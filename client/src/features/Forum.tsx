@@ -1,50 +1,32 @@
 import React, { ReactNode as Node } from 'react'
+import { Link } from 'react-router-dom'
 
 import { Pagination } from '../components/Pagination'
 
 export const Forum: React.FC = () => (
   <>
-    <header className="bg-white shadow ">
-      <div className="max-w-7xl mx-auto pb-6 pt-24 px-4 sm:px-6 lg:px-8 flex">
-        <h1 className="w-3/4 text-3xl font-bold leading-tight text-gray-900">Open Discussion</h1>
-        <span className="w-1/4 text-right"><Commands /></span>
-      </div>
-    </header>
 
-    <main className="bg-gray-200">
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-
-          <div className="flex flex-col">
-            <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-              <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                <table className="min-w-full">
-                  <Headings />
-                  <tbody className="bg-white">
-                    <Post thread="12,000km for the Heart Foundation" author="Juju" replies="100" lastpost="Yesterday 07:57" />
-                    <Post thread="nCoV 2019" author="Nich" replies="100" lastpost="Yesterday 07:57" />
-                    <Post thread="What oils your gears?" author="Silva^" replies="100" lastpost="Yesterday 07:57" />
-                    <Post thread="Random Thoughts II " author="Ab" replies="100" lastpost="Yesterday 07:57" />
-                    <Post thread="Shootings in Christchurch " author="Whiplash" replies="100" lastpost="Yesterday 07:57" />
-                    <Post thread="Video of the day 2.0 instant ban for links w/o descriptions" author="mark111" replies="100" lastpost="Yesterday 07:57" />
-                    <Post thread="What are you reading?" author="fixed_truth" replies="100" lastpost="Yesterday 07:57" />
-                  </tbody>
-                  <Footer />
-                </table>
-              </div>
-            </div>
-          </div>
-
+    <div className="flex flex-col">
+      <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+          <table className="min-w-full">
+            <Headings />
+            <tbody className="bg-white">
+              <Post thread="12,000km for the Heart Foundation" author="Juju" replies="100" lastpost="Yesterday 07:57" />
+              <Post thread="nCoV 2019" author="Nich" replies="100" lastpost="Yesterday 07:57" />
+              <Post thread="What oils your gears?" author="Silva^" replies="100" lastpost="Yesterday 07:57" />
+              <Post thread="Random Thoughts II " author="Ab" replies="100" lastpost="Yesterday 07:57" />
+              <Post thread="Shootings in Christchurch " author="Whiplash" replies="100" lastpost="Yesterday 07:57" />
+              <Post thread="Video of the day 2.0 instant ban for links w/o descriptions" author="mark111" replies="100" lastpost="Yesterday 07:57" />
+              <Post thread="What are you reading?" author="fixed_truth" replies="100" lastpost="Yesterday 07:57" />
+            </tbody>
+            <Footer />
+          </table>
         </div>
       </div>
-    </main>
-  </>
-)
+    </div>
 
-export const Commands: React.FC = () => (
-  <button className=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-    New Thread
-  </button>
+  </>
 )
 
 const Headings: React.FC = () => {
@@ -85,12 +67,12 @@ const Post: React.FC<{
     </td>
     
     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-      <div className="flex items-center">
+      <Link className="flex items-center" to='/thread'>
         <div className="ml-4">
           <div className="text-sm leading-5 font-medium text-gray-900">{thread}</div>
           <div className="text-sm leading-5 text-gray-500">{author}</div>
         </div>
-      </div>
+      </Link>
     </td>
     
     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
