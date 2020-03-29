@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import cls from 'classnames'
 
 import logo from '../assets/workflow-mark-on-dark.svg'
@@ -20,10 +21,7 @@ export const NavBar: React.FC = () => {
             </div>
             <div className="hidden sm:block sm:ml-6">
               <div className="flex">
-                <MenuItem>Dashboard</MenuItem>
-                <MenuItem>Team</MenuItem>
-                <MenuItem>Projects</MenuItem>
-                <MenuItem>Calendar</MenuItem>
+                <MenuItem to="/forum">Open Discussion</MenuItem>
               </div>
             </div>
           </div>
@@ -37,18 +35,21 @@ export const NavBar: React.FC = () => {
       </div>
       <div className="hidden sm:hidden">
         <div className="px-2 pt-2 pb-3">
-          <MenuItem>Dashboard</MenuItem>
-          <MenuItem>Team</MenuItem>
-          <MenuItem>Projects</MenuItem>
-          <MenuItem>Calendar</MenuItem>
+          <MenuItem to="/forum">Open Discussion</MenuItem>
         </div>
       </div>
     </nav>
   )
 }
 
-const MenuItem: React.FC<{href?: string, children: ReactNode}> = ({href = '/', children}) => (
-  <a href={href} className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">{children}</a>
+const MenuItem: React.FC<{
+  to?: string,
+  children: ReactNode
+}> = ({
+  to = '/',
+  children
+}) => (
+  <Link to={to} className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">{children}</Link>
 )
     
 const BellButton: React.FC = () => (

@@ -1,36 +1,84 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode } from 'react'
+import ReactModal from 'react-modal'
 
-import { Button } from './Button'
+import { useBrowserBackButtonToCloseModal } from '../hooks'
 
 export const Modal: React.FC<{
+  isOpen: boolean,
+  closeModal: () => void,
   children: ReactNode,
-  title: string
+  title: string,
+  content: ReactNode,
+  actions?: ReactNode
 }> = ({
+  isOpen,
+  closeModal,
   children,
-  title
+  title,
+  content,
+  actions
 }) => {
+  
+	useBrowserBackButtonToCloseModal({ isOpen, closeModal });
+  
   return (
     <>
-      <div className="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-        <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-    
-        <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-      
-          <div className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-            {title}
-          </div>
-
-          <div className="px-6 py-3">
-            {children}
-          </div>
-        
-          <div className="flex justify-end px-6 py-3 border-t border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-            <Button>Action</Button>
-            <Button secondary>Close</Button>
-          </div>
-        
-        </div>
-      </div>
+      {children}
+      <ReactModal
+        isOpen={isOpen}
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(204, 204, 204, 0.75)'
+          },
+          content: {
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            bottom: 'auto',
+            minHeight: '10rem',
+            left: '50%',
+            padding: 0,
+            position: 'fixed',
+            right: 'auto',
+            top: '50%',
+            transform: 'translate(-50%,-50%)',
+            minWidth: '20rem',
+            width: '80%',
+            maxWidth: '60rem'
+          }
+        }}
+        shouldCloseOnEsc
+  			onRequestClose={closeModal}
+      >
+        <Content title={title} actions={actions}>
+          {content}
+        </Content>
+      </ReactModal>
     </>
   )
 }
+
+const Content: React.FC<{
+  children: ReactNode,
+  title: string,
+  actions?: ReactNode
+}> = ({
+  children,
+  title,
+  actions
+}) => (
+  <>
+    <div className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+      {title}
+    </div>
+
+    <div className="px-6 py-3 overflow-y-auto" style={{maxHeight: '80vh'}}>
+      {children}
+    </div>
+
+    {actions &&
+      <div className="flex justify-end px-6 py-3 border-t border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+        {actions}
+      </div>
+    }
+  </>
+)
