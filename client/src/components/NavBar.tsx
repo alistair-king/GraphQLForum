@@ -1,17 +1,20 @@
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import cls from 'classnames'
+import { MdMenu, MdNotifications } from 'react-icons/md'
 
 import logo from '../assets/workflow-mark-on-dark.svg'
 
 export const NavBar: React.FC = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
+
   return (
     <nav className="bg-gray-800 w-full fixed">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white transition duration-150 ease-in-out">
-              ABC
+              <MdMenu onClick={() => setIsOpen(!isOpen)} />
             </button>
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
@@ -33,7 +36,7 @@ export const NavBar: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="hidden sm:hidden">
+      <div className={cls({"hidden sm:hidden": !isOpen})}>
         <div className="px-2 pt-2 pb-3">
           <MenuItem to="/forum">Open Discussion</MenuItem>
         </div>
@@ -54,9 +57,7 @@ const MenuItem: React.FC<{
     
 const BellButton: React.FC = () => (
   <button className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
-    <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-    </svg>
+     <MdNotifications />
   </button>
 )
   

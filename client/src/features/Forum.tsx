@@ -1,12 +1,11 @@
 import React, { ReactNode as Node } from 'react'
 import { Link } from 'react-router-dom'
-import { MdChevronRight } from 'react-icons/md'
+import { MdChevronRight, MdChatBubbleOutline } from 'react-icons/md'
 
 import { Pagination } from '../components/Pagination'
 
 export const Forum: React.FC = () => (
   <>
-
     <div className="flex flex-col">
       <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
@@ -26,7 +25,6 @@ export const Forum: React.FC = () => (
         </div>
       </div>
     </div>
-
   </>
 )
 
@@ -62,8 +60,8 @@ const Post: React.FC<{
 }) => (
   <tr>
     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-      <div className="flex-shrink-0 h-10 w-10">
-        <img className="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+      <div className="flex-shrink-0 h-10 w-10 text-gray-500">
+        <MdChatBubbleOutline />
       </div>
     </td>
     
@@ -86,7 +84,7 @@ const Post: React.FC<{
 
     <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
       <Link to="/thread" className="text-blue-500 hover:text-blue-700 focus:outline-none focus:underline">
-        <MdChevronRight className="inline" />
+        <MdChevronRight />
       </Link>
     </td>
   </tr>
