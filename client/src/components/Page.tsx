@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { MdChevronLeft } from 'react-icons/md'
 
 export const Page: React.FC<{
   children?: ReactNode,
@@ -17,7 +18,7 @@ export const Page: React.FC<{
     <header className="bg-white shadows">
       <div className="max-w-7xl mx-auto pb-6 pt-24 px-4 sm:px-6 lg:px-8 flex">
         <h1 className="w-3/4 text-3xl font-bold leading-tight text-gray-900">
-          {back && <Link to={back}>&lt;</Link>}
+          {back && <Link to={back}><MdChevronLeft className="inline" /></Link>}
           {title}
         </h1>
         <span className="w-1/4 text-right">{commands}</span>

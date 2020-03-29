@@ -1,7 +1,7 @@
 import React from 'react'
-import { BrowserRouter, Route, RouteProps } from 'react-router-dom'
+import { BrowserRouter, Route, RouteProps, Switch } from 'react-router-dom'
 import ReactModal from 'react-modal'
-import { AnimatedSwitch } from './components/AnimatedSwitch'
+// import { AnimatedSwitch } from './components/AnimatedSwitch'
 import { NavBar } from './components/NavBar'
 
 import { ForumPage } from './pages/ForumPage'
@@ -12,11 +12,11 @@ export const App = () => {
   return (
     <>
       <BrowserRouter>
-        <AnimatedSwitch>
+        <Switch>
           {Routes.map((routeprops, index) =>
             <Route key={index} {...routeprops} />
           )}
-        </AnimatedSwitch>
+        </Switch>
         <NavBar />
       </BrowserRouter>
     </>
