@@ -6,6 +6,7 @@ import { NavBar } from './components/NavBar'
 
 import { ForumPage } from './pages/ForumPage'
 import { ThreadPage } from './pages/ThreadPage'
+import { NewThreadPage } from './pages/NewThreadPage'
 
 export const App = () => (
   <>
@@ -22,12 +23,17 @@ export const App = () => (
 
 const Routes: RouteProps[] = [
   {
+    path: '/forum',
+    component: ForumPage
+  },
+  {
     path: '/thread',
     component: ThreadPage
   },
   {
-    path: '/forum',
-    component: ForumPage
-  }
+    path: '/newthread',
+    component: NewThreadPage
+  },
+  
 ]
 
