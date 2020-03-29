@@ -84,7 +84,7 @@ const Post: React.FC<{
     </td>
 
     <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-      <a href="/" className="text-blue-500 hover:text-blue-700 focus:outline-none focus:underline">Edit</a>
+      <Link to="/thread" className="text-blue-500 hover:text-blue-700 focus:outline-none focus:underline">&gt;</Link>
     </td>
   </tr>
 )

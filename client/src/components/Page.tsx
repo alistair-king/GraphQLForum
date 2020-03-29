@@ -1,8 +1,6 @@
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
-import { NavBar } from './NavBar'
-
 export const Page: React.FC<{
   children?: ReactNode,
   title?: ReactNode,
@@ -14,8 +12,7 @@ export const Page: React.FC<{
   back,
   commands
 }) => (
-  <>
-    <NavBar />
+  <div className="fixed w-full">
     
     <header className="bg-white shadows">
       <div className="max-w-7xl mx-auto pb-6 pt-24 px-4 sm:px-6 lg:px-8 flex">
@@ -44,5 +41,5 @@ export const Page: React.FC<{
         </div>
       </div>
     </main>
-  </>
+  </div>
 )

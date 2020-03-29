@@ -1,19 +1,24 @@
 import React from 'react'
-import { BrowserRouter, Route, RouteProps, Switch } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
+
+import { AnimatedSwitch } from './components/AnimatedSwitch'
+import { NavBar } from './components/NavBar'
 
 import { ForumPage } from './pages/ForumPage'
 import { ThreadPage } from './pages/ThreadPage'
 
 export const App = () => (
-  <BrowserRouter>
-    <Switch>
-      {Routes.map((routeprops, index) =>
-        <Route key={index} {...routeprops} />
-      )}
-    </Switch>
-  </BrowserRouter>
+  <>
+    <BrowserRouter>
+      <AnimatedSwitch>
+        {Routes.map((routeprops, index) =>
+          <Route key={index} {...routeprops} />
+        )}
+      </AnimatedSwitch>
+    </BrowserRouter>
+    <NavBar />
+  </>
 )
-
 
 const Routes: RouteProps[] = [
   {
