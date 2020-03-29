@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, RouteProps } from 'react-router-dom'
 
 import { AnimatedSwitch } from './components/AnimatedSwitch'
 import { NavBar } from './components/NavBar'
