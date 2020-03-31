@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import ReactModal from 'react-modal'
 
-import { useCloseModalOnBack } from '../hooks'
+import { useCloseModalOnBack, useKeyboardEvent } from '../hooks'
 
 export const Modal: React.FC<{
   isOpen: boolean,
@@ -20,6 +20,7 @@ export const Modal: React.FC<{
 }) => {
   
   useCloseModalOnBack({ isOpen, closeModal })
+  useKeyboardEvent('Escape', closeModal)
   
   return (
     <>

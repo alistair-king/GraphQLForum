@@ -20,7 +20,7 @@ export const Avatar: React.FC<{
     {caption && 
       <>
         <p className="md:hidden absolute -mt-4 ml-16">{caption}</p>
-        <p className="invisible md:visible bg-color-red">{caption}</p>
+        <p className="invisible md:visible text-gray-500">{caption}</p>
       </>
     }
   </>

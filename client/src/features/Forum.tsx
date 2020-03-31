@@ -25,7 +25,7 @@ export const Forum: React.FC = () => (
 
 const Headings: React.FC = () => {
   const Cell: React.FC<{children?: ReactNode}> = ({children}) => (
-    <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+    <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase">
       {children}
     </th>
   )
@@ -33,9 +33,8 @@ const Headings: React.FC = () => {
     <thead>
       <tr>
         <Cell />
-        <Cell>Name</Cell>
+        <Cell>Title</Cell>
         <Cell>Replies</Cell>
-        <Cell>Last Post</Cell>
         <Cell />
       </tr>
     </thead>
@@ -54,13 +53,13 @@ const Post: React.FC<{
   lastpost
 }) => (
   <tr>
-    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-      <div className="flex-shrink-0 h-10 w-10 text-gray-500">
+    <td className="pl-6 pr-2 py-4 border-b border-gray-200">
+      <div className="flex-shrink-0 text-gray-500">
         <MdChatBubbleOutline />
       </div>
     </td>
     
-    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+    <td className="px-0 py-4  border-b border-gray-200">
       <Link className="flex items-center" to='/thread'>
         <div className="ml-4">
           <div className="text-sm leading-5 font-medium text-gray-900">{thread}</div>
@@ -69,15 +68,12 @@ const Post: React.FC<{
       </Link>
     </td>
     
-    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-      <div className="text-sm leading-5 text-gray-900 text-right">{replies}</div>
-    </td>
-    
-    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+    <td className="px-0 py-4  border-b border-gray-200">
+      <div className="text-sm leading-5 text-gray-500 text-right">{replies}</div>
       <div className="text-sm leading-5 text-gray-500 text-right">{lastpost}</div>
     </td>
 
-    <td className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+    <td className="px-2 py-4  text-right border-b border-gray-200 text-sm leading-5 font-medium">
       <Link to="/thread" className="text-blue-500 hover:text-blue-700 focus:outline-none focus:underline">
         <MdChevronRight />
       </Link>

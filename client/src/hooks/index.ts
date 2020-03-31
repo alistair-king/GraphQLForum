@@ -32,3 +32,16 @@ export const useCloseModalOnBack = ({
   }, [handleModal])
 }
 
+export const useKeyboardEvent = (key, callback) => {
+  useEffect(() => {
+    const handler = (event) => {
+      if (event.key === key) {
+        callback()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => {
+      window.removeEventListener('keydown', handler)
+    }
+  }, [key, callback])
+}

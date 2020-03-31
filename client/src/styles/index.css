@@ -4,6 +4,10 @@ p {
   @apply m-6;
 }
 
+body {
+  min-width: 375px;
+}
+
 .tooltip .tooltip-text {
   visibility: hidden;
   position: absolute;

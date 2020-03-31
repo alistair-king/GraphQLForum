@@ -19,7 +19,7 @@ export const Thread: React.FC = () => (
       <div className="hidden md:flex w-auto md:w-1/5 py-10 px-6 flex-col items-center">
         <Avatar size={24} caption="Whiplash" />
       </div>
-      <div className="w-auto md:w-4/5 py-2 px-6">
+      <div className="w-auto md:w-4/5 py-3 md:py-2 px-3 md:px-6">
         <p>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
