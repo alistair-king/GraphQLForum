@@ -12,7 +12,7 @@ import { useModal } from '../hooks'
 export const ThreadPage: React.FC = () => (
   <>
     <Page
-      title="12,000km for the Heart Foundation"
+      title="Quis autem vel eum iure reprehenderit"
       commands={<Commands />}
       back="/forum"
     >

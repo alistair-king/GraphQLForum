@@ -10,13 +10,13 @@ export const Forum: React.FC = () => (
     <table className="min-w-full">
       <Headings />
       <tbody className="bg-white">
-        <Post thread="12,000km for the Heart Foundation" author="Juju" replies="100" lastpost="Yesterday 07:57" />
-        <Post thread="nCoV 2019" author="Nich" replies="100" lastpost="Yesterday 07:57" />
-        <Post thread="What oils your gears?" author="Silva^" replies="100" lastpost="Yesterday 07:57" />
-        <Post thread="Random Thoughts II " author="Ab" replies="100" lastpost="Yesterday 07:57" />
-        <Post thread="Shootings in Christchurch " author="Whiplash" replies="100" lastpost="Yesterday 07:57" />
-        <Post thread="Video of the day 2.0 instant ban for links w/o descriptions" author="mark111" replies="100" lastpost="Yesterday 07:57" />
-        <Post thread="What are you reading?" author="fixed_truth" replies="100" lastpost="Yesterday 07:57" />
+        <Post thread="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium" author="Juju" replies="133" lastpost="Today 06:36" />
+        <Post thread="At vero eos et accusamus et iusto odio dignissimos ducimus" author="Nich" replies="12" lastpost="Today 04:37" />
+        <Post thread="est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam?" author="Silva^" replies="164" lastpost="Today 11:57" />
+        <Post thread="Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus" author="Ab" replies="101" lastpost="Today 07:57" />
+        <Post thread="On the other hand, we denounce with righteous indignation" author="Whiplash" replies="140" lastpost="Yesterday 16:57" />
+        <Post thread="But in certain circumstances and owing to the claims of duty or the obligations of business" author="mark111" replies="109" lastpost="Yesterday 12:34" />
+        <Post thread="Quis autem vel eum iure reprehenderit?" author="fixed_truth" replies="13" lastpost="2 days ago" />
       </tbody>
       <Footer />
     </table>
@@ -59,7 +59,7 @@ const Post: React.FC<{
       </div>
     </td>
     
-    <td className="px-0 py-4  border-b border-gray-200">
+    <td className="px-0 py-4 w-full border-b border-gray-200">
       <Link className="flex items-center" to='/thread'>
         <div className="ml-4">
           <div className="text-sm leading-5 font-medium text-gray-900">{thread}</div>
@@ -68,7 +68,7 @@ const Post: React.FC<{
       </Link>
     </td>
     
-    <td className="px-0 py-4  border-b border-gray-200">
+    <td className="px-0 py-4  border-b border-gray-200 whitespace-no-wrap">
       <div className="text-sm leading-5 text-gray-500 text-right">{replies}</div>
       <div className="text-sm leading-5 text-gray-500 text-right">{lastpost}</div>
     </td>
