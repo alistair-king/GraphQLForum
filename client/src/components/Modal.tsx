@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import ReactModal from 'react-modal'
 
-import { useBrowserBackButtonToCloseModal } from '../hooks'
+import { useCloseModalOnBack } from '../hooks'
 
 export const Modal: React.FC<{
   isOpen: boolean,
@@ -19,7 +19,7 @@ export const Modal: React.FC<{
   actions
 }) => {
   
-	useBrowserBackButtonToCloseModal({ isOpen, closeModal });
+  useCloseModalOnBack({ isOpen, closeModal })
   
   return (
     <>
@@ -47,7 +47,7 @@ export const Modal: React.FC<{
           }
         }}
         shouldCloseOnEsc
-  			onRequestClose={closeModal}
+        onRequestClose={closeModal}
       >
         <Content title={title} actions={actions}>
           {content}

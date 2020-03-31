@@ -1,4 +1,5 @@
 import React from 'react'
+import FroalaEditor from 'react-froala-wysiwyg'
 
 export const NewPost: React.FC = () => (
   <>
@@ -16,9 +17,10 @@ export const NewPost: React.FC = () => (
         <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="grid-post">
           Post
         </label>
-        <textarea className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" id="grid-post" />
+        <FroalaEditor tag='textarea' config={{ theme: 'gray', placeHolder: 'test' }} />
       </div>
     </div>
 
   </>
 )
+

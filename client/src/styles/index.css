@@ -1,5 +1,18 @@
 @tailwind base;
 
+p {
+  @apply m-6;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  z-index: 100;
+}
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
 @tailwind components;
 
 @tailwind utilities;

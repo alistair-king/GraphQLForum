@@ -11,25 +11,24 @@ export const useModal = () => {
   }
 }
 
-export const useBrowserBackButtonToCloseModal = ({
-	isOpen,
-	closeModal
+export const useCloseModalOnBack = ({
+  isOpen,
+  closeModal
 }: {
-	isOpen: boolean;
-	closeModal: () => void
+  isOpen: boolean,
+  closeModal: () => void
 }): void => {
-	const handleModal = useCallback(() => {
-		if (isOpen) {
-			closeModal();
-		}
-	}, [isOpen, closeModal]);
+  const handleModal = useCallback(() => {
+    if (isOpen) {
+      closeModal()
+    }
+  }, [isOpen, closeModal])
 
-	useEffect(() => {
-		window.addEventListener('popstate', handleModal);
-
-		return () => {
-			window.removeEventListener('popstate', handleModal);
-		};
-	}, [handleModal]);
-};
+  useEffect(() => {
+    window.addEventListener('popstate', handleModal)
+    return () => {
+      window.removeEventListener('popstate', handleModal)
+    }
+  }, [handleModal])
+}
 

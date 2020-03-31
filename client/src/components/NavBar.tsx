@@ -5,6 +5,8 @@ import { MdMenu, MdNotifications } from 'react-icons/md'
 
 import logo from '../assets/workflow-mark-on-dark.svg'
 
+import { Avatar } from './Avatar'
+
 export const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false)
 
@@ -36,7 +38,7 @@ export const NavBar: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className={cls({"hidden sm:hidden": !isOpen})}>
+      <div className={cls({'hidden sm:hidden': !isOpen})}>
         <div className="px-2 pt-2 pb-3">
           <MenuItem to="/forum">Open Discussion</MenuItem>
         </div>
@@ -57,18 +59,15 @@ const MenuItem: React.FC<{
     
 const BellButton: React.FC = () => (
   <button className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
-     <MdNotifications />
+    <MdNotifications />
   </button>
 )
   
 const DropMenu:React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false)
-
   return (
     <>
-      <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out" onClick={() => setIsOpen(!isOpen)}>
-        <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
-      </button>
+      <Avatar size={8} onClick={() => setIsOpen(!isOpen)} />
       <DropMenuPane isOpen={isOpen}>
         <DropMenuItem>Your Profile</DropMenuItem>
         <DropMenuItem>Settings</DropMenuItem>

@@ -591,6 +591,20 @@ video {
   height: auto;
 }
 
+p {
+  margin: 1.5rem;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  z-index: 100;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
 .container {
   width: 100%;
 }

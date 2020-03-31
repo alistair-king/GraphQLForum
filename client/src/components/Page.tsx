@@ -13,7 +13,7 @@ export const Page: React.FC<{
   back,
   commands
 }) => (
-  <div className="fixed w-full">
+  <div className="w-full">
     
     <header className="bg-white shadows">
       <div className="max-w-7xl mx-auto pb-6 pt-24 px-4 sm:px-6 lg:px-8 flex">

@@ -8,16 +8,16 @@ import { ForumPage } from './pages/ForumPage'
 import { ThreadPage } from './pages/ThreadPage'
 
 export const App = () => {
-	ReactModal.setAppElement('#root');
+  ReactModal.setAppElement('#root')
   return (
     <>
       <BrowserRouter>
+        <NavBar />
         <Switch>
           {Routes.map((routeprops, index) =>
             <Route key={index} {...routeprops} />
           )}
         </Switch>
-        <NavBar />
       </BrowserRouter>
     </>
   )
