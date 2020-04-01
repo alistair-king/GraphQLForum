@@ -18,7 +18,7 @@ export const ActionButton: React.FC<{
 }) => (
   <button 
     onClick={onClick}
-    className={cls(`p-1 border-2 border-transparent rounded-full focus:outline-none  transition duration-150 ease-in-out ml-1 tooltip ${className}`,
+    className={cls(`p-1 border-2 border-transparent rounded-full focus:outline-none transition duration-150 ease-in-out ml-1 tooltip ${className}`,
       {
         'bg-gray-700 text-gray-300': dark,
         'bg-gray-300 text-gray-700': !dark,

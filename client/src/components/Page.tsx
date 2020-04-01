@@ -29,15 +29,7 @@ export const Page: React.FC<{
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
 
-          <div className="flex flex-col">
-            <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-              <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-
-                {children}
-                
-              </div>
-            </div>
-          </div>
+          {children}
 
         </div>
       </div>

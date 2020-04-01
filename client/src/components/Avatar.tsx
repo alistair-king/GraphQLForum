@@ -12,7 +12,7 @@ export const Avatar: React.FC<{
   onClick
 }) => (
   <>
-    <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out"
+    <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out z-20"
       onClick={onClick}
     >
       <img className={`h-${size} w-${size} rounded-full`} src={user} alt="" />

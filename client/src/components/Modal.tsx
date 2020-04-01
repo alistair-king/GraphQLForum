@@ -22,6 +22,14 @@ export const Modal: React.FC<{
   useCloseModalOnBack({ isOpen, closeModal })
   useKeyboardEvent('Escape', closeModal)
   
+  const afterOpen = (): void => {
+  	document.body.style.overflow = 'hidden'
+  }
+
+  const afterClose = (): void => {
+  	document.body.style.overflow = 'auto'
+  }
+  
   return (
     <>
       {children}
@@ -29,7 +37,8 @@ export const Modal: React.FC<{
         isOpen={isOpen}
         style={{
           overlay: {
-            backgroundColor: 'rgba(204, 204, 204, 0.75)'
+            backgroundColor: 'rgba(204, 204, 204, 0.75)',
+            zIndex: 40
           },
           content: {
             border: '1px solid #ccc',
@@ -49,6 +58,8 @@ export const Modal: React.FC<{
         }}
         shouldCloseOnEsc
         onRequestClose={closeModal}
+        onAfterOpen={afterOpen}
+        onAfterClose={afterClose}
       >
         <Content title={title} actions={actions}>
           {content}

@@ -105,4 +105,4 @@ dist
 
 # Finder crap
 .DS_Store
-s
+*.jpg

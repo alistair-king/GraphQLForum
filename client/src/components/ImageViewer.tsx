@@ -22,6 +22,14 @@ export const ImageViewer: React.FC<{
   
   useCloseModalOnBack({ isOpen, closeModal })
   useKeyboardEvent('Escape', closeModal)
+
+  const afterOpen = (): void => {
+  	document.body.style.overflow = 'hidden'
+  }
+
+  const afterClose = (): void => {
+  	document.body.style.overflow = 'auto'
+  }
   
   return (
     <>
@@ -30,7 +38,8 @@ export const ImageViewer: React.FC<{
         isOpen={isOpen}
         style={{
           overlay: {
-            backgroundColor: 'rgba(204, 204, 204, 0.75)'
+            backgroundColor: 'rgba(204, 204, 204, 0.75)',
+            zIndex: 40
           },
           content: {
             backgroundColor: 'black',
@@ -43,11 +52,13 @@ export const ImageViewer: React.FC<{
             right: 'auto',
             top: '50%',
             transform: 'translate(-50%,-50%)',
-            width: '100%',
+            width: '100%'
           }
         }}
         shouldCloseOnEsc
         onRequestClose={closeModal}
+        onAfterOpen={afterOpen}
+        onAfterClose={afterClose}
       >
         <Content title={title} image={image} closeModal={closeModal} />
       </ReactModal>
@@ -71,8 +82,8 @@ const Content: React.FC<{
         {title || image}
       </div>
 
-      <div className="flex-1 flex items-center px-6 py-3">
-        <img src={image} alt="" onClick={() => closeModal()} className="object-contain" />
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-3" onClick={() => closeModal()}>
+          <img src={image} alt="" className="max-h-85-vh" />
       </div>
 
       <div className="pin-b flex justify-end px-6 py-3 border-t border-gray-700 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">

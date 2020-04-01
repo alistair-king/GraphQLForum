@@ -17,7 +17,7 @@ export const ImageEmbed: React.FC<{
   return (
     <div className="flex justify-center">
       <ImageViewer title={title} isOpen={isOpen} closeModal={closeModal} image={image}>
-        <img className="w-1/2 border border-solid border-gray-400 p-1" onClick={() => openModal()} src={image} alt="" />
+        <img className="w-1/2 border border-solid border-gray-400 shadow p-1" onClick={() => openModal()} src={image} alt="" />
       </ImageViewer>
     </div>
   )

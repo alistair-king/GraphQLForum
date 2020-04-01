@@ -3,15 +3,14 @@ import { Link } from 'react-router-dom'
 import cls from 'classnames'
 import { MdMenu, MdNotifications } from 'react-icons/md'
 
-import logo from '../assets/workflow-mark-on-dark.svg'
-
 import { Avatar } from './Avatar'
+import { Logo } from './Logo'
 
 export const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
-    <nav className="bg-gray-800 w-full fixed">
+    <nav className="bg-gray-800 w-full fixed z-30">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -21,10 +20,9 @@ export const NavBar: React.FC = () => {
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0">
-              <img className="block lg:hidden h-8 w-auto mt-1" src={logo} alt="" />
-              <img className="hidden lg:block h-8 w-auto mt-2" src={logo} alt="" />
+              <Logo className="relative" />
             </div>
-            <div className="hidden sm:block sm:ml-6">
+            <div className="hidden sm:block sm:mt-10">
               <div className="flex">
                 <MenuItem to="/forum">Open Discussion</MenuItem>
               </div>
