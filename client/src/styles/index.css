@@ -17,6 +17,10 @@ body {
   visibility: visible;
 }
 
+.max-h-90-vh {
+  max-height: 90vh;
+}
+
 @tailwind components;
 
 @tailwind utilities;
