@@ -8,7 +8,7 @@ export const NewPost: React.FC = () => (
         <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="grid-title">
           Title
         </label>
-        <input className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" id="grid-title" />
+        <input className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 focus:bg-red-700s" id="grid-title" />
       </div>
     </div>
 
