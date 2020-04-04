@@ -1,0 +1,44 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Forum {
+  id: ID!
+  name: String!
+}
+
+type Mutation {
+  addUser(newUserData: NewUserInput!): User!
+  removeUser(id: String!): Boolean!
+  addForum(newForumData: NewForumInput!): Forum!
+  removeForum(id: String!): Boolean!
+}
+
+input NewForumInput {
+  name: String!
+}
+
+input NewUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+type Query {
+  user(id: String!): User!
+  users(skip: Int = 0, take: Int = 25): [User!]!
+  forum(id: String!): Forum!
+  forums(skip: Int = 0, take: Int = 25): [Forum!]!
+}
+
+type Subscription {
+  userAdded: User!
+  forumAdded: Forum!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String
+  password: String!
+}
