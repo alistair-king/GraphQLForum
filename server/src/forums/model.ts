@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 
+import { Thread } from './threads/model'
+
 @ObjectType()
 export class Forum {
   @Field(type => ID)
@@ -7,4 +9,7 @@ export class Forum {
 
   @Field()
   name: string
+
+  @Field(type => [Thread])
+  threads: Thread[];
 }

@@ -1,16 +1,23 @@
 import { NotFoundException } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver, Subscription, Parent, ResolveField } from '@nestjs/graphql'
 import { PubSub } from 'apollo-server-express'
+
 import { NewForumInput } from './dto/new-forum.input'
 import { ForumsArgs } from './dto/forums.args'
-import { Forum } from './models/forum.model'
-import { ForumsService } from './forums.service'
+import { Forum } from './model'
+import { ForumsService } from './service'
+
+import { Thread } from './threads/model'
+import { ThreadsService } from './threads/service'
 
 const pubSub = new PubSub()
 
 @Resolver(of => Forum)
 export class ForumsResolver {
-  constructor(private readonly forumsService: ForumsService) {}
+  constructor(
+    private readonly forumsService: ForumsService,
+    private readonly threadsService: ThreadsService
+  ) {}
 
   @Query(returns => Forum)
   async forum(@Args('id') id: string): Promise<Forum> {
@@ -26,6 +33,12 @@ export class ForumsResolver {
     return this.forumsService.findAll(forumsArgs)
   }
 
+  @ResolveField()
+  threads(@Parent() forum: Forum) {
+    const { id } = forum;
+    return this.threadsService.findAll({ forumId: id, skip: 0, take: 25 });
+  }
+
   @Mutation(returns => Forum)
   async addForum(
     @Args('newForumData') newForumData: NewForumInput,
@@ -35,10 +48,10 @@ export class ForumsResolver {
     return forum
   }
 
-  @Mutation(returns => Boolean)
-  async removeForum(@Args('id') id: string) {
-    return this.forumsService.remove(id)
-  }
+  // @Mutation(returns => Boolean)
+  // async removeForum(@Args('id') id: string) {
+  //   return this.forumsService.remove(id)
+  // }
 
   @Subscription(returns => Forum)
   forumAdded() {

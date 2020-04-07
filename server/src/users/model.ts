@@ -8,7 +8,7 @@ export class User {
   @Field()
   name: string
 
-  @Field({ nullable: true })
+  @Field()
   email: string
 
   @Field()
