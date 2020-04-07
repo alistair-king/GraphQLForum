@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 import { Thread } from '../entity'
 import { User } from '../../../users/entity'
@@ -14,11 +14,11 @@ export class Reply {
   @Column()
   content: string;
 
-  @OneToOne(type => Thread)
+  @ManyToOne(type => Thread)
   @JoinColumn()
   thread: Thread;
   
-  @OneToOne(type => User) 
+  @ManyToOne(type => User) 
   @JoinColumn()
   author: User
 }

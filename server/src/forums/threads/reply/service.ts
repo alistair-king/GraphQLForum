@@ -23,7 +23,9 @@ export class RepliesService {
   }
 
   async findAll(repliesArgs: RepliesArgs): Promise<Reply[]> {
-    return this.repliesRepository.find()
+    return this.repliesRepository.createQueryBuilder('reply')
+      .where("reply.threadid = :id", { id: repliesArgs.threadId })
+      .getMany()
   }
 
   // async remove(id: string): Promise<boolean> {

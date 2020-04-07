@@ -33,7 +33,7 @@ export class ThreadsResolver {
   }
   
   @ResolveField()
-  replies(@Parent() thread: Thread) {
+  replies(@Parent() thread: Thread) {    
     const { id } = thread;
     return this.repliesService.findAll({ threadId: id, skip: 0, take: 25 });
   }

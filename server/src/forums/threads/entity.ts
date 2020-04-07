@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
 
 import { Forum } from '../entity'
 import { User } from '../../users/entity'
@@ -17,11 +17,11 @@ export class Thread {
   @Column()
   content: string
 
-  @OneToOne(type => Forum)
+  @ManyToOne(type => Forum)
   @JoinColumn()
   forum: Forum;
   
-  @OneToOne(type => User) 
+  @ManyToOne(type => User) 
   @JoinColumn()
   author: User
 }
