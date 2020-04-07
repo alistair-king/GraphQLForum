@@ -16,11 +16,18 @@ type Forum {
 type Mutation {
   addForum(newForumData: NewForumInput!): Forum!
   addThread(newThreadData: NewThreadInput!): Thread!
+  addReply(newReplyData: NewReplyInput!): Reply!
   addUser(newUserData: NewUserInput!): User!
 }
 
 input NewForumInput {
   name: String!
+}
+
+input NewReplyInput {
+  name: String!
+  email: String!
+  password: String!
 }
 
 input NewThreadInput {
@@ -41,13 +48,24 @@ type Query {
   forums(skip: Int = 0, take: Int = 25): [Forum!]!
   thread(id: String!): Thread!
   threads(forumId: String!, skip: Int = 0, take: Int = 25): [Thread!]!
+  reply(id: String!): Reply!
+  replys(threadId: String!, skip: Int = 0, take: Int = 25): [Reply!]!
   user(id: String!): User!
   users(skip: Int = 0, take: Int = 25): [User!]!
+}
+
+type Reply {
+  id: ID!
+  when: DateTime!
+  content: String!
+  thread: Thread!
+  author: User!
 }
 
 type Subscription {
   forumAdded: Forum!
   threadAdded: Thread!
+  replyAdded: Reply!
   userAdded: User!
 }
 
@@ -58,6 +76,7 @@ type Thread {
   content: String!
   forum: Forum!
   author: User!
+  replies: [Reply!]!
 }
 
 type User {

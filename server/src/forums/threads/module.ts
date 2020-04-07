@@ -7,9 +7,13 @@ import { ThreadsResolver } from './resolver'
 import { ThreadsService } from './service'
 import { Thread } from './entity'
 
+import { RepliesModule } from './reply/module'
+import { RepliesService } from './reply/service'
+
 @Module({
   imports: [
-    DatabaseModule
+    DatabaseModule,
+    RepliesModule
   ],
   exports: [
     ThreadsService

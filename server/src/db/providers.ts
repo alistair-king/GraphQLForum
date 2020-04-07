@@ -4,6 +4,7 @@ import { Constants } from '../common/constants'
 
 import { Forum } from '../forums/entity'
 import { Thread } from '../forums/threads/entity'
+import { Reply } from '../forums/threads/reply/entity'
 import { User } from '../users/entity'
 
 export const databaseProviders = [
@@ -19,6 +20,7 @@ export const databaseProviders = [
       entities: [
         Forum,
         Thread,
+        Reply,
         User
       ],
       synchronize: true,

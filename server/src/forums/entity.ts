@@ -10,6 +10,6 @@ export class Forum {
   @Column()
   name: string
 
-  // @OneToMany(type => Thread, thread => thread.forum)
-  // threads: Thread[]
+  @OneToMany(type => Thread, thread => thread.forum)
+  threads: Thread[]
 }
