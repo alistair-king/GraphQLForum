@@ -13,7 +13,10 @@ export class Thread {
 
   @Field()
   title: string
-  
+
+  @Field()
+  content: string
+
   @Field(type => Forum)
   forum: Forum
   

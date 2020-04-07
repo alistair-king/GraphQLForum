@@ -1,12 +1,14 @@
 import { createConnection } from 'typeorm';
 
+import { Constants } from '../common/constants'
+
 import { Forum } from '../forums/entity'
 import { Thread } from '../forums/threads/entity'
 import { User } from '../users/entity'
 
 export const databaseProviders = [
   {
-    provide: 'DATABASE_CONNECTION',
+    provide: Constants.DATABASE_CONNECTION,
     useFactory: async () => await createConnection({
       type: 'mysql',
       host: 'localhost',

@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { Repository } from 'typeorm'
 
+import { Constants } from '../common/constants'
+
 import { NewUserInput } from './dto/new-user.input'
 import { UsersArgs } from './dto/users.args'
 import { User } from './model'
@@ -8,7 +10,7 @@ import { User } from './model'
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject('USER_REPOSITORY')
+    @Inject(Constants.USER_REPO)
     private usersRepository: Repository<User>
   ) {}
 

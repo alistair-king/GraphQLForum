@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { Repository } from 'typeorm'
 
+import { Constants } from '../common/constants'
+
 import { NewForumInput } from './dto/new-forum.input'
 import { ForumsArgs } from './dto/forums.args'
 import { Forum } from './model'
@@ -10,7 +12,7 @@ import { Thread } from './threads/model'
 @Injectable()
 export class ForumsService {
   constructor(
-    @Inject('FORUM_REPOSITORY')
+    @Inject(Constants.FORUM_REPO)
     private forumsRepository: Repository<Forum>
   ) {}
 

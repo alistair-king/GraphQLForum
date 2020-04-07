@@ -55,6 +55,7 @@ type Thread {
   id: ID!
   when: DateTime!
   title: String!
+  content: String!
   forum: Forum!
   author: User!
 }

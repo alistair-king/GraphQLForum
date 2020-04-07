@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { Repository } from 'typeorm'
 
+import { Constants } from '../../common/constants'
+
 import { NewThreadInput } from './dto/new-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
 import { Thread } from './model'
@@ -8,7 +10,7 @@ import { Thread } from './model'
 @Injectable()
 export class ThreadsService {
   constructor(
-    @Inject('THREAD_REPOSITORY')
+    @Inject(Constants.THREAD_REPO)
     private threadsRepository: Repository<Thread>
   ) {}
 

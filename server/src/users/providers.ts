@@ -1,11 +1,13 @@
 import { Connection, Repository } from 'typeorm';
 
+import { Constants } from '../common/constants'
+
 import { User } from './entity';
 
 export const UserProviders = [
   {
-    provide: 'USER_REPOSITORY',
+    provide: Constants.USER_REPO,
     useFactory: (connection: Connection) => connection.getRepository(User),
-    inject: ['DATABASE_CONNECTION'],
+    inject: [Constants.DATABASE_CONNECTION],
   },
 ];

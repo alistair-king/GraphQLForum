@@ -15,7 +15,7 @@ export class Thread {
   title: string
 
   @Column()
-  body: string
+  content: string
 
   @OneToOne(type => Forum)
   @JoinColumn()
