@@ -6,17 +6,17 @@ import { User } from '../../../users/entity'
 @Entity()
 export class Reply {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  when: string;
+  when: Date
 
   @Column()
-  content: string;
+  content: string
 
   @ManyToOne(type => Thread)
   @JoinColumn()
-  thread: Thread;
+  thread: Thread
   
   @ManyToOne(type => User) 
   @JoinColumn()

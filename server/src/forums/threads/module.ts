@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 
+import { DateScalar } from '../../common/scalars/date.scalar'
 import { DatabaseModule } from '../../db/module'
 
 import { ThreadProviders } from './providers'
@@ -21,7 +22,8 @@ import { RepliesService } from './reply/service'
   providers: [
     ...ThreadProviders,
     ThreadsResolver,
-    ThreadsService
+    ThreadsService,
+    DateScalar
   ],
 })
 export class ThreadsModule {}

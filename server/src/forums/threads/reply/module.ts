@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 
+import { DateScalar } from '../../../common/scalars/date.scalar'
 import { DatabaseModule } from '../../../db/module'
 
 import { ReplyProviders } from './providers'
@@ -17,7 +18,8 @@ import { Reply } from './entity'
   providers: [
     ...ReplyProviders,
     RepliesResolver,
-    RepliesService
+    RepliesService,
+    DateScalar
   ]
 })
 export class RepliesModule {}
