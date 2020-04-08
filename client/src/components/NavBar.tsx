@@ -24,7 +24,7 @@ export const NavBar: React.FC = () => {
             </div>
             <div className="hidden sm:block sm:mt-10">
               <div className="flex">
-                <MenuItem to="/forum">Open Discussion</MenuItem>
+                <MenuItem to="/forum/1">Open Discussion</MenuItem>
               </div>
             </div>
           </div>

@@ -3,26 +3,28 @@ import { Link } from 'react-router-dom'
 import { MdChatBubbleOutline } from 'react-icons/md'
 import cls from 'classnames'
 
+import { IForum, IThread } from '../types'
+
 import { Card } from '../components/Card'
 import { Pagination } from '../components/Pagination'
 
-export const Forum: React.FC = () => (
-  <Card>
-    <table className="min-w-full">
-      <Headings />
-      <tbody className="bg-white">
-        <Post thread="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium" author="Juju" replies="133" lastpost="Today 06:36" newposts={21} />
-        <Post thread="At vero eos et accusamus et iusto odio dignissimos ducimus" author="Nich" replies="12" lastpost="Today 04:37" newposts={7} />
-        <Post thread="est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam?" author="Silva^" replies="164" lastpost="Today 11:57" newposts={3} />
-        <Post thread="Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus" author="Ab" replies="101" lastpost="Today 07:57" newposts={1} />
-        <Post thread="On the other hand, we denounce with righteous indignation" author="Whiplash" replies="140" lastpost="Yesterday 16:57" />
-        <Post thread="But in certain circumstances and owing to the claims of duty or the obligations of business" author="mark111" replies="109" lastpost="Yesterday 12:34" />
-        <Post thread="Quis autem vel eum iure reprehenderit?" author="fixed_truth" replies="13" lastpost="2 days ago" />
-      </tbody>
-      <Footer />
-    </table>
-  </Card>
-)
+export const Forum: React.FC<{
+  forum: IForum
+}> = ({
+  forum
+}) => {
+  return (
+    <Card>
+      <table className="min-w-full">
+        <Headings />
+        <tbody className="bg-white">
+          { forum && forum.threads.map(thread => <Thread thread={thread} replies="133" lastpost="Today 06:36" newposts={21} />)}
+        </tbody>
+        <Footer />
+      </table>
+    </Card>
+  )
+}
 
 const Headings: React.FC = () => {
   const Cell: React.FC<{children?: ReactNode}> = ({children}) => (
@@ -42,15 +44,13 @@ const Headings: React.FC = () => {
   )
 }
 
-const Post: React.FC<{
-  thread: string,
-  author: string,
+const Thread: React.FC<{
+  thread: IThread,
   replies: string,
   lastpost: string,
   newposts?: number
 }> = ({
   thread,
-  author,
   replies,
   lastpost,
   newposts = 0
@@ -63,10 +63,10 @@ const Post: React.FC<{
     </td>
     
     <td className="px-0 py-4 w-full border-b border-gray-200">
-      <Link className="flex items-center" to='/thread'>
+      <Link className="flex items-center" to={`/thread/${thread.id}`}>
         <div className="ml-4">
-          <div className="text-sm leading-5 font-medium text-gray-900">{thread}</div>
-          <div className="text-sm leading-5 text-gray-500">{author}</div>
+          <div className="text-sm leading-5 font-medium text-gray-900">{thread.title}</div>
+          <div className="text-sm leading-5 text-gray-500">{thread.author.name}</div>
         </div>
       </Link>
     </td>

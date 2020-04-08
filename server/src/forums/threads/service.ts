@@ -25,6 +25,7 @@ export class ThreadsService {
   async findAll(threadsArgs: ThreadsArgs): Promise<Thread[]> {
     return this.threadsRepository.createQueryBuilder('thread')
       .where("thread.forumid = :id", { id: threadsArgs.forumId })
+      .leftJoinAndSelect("thread.author", "User")
       .getMany()
   }
 

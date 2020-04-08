@@ -21,7 +21,7 @@ export class Thread {
   @JoinColumn()
   forum: Forum;
   
-  @ManyToOne(type => User) 
+  @ManyToOne(type => User)
   @JoinColumn()
   author: User
 }

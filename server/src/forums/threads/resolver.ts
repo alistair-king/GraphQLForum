@@ -2,6 +2,8 @@ import { NotFoundException } from '@nestjs/common'
 import { Args, Mutation, Query, Parent, Resolver, ResolveField, Subscription } from '@nestjs/graphql'
 import { PubSub } from 'apollo-server-express'
 
+import { UsersService } from '../../users/service'
+
 import { NewThreadInput } from './dto/new-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
 import { Thread } from './model'
