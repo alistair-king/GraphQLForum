@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
@@ -13,16 +14,9 @@ import { Spinner } from '../components/Spinner'
 import { Forum } from '../features/Forum'
 import { NewPost } from '../features/NewPost'
 
+import { ErrorPage } from './ErrorPage'
+
 import { useModal } from '../hooks'
-
-
-interface DataForum {
-  forum: IForum;
-}
-
-interface DataForumVars {
-  id: string;
-}
 
 const GET_FOURM = gql`
   query getForum($id: String!) {
@@ -43,23 +37,24 @@ const GET_FOURM = gql`
 `;
 
 export const ForumPage: React.FC = () => {
-
-  const { loading, error, data } = useQuery<DataForum, DataForumVars>(
+  const { id } = useParams();
+  
+  const { loading, error, data } = useQuery<{forum: IForum}, {id: string}>(
     GET_FOURM,
-    { variables: { id: '1' } }
+    { variables: { id: id as string } }
   );
   
-  if ( loading ) { return <Spinner /> }
-  if ( error || !data ) { return <p>Error! : {error}</p> }
-  
-  const { forum } = data
+  if ( error ) {
+    return <ErrorPage message={error?.message} />
+  }
   
   return (
-    <>
-      <Page title={forum.name} commands={<Commands />}>
-        <Forum forum={forum} />
-      </Page>
-    </>
+    <Page title={data?.forum?.name} commands={<Commands />}>
+      { loading || !data
+        ? <Spinner className="w-full flex justify-center pt-8" />
+        : <Forum forum={data.forum} />
+      }
+    </Page>
   )
 }
 
