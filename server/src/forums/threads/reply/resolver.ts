@@ -22,11 +22,6 @@ export class RepliesResolver {
     return reply
   }
 
-  @Query(returns => [Reply])
-  replys(@Args() replysArgs: RepliesArgs): Promise<Reply[]> {
-    return this.replysService.findAll(replysArgs)
-  }
-
   @Mutation(returns => Reply)
   async addReply(
     @Args('newReplyData') newReplyData: NewReplyInput,

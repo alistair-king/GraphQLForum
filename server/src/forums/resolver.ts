@@ -34,9 +34,17 @@ export class ForumsResolver {
   }
 
   @ResolveField()
-  threads(@Parent() forum: Forum) {
+  async threads(@Parent() forum: Forum) {
     const { id } = forum;
-    return this.threadsService.findAll({ forumId: id, skip: 0, take: 25 });
+    const result = await this.threadsService.findAll({
+      forumId: id,
+      skip: 0,
+      take: 25
+    });
+    return {
+      items: result[0],
+      count: result[1]
+    }
   }
 
   @Mutation(returns => Forum)

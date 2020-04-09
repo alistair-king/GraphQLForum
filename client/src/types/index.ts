@@ -20,9 +20,14 @@ export interface IThread {
   replies: IReply[]
 }
 
+export interface IThreads {
+  items: IThread[]
+  count: number
+}
+
 export interface IForum {
   id: number
   name: string
-  threads: IThread[]
+  threads: IThreads
 }
 

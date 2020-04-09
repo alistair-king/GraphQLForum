@@ -24,17 +24,21 @@ const GET_FOURM = gql`
       id
       name
       threads {
-        id
-        title
-        when
-        author {
+        count,
+        items {
           id
-          name
+          title
+          when
+          author {
+            id
+            name
+          }
         }
       }
     }
   }
 `;
+
 
 export const ForumPage: React.FC = () => {
   const { id } = useParams();

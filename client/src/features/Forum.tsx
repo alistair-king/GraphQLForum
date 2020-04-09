@@ -18,7 +18,7 @@ export const Forum: React.FC<{
       <table className="min-w-full">
         <Headings />
         <tbody className="bg-white">
-          { forum && forum.threads.map(thread => <Thread thread={thread} replies="133" lastpost="Today 06:36" newposts={21} />)}
+          { forum && forum.threads.items.map(thread => <Thread key={thread.id} thread={thread} replies="133" lastpost="Today 06:36" newposts={21} />)}
         </tbody>
         <Footer />
       </table>

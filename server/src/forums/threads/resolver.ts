@@ -29,15 +29,18 @@ export class ThreadsResolver {
     return thread
   }
 
-  @Query(returns => [Thread])
-  threads(@Args() threadsArgs: ThreadsArgs): Promise<Thread[]> {
-    return this.threadsService.findAll(threadsArgs)
-  }
-  
   @ResolveField()
-  replies(@Parent() thread: Thread) {    
+  async replies(@Parent() thread: Thread) {    
     const { id } = thread;
-    return this.repliesService.findAll({ threadId: id, skip: 0, take: 25 });
+    const result = await this.repliesService.findAll({
+      threadId: id,
+      skip: 0,
+      take: 25
+    })
+    return {
+      items: result[0],
+      count: result[1]
+    }
   }
 
   @Mutation(returns => Thread)
