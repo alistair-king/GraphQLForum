@@ -1,5 +1,14 @@
 import { NotFoundException } from '@nestjs/common'
-import { Args, Mutation, Query, Parent, Resolver, ResolveField, Subscription } from '@nestjs/graphql'
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  Parent,
+  Resolver,
+  ResolveField,
+  Subscription
+} from '@nestjs/graphql'
 import { PubSub } from 'apollo-server-express'
 
 import { UsersService } from '../../users/service'
@@ -30,12 +39,15 @@ export class ThreadsResolver {
   }
 
   @ResolveField()
-  async replies(@Parent() thread: Thread) {    
+  async replies(
+    @Parent() thread: Thread,
+    @Args('skip', { type: () => Int }) skip: number
+  ) {
     const { id } = thread;
     const result = await this.repliesService.findAll({
       threadId: id,
-      skip: 0,
-      take: 25
+      skip,
+      take: 10
     })
     return {
       items: result[0],

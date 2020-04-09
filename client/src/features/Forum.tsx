@@ -9,10 +9,45 @@ import { Card } from '../components/Card'
 import { Pagination } from '../components/Pagination'
 
 export const Forum: React.FC<{
-  forum: IForum
+  forum: IForum,
+  page: number,
+  setPage: (page: number) => void    
 }> = ({
-  forum
+  forum,
+  page,
+  setPage
 }) => {
+  
+  const Headings: React.FC = () => {
+    const Cell: React.FC<{children?: ReactNode}> = ({children}) => (
+      <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase">
+        {children}
+      </th>
+    )
+    return (
+      <thead>
+        <tr>
+          <Cell />
+          <Cell>Title</Cell>
+          <Cell>Replies</Cell>
+          <Cell />
+        </tr>
+      </thead>
+    )
+  }
+
+  const Footer: React.FC = () => {
+    return (
+      <tfoot>
+        <tr>
+          <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" colSpan={5}>
+            <Pagination page={page} count={forum.threads.count} setPage={setPage}/>
+          </th>
+        </tr>
+      </tfoot>
+    )
+  }
+
   return (
     <Card>
       <table className="min-w-full">
@@ -23,24 +58,6 @@ export const Forum: React.FC<{
         <Footer />
       </table>
     </Card>
-  )
-}
-
-const Headings: React.FC = () => {
-  const Cell: React.FC<{children?: ReactNode}> = ({children}) => (
-    <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase">
-      {children}
-    </th>
-  )
-  return (
-    <thead>
-      <tr>
-        <Cell />
-        <Cell>Title</Cell>
-        <Cell>Replies</Cell>
-        <Cell />
-      </tr>
-    </thead>
   )
 }
 
@@ -77,23 +94,12 @@ const Thread: React.FC<{
     </td>
 
     <td className="px-2 py-4  text-right border-b border-gray-200 text-sm leading-5 font-medium">
-      <NewPosts newposts={newposts} />
+      <NewPosts newposts={0} />
     </td>
   </tr>
 )
 
 
-const Footer: React.FC = () => {
-  return (
-    <tfoot>
-      <tr>
-        <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" colSpan={5}>
-          <Pagination />
-        </th>
-      </tr>
-    </tfoot>
-  )
-}
 
 const NewPosts: React.FC<{
   newposts: number

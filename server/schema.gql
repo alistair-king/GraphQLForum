@@ -8,7 +8,7 @@ scalar Date
 type Forum {
   id: ID!
   name: String!
-  threads: PaginatedThreads!
+  threads(skip: Int!): PaginatedThreads!
 }
 
 type Mutation {
@@ -82,7 +82,7 @@ type Thread {
   content: String!
   forum: Forum!
   author: User!
-  replies: PaginatedReplies!
+  replies(skip: Int!): PaginatedReplies!
 }
 
 type User {

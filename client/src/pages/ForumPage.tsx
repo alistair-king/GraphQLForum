@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import gql from 'graphql-tag';
@@ -19,11 +19,11 @@ import { ErrorPage } from './ErrorPage'
 import { useModal } from '../hooks'
 
 const GET_FOURM = gql`
-  query getForum($id: String!) {
+  query getForum($id: String!, $skip: Int!) {
     forum(id: $id) {
       id
       name
-      threads {
+      threads(skip: $skip) {
         count,
         items {
           id
@@ -42,11 +42,16 @@ const GET_FOURM = gql`
 
 export const ForumPage: React.FC = () => {
   const { id } = useParams();
-  
-  const { loading, error, data } = useQuery<{forum: IForum}, {id: string}>(
+  const [page, setPage] = useState(0)
+  const { loading, error, data } = useQuery<{forum: IForum}, {id: string, skip: number}>(
     GET_FOURM,
-    { variables: { id: id as string } }
-  );
+    {
+      variables: {
+        id: id as string,
+        skip: (page  * 10)
+      }
+    }
+  )
   
   if ( error ) {
     return <ErrorPage message={error?.message} />
@@ -56,7 +61,7 @@ export const ForumPage: React.FC = () => {
     <Page title={data?.forum?.name} commands={<Commands />}>
       { loading || !data
         ? <Spinner className="w-full flex justify-center pt-8" />
-        : <Forum forum={data.forum} />
+        : <Forum forum={data.forum} page={page} setPage={setPage} />
       }
     </Page>
   )
