@@ -22,7 +22,7 @@ export class ThreadsService {
     return this.threadsRepository.findOne(id)
   }
 
-  async findAll(args: ThreadsArgs): Promise<[Thread[], number]> {
+  async findThreads(args: ThreadsArgs): Promise<[Thread[], number]> {
     return this.threadsRepository.createQueryBuilder('thread')
       .where("thread.forumid = :id", { id: args.forumId })
       .skip(args.skip)
@@ -30,7 +30,7 @@ export class ThreadsService {
       .leftJoinAndSelect("thread.author", "User")
       .getManyAndCount()
   }
-
+  
   // async remove(id: string): Promise<boolean> {
   //   return true
   // }

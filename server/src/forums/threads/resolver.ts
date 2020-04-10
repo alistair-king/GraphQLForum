@@ -55,6 +55,26 @@ export class ThreadsResolver {
     }
   }
 
+  @ResolveField()
+  async lastReply(
+    @Parent() thread: Thread,    
+  ) {
+    const { id } = thread;
+    const result = await this.repliesService.findLastReply({
+      threadId: id,
+      skip: 0,
+      take: 1
+    })
+    const replies = result[0]
+    const reply = replies.length > 0
+      ? replies[0]
+      : undefined
+    return {
+      reply,
+      count: result[1]
+    }
+  }
+
   @Mutation(returns => Thread)
   async addThread(
     @Args('newThreadData') newThreadData: NewThreadInput,

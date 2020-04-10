@@ -14,6 +14,15 @@ abstract class PaginatedReplies {
   count: number;
 }
 
+@ObjectType({ isAbstract: true })
+abstract class LastReply {
+  @Field(type => Reply, { nullable: true })
+  reply: Reply;
+
+  @Field(type => Int)
+  count: number;
+}
+
 @ObjectType()
 export class Thread {
   @Field(type => ID)
@@ -34,6 +43,9 @@ export class Thread {
   @Field(type => User)
   author: User
 
-  @Field(type => PaginatedReplies )
-  replies: PaginatedReplies;
+  @Field(type => PaginatedReplies)
+  replies: PaginatedReplies
+
+  @Field(type => LastReply)
+  lastReply: LastReply
 }

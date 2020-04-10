@@ -9,6 +9,7 @@ export interface IReply {
   id: number
   when: Date
   content: string  
+  author?: IUser
 }
 
 export interface IThread {
@@ -18,6 +19,10 @@ export interface IThread {
   content: string
   author: IUser
   replies: IReply[]
+  lastReply?: {
+    reply?: IReply
+    count: number
+  }
 }
 
 export interface IThreads {

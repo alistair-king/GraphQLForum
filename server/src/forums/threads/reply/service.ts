@@ -31,6 +31,15 @@ export class RepliesService {
       .getManyAndCount()
   }
 
+  async findLastReply(args: RepliesArgs): Promise<[Reply[], number]> {
+    return this.repliesRepository.createQueryBuilder('reply')
+      .where("reply.threadid = :id", { id: args.threadId })
+      .orderBy('reply.id', 'DESC')
+      .take(1)
+      .leftJoinAndSelect("reply.author", "User")
+      .getManyAndCount()
+  }
+
   // async remove(id: string): Promise<boolean> {
   //   return this.repliesRepository.delete(id)
   // }

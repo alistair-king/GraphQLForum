@@ -19,11 +19,11 @@ import { ErrorPage } from './ErrorPage'
 import { useModal } from '../hooks'
 
 const GET_FOURM = gql`
-  query getForum($id: String!, $skip: Int!) {
+  query getForum($id: String!, $skip: Int!, $take: Int!) {
     forum(id: $id) {
       id
       name
-      threads(skip: $skip) {
+      threads(skip: $skip, take: $take) {
         count,
         items {
           id
@@ -32,6 +32,17 @@ const GET_FOURM = gql`
           author {
             id
             name
+          }
+          lastReply {
+            count
+            reply {
+              id
+              when
+              author {
+                id
+                name
+              }
+            }
           }
         }
       }
@@ -43,12 +54,13 @@ const GET_FOURM = gql`
 export const ForumPage: React.FC = () => {
   const { id } = useParams()
   const [page, setPage] = useState(0)
-  const { loading, error, data } = useQuery<{forum: IForum}, {id: string, skip: number}>(
+  const { loading, error, data } = useQuery<{forum: IForum}, {id: string, skip: number, take: number}>(
     GET_FOURM,
     {
       variables: {
         id: id as string,
-        skip: (page  * 10)
+        skip: (page  * 10),
+        take: 10
       }
     }
   )

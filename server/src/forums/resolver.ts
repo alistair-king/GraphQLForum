@@ -45,15 +45,14 @@ export class ForumsResolver {
   @ResolveField()
   async threads(
     @Parent() forum: Forum,
-    @Args('skip', { type: () => Int }) skip: number
+    @Args('skip', { type: () => Int }) skip: number,
+    @Args('take', { type: () => Int }) take: number
   ) {
-    console.log('threads', forum, skip);
-    
     const { id } = forum;
-    const result = await this.threadsService.findAll({
+    const result = await this.threadsService.findThreads({
       forumId: id,
       skip,
-      take: 10
+      take
     });
     return {
       items: result[0],
