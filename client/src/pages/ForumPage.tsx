@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
@@ -52,8 +52,11 @@ const GET_FOURM = gql`
 
 
 export const ForumPage: React.FC = () => {
-  const { id } = useParams()
-  const [page, setPage] = useState(0)
+  const { id, pageString } = useParams()
+  const page = parseInt(pageString || '0')
+  const history = useHistory()
+  const setPage = (newPage: number) => { history.push(`/forum/${id}/${newPage}`) }
+  
   const { loading, error, data } = useQuery<{forum: IForum}, {id: string, skip: number, take: number}>(
     GET_FOURM,
     {

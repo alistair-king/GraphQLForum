@@ -35,7 +35,10 @@ export const App = () => {
 
 const Routes: RouteProps[] = [
   {
-    path: '/forum/:id',
+    path: [
+      '/forum/:id/:pageString',
+      '/forum/:id',
+    ],
     component: ForumPage
   },
   {
