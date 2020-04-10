@@ -1,6 +1,17 @@
 import { NotFoundException } from '@nestjs/common'
-import { Args, Mutation, Query, Parent, Resolver, ResolveField, Subscription } from '@nestjs/graphql'
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  Parent,
+  Resolver,
+  ResolveField,
+  Subscription
+} from '@nestjs/graphql'
 import { PubSub } from 'apollo-server-express'
+
+import { UsersService } from '../../users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
@@ -27,15 +38,41 @@ export class ThreadsResolver {
     return thread
   }
 
-  @Query(returns => [Thread])
-  threads(@Args() threadsArgs: ThreadsArgs): Promise<Thread[]> {
-    return this.threadsService.findAll(threadsArgs)
-  }
-  
   @ResolveField()
-  replies(@Parent() thread: Thread) {    
+  async replies(
+    @Parent() thread: Thread,
+    @Args('skip', { type: () => Int }) skip: number
+  ) {
     const { id } = thread;
-    return this.repliesService.findAll({ threadId: id, skip: 0, take: 25 });
+    const result = await this.repliesService.findAll({
+      threadId: id,
+      skip,
+      take: 10
+    })
+    return {
+      items: result[0],
+      count: result[1]
+    }
+  }
+
+  @ResolveField()
+  async lastReply(
+    @Parent() thread: Thread,    
+  ) {
+    const { id } = thread;
+    const result = await this.repliesService.findLastReply({
+      threadId: id,
+      skip: 0,
+      take: 1
+    })
+    const replies = result[0]
+    const reply = replies.length > 0
+      ? replies[0]
+      : undefined
+    return {
+      reply,
+      count: result[1]
+    }
   }
 
   @Mutation(returns => Thread)

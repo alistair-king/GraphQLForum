@@ -8,7 +8,12 @@ scalar Date
 type Forum {
   id: ID!
   name: String!
-  threads: [Thread!]!
+  threads(take: Int!, skip: Int!): PaginatedThreads!
+}
+
+type LastReply {
+  reply: Reply
+  count: Int!
 }
 
 type Mutation {
@@ -41,13 +46,21 @@ input NewUserInput {
   password: String!
 }
 
+type PaginatedReplies {
+  items: [Reply!]!
+  count: Int!
+}
+
+type PaginatedThreads {
+  items: [Thread!]!
+  count: Int!
+}
+
 type Query {
   forum(id: String!): Forum!
   forums(skip: Int = 0, take: Int = 25): [Forum!]!
   thread(id: String!): Thread!
-  threads(forumId: String!, skip: Int = 0, take: Int = 25): [Thread!]!
   reply(id: String!): Reply!
-  replys(threadId: String!, skip: Int = 0, take: Int = 25): [Reply!]!
   user(id: String!): User!
   users(skip: Int = 0, take: Int = 25): [User!]!
 }
@@ -74,7 +87,8 @@ type Thread {
   content: String!
   forum: Forum!
   author: User!
-  replies: [Reply!]!
+  replies(skip: Int!): PaginatedReplies!
+  lastReply: LastReply!
 }
 
 type User {

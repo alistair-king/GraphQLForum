@@ -1,5 +1,14 @@
 import { NotFoundException } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver, Subscription, Parent, ResolveField } from '@nestjs/graphql'
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Subscription,
+  Parent,
+  ResolveField
+} from '@nestjs/graphql'
 import { PubSub } from 'apollo-server-express'
 
 import { NewForumInput } from './dto/new-forum.input'
@@ -34,9 +43,21 @@ export class ForumsResolver {
   }
 
   @ResolveField()
-  threads(@Parent() forum: Forum) {
+  async threads(
+    @Parent() forum: Forum,
+    @Args('skip', { type: () => Int }) skip: number,
+    @Args('take', { type: () => Int }) take: number
+  ) {
     const { id } = forum;
-    return this.threadsService.findAll({ forumId: id, skip: 0, take: 25 });
+    const result = await this.threadsService.findThreads({
+      forumId: id,
+      skip,
+      take
+    });
+    return {
+      items: result[0],
+      count: result[1]
+    }
   }
 
   @Mutation(returns => Forum)

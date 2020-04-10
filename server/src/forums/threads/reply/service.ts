@@ -22,10 +22,22 @@ export class RepliesService {
     return this.repliesRepository.findOne(id)
   }
 
-  async findAll(repliesArgs: RepliesArgs): Promise<Reply[]> {
+  async findAll(args: RepliesArgs): Promise<[Reply[], number]> {
     return this.repliesRepository.createQueryBuilder('reply')
-      .where("reply.threadid = :id", { id: repliesArgs.threadId })
-      .getMany()
+      .where("reply.threadid = :id", { id: args.threadId })
+      .skip(args.skip)
+      .take(args.take)
+      .leftJoinAndSelect("reply.author", "User")
+      .getManyAndCount()
+  }
+
+  async findLastReply(args: RepliesArgs): Promise<[Reply[], number]> {
+    return this.repliesRepository.createQueryBuilder('reply')
+      .where("reply.threadid = :id", { id: args.threadId })
+      .orderBy('reply.id', 'DESC')
+      .take(1)
+      .leftJoinAndSelect("reply.author", "User")
+      .getManyAndCount()
   }
 
   // async remove(id: string): Promise<boolean> {

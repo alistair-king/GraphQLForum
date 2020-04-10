@@ -22,12 +22,15 @@ export class ThreadsService {
     return this.threadsRepository.findOne(id)
   }
 
-  async findAll(threadsArgs: ThreadsArgs): Promise<Thread[]> {
+  async findThreads(args: ThreadsArgs): Promise<[Thread[], number]> {
     return this.threadsRepository.createQueryBuilder('thread')
-      .where("thread.forumid = :id", { id: threadsArgs.forumId })
-      .getMany()
+      .where("thread.forumid = :id", { id: args.forumId })
+      .skip(args.skip)
+      .take(args.take)
+      .leftJoinAndSelect("thread.author", "User")
+      .getManyAndCount()
   }
-
+  
   // async remove(id: string): Promise<boolean> {
   //   return true
   // }

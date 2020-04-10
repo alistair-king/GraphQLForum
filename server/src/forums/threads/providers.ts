@@ -9,5 +9,5 @@ export const ThreadProviders = [
     provide: Constants.THREAD_REPO,
     useFactory: (connection: Connection) => connection.getRepository(Thread),
     inject: [Constants.DATABASE_CONNECTION]
-  },
+  }  
 ];

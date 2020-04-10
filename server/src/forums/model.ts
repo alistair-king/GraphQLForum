@@ -1,6 +1,16 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Type } from '@nestjs/common';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql'
 
 import { Thread } from './threads/model'
+
+@ObjectType({ isAbstract: true })
+abstract class PaginatedThreads {
+  @Field(type => [Thread])
+  items: Thread[];
+
+  @Field(type => Int)
+  count: number;
+}
 
 @ObjectType()
 export class Forum {
@@ -10,6 +20,8 @@ export class Forum {
   @Field()
   name: string
 
-  @Field(type => [Thread])
-  threads: Thread[];
+  @Field(type => PaginatedThreads)
+  threads: PaginatedThreads;
 }
+
+

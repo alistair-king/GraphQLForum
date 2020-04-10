@@ -1,8 +1,27 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql'
 
 import { Forum } from '../model'
 import { Reply } from './reply/model'
 import { User } from '../../users/model'
+
+
+@ObjectType({ isAbstract: true })
+abstract class PaginatedReplies {
+  @Field(type => [Reply])
+  items: Reply[];
+
+  @Field(type => Int)
+  count: number;
+}
+
+@ObjectType({ isAbstract: true })
+abstract class LastReply {
+  @Field(type => Reply, { nullable: true })
+  reply: Reply;
+
+  @Field(type => Int)
+  count: number;
+}
 
 @ObjectType()
 export class Thread {
@@ -24,6 +43,9 @@ export class Thread {
   @Field(type => User)
   author: User
 
-  @Field(type => [Reply])
-  replies: Reply[];
+  @Field(type => PaginatedReplies)
+  replies: PaginatedReplies
+
+  @Field(type => LastReply)
+  lastReply: LastReply
 }
