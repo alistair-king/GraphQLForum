@@ -41,7 +41,7 @@ const GET_FOURM = gql`
 
 
 export const ForumPage: React.FC = () => {
-  const { id } = useParams();
+  const { id } = useParams()
   const [page, setPage] = useState(0)
   const { loading, error, data } = useQuery<{forum: IForum}, {id: string, skip: number}>(
     GET_FOURM,

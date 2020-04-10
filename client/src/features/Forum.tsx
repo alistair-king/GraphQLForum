@@ -41,7 +41,7 @@ export const Forum: React.FC<{
       <tfoot>
         <tr>
           <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" colSpan={5}>
-            <Pagination page={page} count={forum.threads.count} setPage={setPage}/>
+            <Pagination activepage={page} count={forum.threads.count} setPage={setPage}/>
           </th>
         </tr>
       </tfoot>
