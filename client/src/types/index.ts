@@ -12,13 +12,18 @@ export interface IReply {
   author?: IUser
 }
 
+export interface IReplies {
+  items?: IReply[]
+  count: number
+}
+
 export interface IThread {
   id: number
   when: Date
   title: string
   content: string
   author: IUser
-  replies: IReply[]
+  replies?: IReplies
   lastReply?: {
     reply?: IReply
     count: number

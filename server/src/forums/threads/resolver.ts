@@ -41,13 +41,14 @@ export class ThreadsResolver {
   @ResolveField()
   async replies(
     @Parent() thread: Thread,
-    @Args('skip', { type: () => Int }) skip: number
+    @Args('skip', { type: () => Int }) skip: number,
+    @Args('take', { type: () => Int }) take: number
   ) {
     const { id } = thread;
     const result = await this.repliesService.findAll({
       threadId: id,
       skip,
-      take: 10
+      take
     })
     return {
       items: result[0],
@@ -57,7 +58,7 @@ export class ThreadsResolver {
 
   @ResolveField()
   async lastReply(
-    @Parent() thread: Thread,    
+    @Parent() thread: Thread
   ) {
     const { id } = thread;
     const result = await this.repliesService.findLastReply({

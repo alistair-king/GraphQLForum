@@ -19,7 +19,11 @@ export class ThreadsService {
   }
 
   async findOneById(id: string): Promise<Thread> {
-    return this.threadsRepository.findOne(id)
+    return this.threadsRepository.createQueryBuilder('thread')
+      .where("thread.id = :id", { id })
+      .leftJoinAndSelect("thread.author", "User") 
+      // .take(1)
+      .getOne()
   }
 
   async findThreads(args: ThreadsArgs): Promise<[Thread[], number]> {

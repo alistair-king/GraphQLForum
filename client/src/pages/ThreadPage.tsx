@@ -1,25 +1,82 @@
 import React from 'react'
+import { useParams } from 'react-router-dom' // useHistory, 
+
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
+
+import { IThread } from '../types'
 
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import { Page } from '../components/Page'
+import { Spinner } from '../components/Spinner'
 
 import { Thread } from '../features/Thread'
 import { NewReply } from '../features/NewReply'
 
+import { ErrorPage } from './ErrorPage'
+
 import { useModal } from '../hooks'
 
-export const ThreadPage: React.FC = () => (
-  <>
-    <Page
-      title="Quis autem vel eum iure reprehenderit"
-      commands={<Commands />}
-      back="/forum"
-    >
-      <Thread />
-    </Page>
-  </>
-)
+const GET_THREAD = gql`
+  query getForum($id: String!, $skip: Int!, $take: Int!) {
+    thread(id: $id) {
+      id
+      title
+      content
+      when
+      author {
+        id
+        name
+      }
+      replies(skip: $skip, take: $take) {
+        count,
+        items {
+          id
+          when
+          content
+        }
+      }
+    }
+  }
+`;
+
+export const ThreadPage: React.FC = () => {
+  const { id } = useParams() // , pageString
+  // const page = parseInt(pageString || '0')
+  // const history = useHistory()
+  // const setPage = (newPage: number) => { history.push(`/thread/${id}/${newPage}`) }
+
+  const { loading, error, data } = useQuery<{thread: IThread}, {id: string, skip: number, take: number}>(
+    GET_THREAD,
+    {
+      variables: {
+        id: id as string,
+        skip: 0,
+        take: 10
+      }
+    }
+  )
+
+  if ( error ) {
+    return <ErrorPage message={error?.message} />
+  }
+
+  return (
+    <>
+      <Page
+        title={data?.thread?.title}
+        commands={<Commands />}
+        back="/forum/1"
+      >
+        { loading || !data
+          ? <Spinner className="w-full flex justify-center pt-8" />
+          : <Thread thread={data.thread}/>
+        }
+      </Page>
+    </>
+  )
+}
 
 const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()

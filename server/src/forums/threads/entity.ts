@@ -14,7 +14,7 @@ export class Thread {
   @Column()
   title: string
 
-  @Column()
+  @Column('text')
   content: string
 
   @ManyToOne(type => Forum)
