@@ -81,7 +81,7 @@ const Thread: React.FC<{
         <Link className="flex items-center" to={`/thread/${thread.id}`}>
           <div className="ml-4">
             <div className="text-sm leading-5 font-medium text-gray-900">{thread.title}</div>
-            <div className="text-sm leading-5 text-gray-500">{thread.author.name} {timeAgo(thread.when)}</div>
+            <div className="text-sm leading-5 text-gray-500">{thread.author?.name} {timeAgo(thread.when)}</div>
           </div>
         </Link>
       </td>

@@ -22,7 +22,8 @@ export interface IThread {
   when: Date
   title: string
   content: string
-  author: IUser
+  author?: IUser
+  forum?: IForum
   replies?: IReplies
   lastReply?: {
     reply?: IReply

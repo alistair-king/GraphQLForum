@@ -20,18 +20,19 @@ export class ThreadsService {
 
   async findOneById(id: string): Promise<Thread> {
     return this.threadsRepository.createQueryBuilder('thread')
-      .where("thread.id = :id", { id })
-      .leftJoinAndSelect("thread.author", "User") 
+      .where('thread.id = :id', { id })
+      .leftJoinAndSelect('thread.forum', 'Forum') 
+      .leftJoinAndSelect('thread.author', 'User') 
       // .take(1)
       .getOne()
   }
 
   async findThreads(args: ThreadsArgs): Promise<[Thread[], number]> {
     return this.threadsRepository.createQueryBuilder('thread')
-      .where("thread.forumid = :id", { id: args.forumId })
+      .where('thread.forumid = :id', { id: args.forumId })
       .skip(args.skip)
       .take(args.take)
-      .leftJoinAndSelect("thread.author", "User")
+      .leftJoinAndSelect('thread.author', 'User')
       .getManyAndCount()
   }
   

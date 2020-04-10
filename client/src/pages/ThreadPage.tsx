@@ -25,6 +25,10 @@ const GET_THREAD = gql`
       title
       content
       when
+      forum {
+        id
+        name
+      }
       author {
         id
         name
@@ -65,9 +69,9 @@ export const ThreadPage: React.FC = () => {
   return (
     <>
       <Page
-        title={data?.thread?.title}
+        title={`${data?.thread?.forum?.name} > ${data?.thread?.title}`}
         commands={<Commands />}
-        back="/forum/1"
+        back={`/forum/${data?.thread?.forum?.id}`}
       >
         { loading || !data
           ? <Spinner className="w-full flex justify-center pt-8" />
