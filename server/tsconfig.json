@@ -8,9 +8,14 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@server/*": [
+        "src/*"
+      ]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }

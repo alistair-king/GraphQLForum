@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { Repository } from 'typeorm'
 
-import { Constants } from '../common/constants'
+import { Constants } from '@server/common/constants'
 
 import { NewForumInput } from './dto/new-forum.input'
 import { ForumsArgs } from './dto/forums.args'

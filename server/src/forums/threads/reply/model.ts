@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
 
-import { Thread } from '../model'
-import { User } from '../../../users/model'
+import { Thread } from '@server/forums/threads/model'
+import { User } from '@server/users/model'
 
 @ObjectType()
 export class Reply {

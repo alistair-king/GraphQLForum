@@ -1,6 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql'
 import { IsOptional, Length, MaxLength } from 'class-validator'
 
+import { User } from '@server/users/model'
+
+
 @InputType()
 export class NewReplyInput {
   @Field()

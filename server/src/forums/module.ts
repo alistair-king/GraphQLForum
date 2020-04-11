@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { DatabaseModule } from '../db/module'
+import { DatabaseModule } from '@server/db/module'
 
 import { ForumProviders } from './providers'
 import { ForumsResolver } from './resolver'

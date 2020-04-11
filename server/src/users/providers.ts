@@ -1,6 +1,6 @@
 import { Connection, Repository } from 'typeorm';
 
-import { Constants } from '../common/constants'
+import { Constants } from '@server/common/constants'
 
 import { User } from './entity';
 

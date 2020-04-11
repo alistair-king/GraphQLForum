@@ -1,8 +1,8 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql'
 
-import { Forum } from '../model'
-import { Reply } from './reply/model'
-import { User } from '../../users/model'
+import { Forum } from '@server/forums/model'
+import { Reply } from '@server/forums/threads/reply/model'
+import { User } from '@server/users/model'
 
 
 @ObjectType({ isAbstract: true })

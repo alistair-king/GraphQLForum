@@ -1,8 +1,8 @@
 import { Field, InputType, Int } from '@nestjs/graphql'
 import { MaxLength } from 'class-validator'
 
-import { Forum } from '../../model'
-import { User } from '../../../users/model'
+import { Forum } from '@server/forums/model'
+import { User } from '@server/users/model'
 
 @InputType()
 export class NewThreadInput {

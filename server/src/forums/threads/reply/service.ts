@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { Repository } from 'typeorm'
 
-import { Constants } from '../../../common/constants'
+import { Constants } from '@server/common/constants'
 
 import { NewReplyInput } from './dto/new-reply.input'
 import { RepliesArgs } from './dto/replies.args'

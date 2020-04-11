@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
 
-import { Forum } from '../entity'
-import { User } from '../../users/entity'
+import { Forum } from '@server/forums/entity'
+import { User } from '@server/users/entity'
 
 @Entity()
 export class Thread {

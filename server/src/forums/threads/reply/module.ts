@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 
-import { DateScalar } from '../../../common/scalars/date.scalar'
-import { DatabaseModule } from '../../../db/module'
+import { DateScalar } from '@server/common/scalars/date.scalar'
+import { DatabaseModule } from '@server/db/module'
 
 import { ReplyProviders } from './providers'
 import { RepliesResolver } from './resolver'
