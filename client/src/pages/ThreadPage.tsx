@@ -2,7 +2,7 @@ import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import { IThread } from '../types'
 
@@ -49,6 +49,15 @@ const GET_THREAD = gql`
   }
 `;
 
+const ADD_REPLY = gql`
+  mutation AddReply($newReplyData: NewReplyInput!) {
+    addReply(newReplyData: $newReplyData) {
+      content
+    }
+  }
+`;
+
+
 export const ThreadPage: React.FC = () => {
   const { id, pageString } = useParams()
   const page = parseInt(pageString || '0')
@@ -70,6 +79,41 @@ export const ThreadPage: React.FC = () => {
     return <ErrorPage message={error?.message} />
   }
 
+  const Commands: React.FC = () => {
+    const { isOpen, openModal, closeModal } = useModal()
+    const [addReply] = useMutation(ADD_REPLY)
+  
+    const newReply = () => {
+
+      const newReplyData = {
+        threadId: id, 
+        authorId: '1',
+        content: 'lorem ipsum'
+      }
+      addReply({
+        variables: {
+          newReplyData
+        }
+      })
+      closeModal();
+    }
+    
+    const Actions: React.FC = () => (
+      <>
+        <Button onClick={() => newReply() }>Post</Button>
+        <Button secondary onClick={() => closeModal()}>Cancel</Button>
+      </>
+    )
+  
+    return (
+      <Modal isOpen={isOpen} closeModal={closeModal} title="Reply" content={<NewReply />} actions={<Actions />}>
+        <Button onClick={() => openModal()}>
+          Reply
+        </Button>
+      </Modal>
+    )
+  }
+
   return (
     <>
       <Page
@@ -85,23 +129,3 @@ export const ThreadPage: React.FC = () => {
     </>
   )
 }
-
-const Commands: React.FC = () => {
-  const { isOpen, openModal, closeModal } = useModal()
-    
-  const Actions: React.FC = () => (
-    <>
-      <Button>Post</Button>
-      <Button secondary onClick={() => closeModal()}>Cancel</Button>
-    </>
-  )
-  
-  return (
-    <Modal isOpen={isOpen} closeModal={closeModal} title="Reply" content={<NewReply />} actions={<Actions />}>
-      <Button onClick={() => openModal()}>
-        Reply
-      </Button>
-    </Modal>
-  )
-}
-

@@ -8,7 +8,7 @@ export class Thread {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   when: Date
 
   @Column()

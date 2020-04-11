@@ -19,8 +19,8 @@ type LastReply {
 type Mutation {
   addForum(newForumData: NewForumInput!): Forum!
   addThread(newThreadData: NewThreadInput!): Thread!
-  addReply(newReplyData: NewReplyInput!): Reply!
   addUser(newUserData: NewUserInput!): User!
+  addReply(newReplyData: NewReplyInput!): Reply!
 }
 
 input NewForumInput {
@@ -28,9 +28,9 @@ input NewForumInput {
 }
 
 input NewReplyInput {
-  name: String!
-  email: String!
-  password: String!
+  threadId: String!
+  authorId: String!
+  content: String!
 }
 
 input NewThreadInput {
@@ -60,9 +60,9 @@ type Query {
   forum(id: String!): Forum!
   forums(skip: Int = 0, take: Int = 25): [Forum!]!
   thread(id: String!): Thread!
-  reply(id: String!): Reply!
   user(id: String!): User!
   users(skip: Int = 0, take: Int = 25): [User!]!
+  reply(id: String!): Reply!
 }
 
 type Reply {
@@ -76,8 +76,8 @@ type Reply {
 type Subscription {
   forumAdded: Forum!
   threadAdded: Thread!
-  replyAdded: Reply!
   userAdded: User!
+  replyAdded: Reply!
 }
 
 type Thread {
