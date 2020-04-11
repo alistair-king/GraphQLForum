@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom' // useHistory, 
+import { useHistory, useParams } from 'react-router-dom'
 
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
@@ -50,17 +50,17 @@ const GET_THREAD = gql`
 `;
 
 export const ThreadPage: React.FC = () => {
-  const { id } = useParams() // , pageString
-  // const page = parseInt(pageString || '0')
-  // const history = useHistory()
-  // const setPage = (newPage: number) => { history.push(`/thread/${id}/${newPage}`) }
+  const { id, pageString } = useParams()
+  const page = parseInt(pageString || '0')
+  const history = useHistory()
+  const setPage = (newPage: number) => { history.push(`/thread/${id}/${newPage}`) }
 
   const { loading, error, data } = useQuery<{thread: IThread}, {id: string, skip: number, take: number}>(
     GET_THREAD,
     {
       variables: {
         id: id as string,
-        skip: 0,
+        skip: (page * 10),
         take: 10
       }
     }
@@ -79,7 +79,7 @@ export const ThreadPage: React.FC = () => {
       >
         { loading || !data
           ? <Spinner className="w-full flex justify-center pt-8" />
-          : <Thread thread={data.thread}/>
+          : <Thread thread={data.thread} page={page} setPage={setPage}/>
         }
       </Page>
     </>

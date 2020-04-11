@@ -37,12 +37,15 @@ const Routes: RouteProps[] = [
   {
     path: [
       '/forum/:id/:pageString',
-      '/forum/:id',
+      '/forum/:id'
     ],
     component: ForumPage
   },
   {
-    path: '/thread/:id',
+    path: [
+      '/thread/:id/:pageString',
+      '/thread/:id'
+    ],
     component: ThreadPage
   },
   {
