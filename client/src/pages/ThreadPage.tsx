@@ -1,8 +1,9 @@
 import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useForm } from 'react-hook-form'
+import cls from 'classnames'
 
 import { IThread } from '../types'
 
@@ -12,7 +13,6 @@ import { Page } from '../components/Page'
 import { Spinner } from '../components/Spinner'
 
 import { Thread } from '../features/Thread'
-import { NewReply } from '../features/NewReply'
 
 import { ErrorPage } from './ErrorPage'
 
@@ -81,32 +81,62 @@ export const ThreadPage: React.FC = () => {
 
   const Commands: React.FC = () => {
     const { isOpen, openModal, closeModal } = useModal()
+    const { register, handleSubmit, errors } = useForm()
     const [addReply] = useMutation(ADD_REPLY)
-  
-    const newReply = () => {
+    
+    const Form: React.FC = () => {
+      return (
+        <div className="-mx-3 md:flex mb-6">
+          <div className="md:w-full px-3">
+            <textarea
+              autoFocus
+              name="content"
+              id="grid-reply"
+              ref={register({ required: true })}
+              className={cls('appearance-none block w-full text-grey-darker border rounded py-3 px-4 mb-3',
+                {
+                  'bg-grey-lighter border-grey-lighter': !errors.content,
+                  'bg-red-200 border-red-500': !!errors.content
+                }
+              )} />
+            {errors.content && <span className="text-red-500">Required field!</span>}
+          </div>
+        </div>
+      )
+    }
 
-      const newReplyData = {
-        threadId: id, 
-        authorId: '1',
-        content: 'lorem ipsum'
-      }
-      addReply({
-        variables: {
-          newReplyData
+    const onSubmit = data => {
+      if (data.content) {
+        const newReplyData = {
+          threadId: id, 
+          authorId: '1',
+          content: data.content
         }
-      })
-      closeModal();
+        addReply({
+          variables: {
+            newReplyData
+          }
+        })
+        closeModal();
+      }
     }
     
     const Actions: React.FC = () => (
       <>
-        <Button onClick={() => newReply() }>Post</Button>
+        <Button type="submit">Post</Button>
         <Button secondary onClick={() => closeModal()}>Cancel</Button>
       </>
     )
   
     return (
-      <Modal isOpen={isOpen} closeModal={closeModal} title="Reply" content={<NewReply />} actions={<Actions />}>
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        title="Reply"
+        content={<Form />}
+        actions={<Actions />}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Button onClick={() => openModal()}>
           Reply
         </Button>

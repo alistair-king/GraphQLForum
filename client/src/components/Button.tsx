@@ -3,14 +3,17 @@ import cls from 'classnames'
 
 export const Button: React.FC<{
   children: ReactNode,
+  type?: 'button' | 'submit' | 'reset',
   secondary?: boolean,
   onClick?: () => void
 }> = ({
   children,
+  type = 'button',
   secondary = false,
   onClick
 }) => (
-  <button type="button"
+  <button
+    type={type}
     onClick={onClick}
     className={
       cls('font-bold py-2 px-4 rounded',
