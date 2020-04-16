@@ -20,6 +20,9 @@ export class Forum {
   @Field()
   name: string
 
+  @Field()
+  description: string
+
   @Field(type => PaginatedThreads)
   threads: PaginatedThreads;
 }

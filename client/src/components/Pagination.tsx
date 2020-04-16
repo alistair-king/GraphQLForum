@@ -22,6 +22,9 @@ export const Pagination: React.FC<{
   for ( let i = first; i <= last; i++ ) {
     pageNumbers.push(i)
   }
+  if (pageNumbers.length < 2) {
+    return null
+  }
   
   return (
     <>

@@ -8,6 +8,7 @@ scalar Date
 type Forum {
   id: ID!
   name: String!
+  description: String!
   threads(take: Int!, skip: Int!): PaginatedThreads!
 }
 

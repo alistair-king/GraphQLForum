@@ -73,7 +73,11 @@ export const ForumPage: React.FC = () => {
   }
   
   return (
-    <Page title={data?.forum?.name} commands={<Commands />}>
+    <Page
+      title={data?.forum?.name}
+      commands={<Commands />}
+      back="/"
+    >
       { loading || !data
         ? <Spinner className="w-full flex justify-center pt-8" />
         : <Forum forum={data.forum} page={page} setPage={setPage} />

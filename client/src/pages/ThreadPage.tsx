@@ -147,7 +147,7 @@ export const ThreadPage: React.FC = () => {
   return (
     <>
       <Page
-        title={`${data?.thread?.forum?.name} / ${data?.thread?.title}`}
+        title={`${data?.thread?.title}`}
         commands={<Commands />}
         back={`/forum/${data?.thread?.forum?.id}`}
       >

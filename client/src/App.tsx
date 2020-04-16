@@ -8,6 +8,7 @@ import ReactModal from 'react-modal'
 // import { AnimatedSwitch } from './components/AnimatedSwitch'
 import { NavBar } from './components/NavBar'
 
+import { HomePage } from './pages/HomePage'
 import { ForumPage } from './pages/ForumPage'
 import { ThreadPage } from './pages/ThreadPage'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -34,6 +35,11 @@ export const App = () => {
 }
 
 const Routes: RouteProps[] = [
+  {
+    path: '/',
+    component: HomePage,
+    exact: true
+  },
   {
     path: [
       '/forum/:id/:pageString',
