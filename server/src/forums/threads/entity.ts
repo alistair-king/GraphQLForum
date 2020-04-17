@@ -17,6 +17,12 @@ export class Thread {
   @Column('text')
   content: string
 
+  @ManyToOne(type => User, { nullable: true })
+  userLastReply: User
+  
+  @Column({ type: "timestamp" })
+  whenLastActivity: Date  
+
   @ManyToOne(type => Forum)
   @JoinColumn()
   forum: Forum;

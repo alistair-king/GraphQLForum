@@ -32,7 +32,10 @@ export class RepliesService {
     const reply = this.repliesRepository.create(rest)
     reply.thread = await this.threadsService.findOneById(threadId)
     reply.author = await this.usersService.findOneById(authorId)
-    this.repliesRepository.save(reply)
+    await this.repliesRepository.save(reply)
+    
+    this.threadsService.recordActivity(reply.thread, reply)
+    
     return reply
   }
 

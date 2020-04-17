@@ -88,6 +88,8 @@ type Thread {
   content: String!
   forum: Forum!
   author: User!
+  userLastReply: User!
+  whenLastActivity: Date!
   replies(take: Int!, skip: Int!): PaginatedReplies!
   lastReply: LastReply!
 }

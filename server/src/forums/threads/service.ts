@@ -8,7 +8,9 @@ import { UsersService } from '@server/users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
+
 import { Thread } from './model'
+import { Reply } from './reply/model'
 
 @Injectable()
 export class ThreadsService {
@@ -41,17 +43,23 @@ export class ThreadsService {
       .where('thread.id = :id', { id })
       .leftJoinAndSelect('thread.forum', 'Forum') 
       .leftJoinAndSelect('thread.author', 'User') 
-      // .take(1)
       .getOne()
   }
 
   async findThreads(args: ThreadsArgs): Promise<[Thread[], number]> {
     return this.threadsRepository.createQueryBuilder('thread')
       .where('thread.forumid = :id', { id: args.forumId })
+      .orderBy('thread.whenLastActivity', 'DESC')
       .skip(args.skip)
       .take(args.take)
       .leftJoinAndSelect('thread.author', 'User')
       .getManyAndCount()
+  }
+  
+  async recordActivity(thread: Thread, reply: Reply) {
+    thread.userLastReply = reply.author
+    thread.whenLastActivity = reply.when
+    this.threadsRepository.save(thread)
   }
   
   // async remove(id: string): Promise<boolean> {

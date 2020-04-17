@@ -43,6 +43,13 @@ export class Thread {
   @Field(type => User)
   author: User
 
+  @Field(type => User)
+  userLastReply: User
+
+  @Field()
+  whenLastActivity: Date  
+
+
   @Field(type => PaginatedReplies)
   replies: PaginatedReplies
 
