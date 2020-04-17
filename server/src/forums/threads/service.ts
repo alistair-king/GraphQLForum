@@ -1,7 +1,10 @@
-import { Injectable, Inject } from '@nestjs/common'
+import { Injectable, Inject, forwardRef } from '@nestjs/common'
 import { Repository } from 'typeorm'
 
 import { Constants } from '@server/common/constants'
+
+import { ForumsService } from '@server/forums/service'
+import { UsersService } from '@server/users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
@@ -11,11 +14,26 @@ import { Thread } from './model'
 export class ThreadsService {
   constructor(
     @Inject(Constants.THREAD_REPO)
-    private threadsRepository: Repository<Thread>
+    private threadsRepository: Repository<Thread>,
+
+    @Inject(forwardRef(() => ForumsService))
+    private forumsService: ForumsService,
+
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService
   ) {}
 
   async create(data: NewThreadInput): Promise<Thread> {
-    return {} as any
+    const {
+      forumId,
+      authorId,
+      ...rest
+    } = data
+    const reply = this.threadsRepository.create(rest)
+    reply.forum = await this.forumsService.findOneById(forumId)
+    reply.author = await this.usersService.findOneById(authorId)
+    this.threadsRepository.save(reply)
+    return reply
   }
 
   async findOneById(id: string): Promise<Thread> {

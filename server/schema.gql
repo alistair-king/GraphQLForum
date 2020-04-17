@@ -35,10 +35,10 @@ input NewReplyInput {
 }
 
 input NewThreadInput {
-  name: String!
-  body: String!
-  authorid: Int!
-  forumid: Int!
+  title: String!
+  content: String!
+  authorId: String!
+  forumId: String!
 }
 
 input NewUserInput {

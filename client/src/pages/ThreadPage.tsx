@@ -47,7 +47,7 @@ const GET_THREAD = gql`
       }
     }
   }
-`;
+`
 
 const ADD_REPLY = gql`
   mutation AddReply($newReplyData: NewReplyInput!) {
@@ -55,7 +55,7 @@ const ADD_REPLY = gql`
       content
     }
   }
-`;
+`
 
 
 export const ThreadPage: React.FC = () => {

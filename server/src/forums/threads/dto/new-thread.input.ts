@@ -8,14 +8,14 @@ import { User } from '@server/users/model'
 export class NewThreadInput {
   @Field()
   @MaxLength(255)
-  name: string
+  title: string
 
   @Field()
-  body: string
+  content: string
   
-  @Field(type => Int)
-  authorid: number
+  @Field(type => String)
+  authorId: string
   
-  @Field(type => Int)
-  forumid: number
+  @Field(type => String)
+  forumId: string
 }

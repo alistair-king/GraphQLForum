@@ -7,6 +7,10 @@ import { UsersModule } from '@server/users/module'
 import { UserProviders } from '@server/users/providers'
 import { UsersService } from '@server/users/service'
 
+import { ForumsModule } from '@server/forums/module'
+import { ForumProviders } from '@server/forums/providers'
+import { ForumsService } from '@server/forums/service'
+
 import { ThreadsModule } from '@server/forums/threads/module'
 import { ThreadProviders } from '@server/forums/threads/providers'
 import { ThreadsService } from '@server/forums/threads/service'
@@ -14,11 +18,11 @@ import { ThreadsService } from '@server/forums/threads/service'
 import { ReplyProviders } from './providers'
 import { RepliesResolver } from './resolver'
 import { RepliesService } from './service'
-import { Reply } from './entity'
 
 @Module({
   imports: [
     DatabaseModule,
+    forwardRef(() => ForumsModule),
     forwardRef(() => ThreadsModule),
     forwardRef(() => UsersModule)
   ],
@@ -26,11 +30,13 @@ import { Reply } from './entity'
     RepliesService
   ],
   providers: [
-    ...ReplyProviders,
     ...ThreadProviders,
+    ...ForumProviders,
+    ...ReplyProviders,
     ...UserProviders,
     RepliesResolver,
     RepliesService,
+    ForumsService,
     ThreadsService,
     UsersService,
     DateScalar

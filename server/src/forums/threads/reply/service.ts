@@ -10,7 +10,6 @@ import { NewReplyInput } from './dto/new-reply.input'
 import { RepliesArgs } from './dto/replies.args'
 import { Reply } from './model'
 
-
 @Injectable()
 export class RepliesService {
   constructor(
@@ -31,8 +30,8 @@ export class RepliesService {
       ...rest
     } = data
     const reply = this.repliesRepository.create(rest)
-    reply.thread = await this.threadsService.findOneById(threadId);
-    reply.author = await this.usersService.findOneById(authorId);
+    reply.thread = await this.threadsService.findOneById(threadId)
+    reply.author = await this.usersService.findOneById(authorId)
     this.repliesRepository.save(reply)
     return reply
   }
