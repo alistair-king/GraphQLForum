@@ -133,7 +133,7 @@ export const ForumPage: React.FC = () => {
     )
   
     const onSubmit = data => {
-ss      if (data.title && data.content) {
+      if (data.title && data.content) {
         const newThreadData = {
           forumId: id, 
           authorId: '1',
