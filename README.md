@@ -8,5 +8,6 @@ Mainly just an opportunity to try new things.
 - apollo
 - tailwind
 - react hook form
+- typeORM
 
 
