@@ -14,9 +14,9 @@ export const databaseProviders = [
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'alistairk',
-      password: 'test',
-      database: 'graphqlforum',
+      username: '',
+      password: '',
+      database: '',
       entities: [
         Forum,
         Thread,
