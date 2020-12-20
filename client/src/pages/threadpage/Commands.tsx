@@ -3,12 +3,9 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
-import { useForm } from 'react-hook-form'
-import cls from 'classnames'
-
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
-
+import { Reply } from '../../forms/Reply'
 import { useModal } from '../../hooks'
 
 const ADD_REPLY = gql`
@@ -21,30 +18,8 @@ const ADD_REPLY = gql`
 
 export const Commands: React.FC<{ id: string }> = ({ id }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const { register, handleSubmit, errors } = useForm()
   const [addReply] = useMutation(ADD_REPLY)
   
-  const Form: React.FC = () => {
-    return (
-      <div className="-mx-3 md:flex mb-6">
-        <div className="md:w-full px-3">
-          <textarea
-            autoFocus
-            name="content"
-            id="grid-reply"
-            ref={register({ required: true })}
-            className={cls('appearance-none block w-full text-grey-darker border rounded py-3 px-4 mb-3',
-              {
-                'bg-grey-lighter border-grey-lighter': !errors.content,
-                'bg-red-200 border-red-500': !!errors.content
-              }
-            )} />
-          {errors.content && <span className="text-red-500">Required field!</span>}
-        </div>
-      </div>
-    )
-  }
-
   const onSubmit = data => {
     if (data.content) {
       const newReplyData = {
@@ -72,10 +47,7 @@ export const Commands: React.FC<{ id: string }> = ({ id }) => {
     <Modal
       isOpen={isOpen}
       closeModal={closeModal}
-      title="Reply"
-      content={<Form />}
-      actions={<Actions />}
-      onSubmit={handleSubmit(onSubmit)}
+      content={<Reply title="Reply" actions={<Actions />} onSubmit={onSubmit}/>}
     >
       <Button onClick={() => openModal()}>
         Reply

@@ -7,18 +7,13 @@ export const Modal: React.FC<{
   isOpen: boolean,
   closeModal: () => void,
   children: ReactNode,
-  title: string,
   onSubmit?: (data: any) => void,
   content: ReactNode,
-  actions?: ReactNode
 }> = ({
   isOpen,
   closeModal,
   children,
-  title,
   content,
-  actions,
-  onSubmit
 }) => {
   
   useCloseModalOnBack({ isOpen, closeModal })
@@ -63,40 +58,8 @@ export const Modal: React.FC<{
         onAfterOpen={afterOpen}
         onAfterClose={afterClose}
       >
-        <Content title={title} actions={actions} onSubmit={onSubmit}>
-          {content}
-        </Content>
+        {content}
       </ReactModal>
     </>
   )
 }
-
-const Content: React.FC<{
-  children: ReactNode,
-  title: string,
-  actions?: ReactNode,
-  onSubmit?: (data: any) => void
-}> = ({
-  children,
-  title,
-  actions,
-  onSubmit
-}) => (
-  <form onSubmit={onSubmit}>
-  
-    <div className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-      {title}
-    </div>
-
-    <div className="px-6 py-3 overflow-y-auto" style={{maxHeight: '80vh'}}>
-      {children}
-    </div>
-
-    {actions &&
-      <div className="flex justify-end px-6 py-3 border-t border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-        {actions}
-      </div>
-    }
-
-  </form>
-)
