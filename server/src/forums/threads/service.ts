@@ -7,6 +7,7 @@ import { ForumsService } from '@server/forums/service'
 import { UsersService } from '@server/users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
+import { UpdateThreadInput } from './dto/update-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
 
 import { Thread } from './model'
@@ -31,11 +32,11 @@ export class ThreadsService {
       authorId,
       ...rest
     } = data
-    const reply = this.threadsRepository.create(rest)
-    reply.forum = await this.forumsService.findOneById(forumId)
-    reply.author = await this.usersService.findOneById(authorId)
-    this.threadsRepository.save(reply)
-    return reply
+    const thread = this.threadsRepository.create(rest)
+    thread.forum = await this.forumsService.findOneById(forumId)
+    thread.author = await this.usersService.findOneById(authorId)
+    this.threadsRepository.save(thread)
+    return thread
   }
 
   async findOneById(id: string): Promise<Thread> {
@@ -61,7 +62,17 @@ export class ThreadsService {
     thread.whenLastActivity = reply.when
     this.threadsRepository.save(thread)
   }
-  
+
+  async update(updateData: UpdateThreadInput): Promise<Thread> {
+    const { id, ...rest } = updateData;
+    const thread = {
+      ...(await this.findOneById(`${id}`)),
+      ...rest
+    }
+    await this.threadsRepository.save(thread)
+    return thread;
+  }
+
   // async remove(id: string): Promise<boolean> {
   //   return true
   // }

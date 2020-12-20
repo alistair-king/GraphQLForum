@@ -82,7 +82,7 @@ const Content: React.FC<{
         {title || image}
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-3" onClick={() => closeModal()}>
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-3" onClick={closeModal}>
           <img src={image} alt="" className="max-h-85-vh" />
       </div>
 

@@ -14,6 +14,7 @@ import { PubSub } from 'apollo-server-express'
 import { UsersService } from '@server/users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
+import { UpdateThreadInput } from './dto/update-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
 import { Thread } from './model'
 import { ThreadsService } from './service'
@@ -82,6 +83,15 @@ export class ThreadsResolver {
   ): Promise<Thread> {
     const thread = await this.threadsService.create(newThreadData)
     pubSub.publish('threadAdded', { threadAdded: thread })
+    return thread
+  }
+
+  @Mutation(returns => Thread)
+  async updateThread(
+    @Args('updateThreadData') updateThreadData: UpdateThreadInput,
+  ): Promise<Thread> {
+    const thread = await this.threadsService.update(updateThreadData)
+    pubSub.publish('threadUpdated', { threadAdded: thread })
     return thread
   }
 

@@ -2,18 +2,26 @@ import React, { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import cls from 'classnames'
 
+import { IThread } from '../types'
 import { ValidationError } from '../components/ValidationError'
 
 export const Thread: React.FC<{
+  thread?: IThread,
   title: string,
   actions: ReactNode,
   onSubmit: any
 }> = ({
+  thread, 
   title,
   actions,
   onSubmit
 }) => {
-  const { register, handleSubmit, errors } = useForm()
+  const defaultValues = {
+    title: thread?.title || '',
+    content: thread?.content || '',
+  };
+  console.log('AJK defaultValues', defaultValues)
+  const { register, handleSubmit, errors } = useForm({ defaultValues })
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">

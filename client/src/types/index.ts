@@ -18,7 +18,7 @@ export interface IReplies {
 }
 
 export interface IThread {
-  id: number
+  id: string
   when: Date
   title: string
   content: string

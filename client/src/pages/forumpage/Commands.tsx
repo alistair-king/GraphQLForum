@@ -23,7 +23,7 @@ export const Commands: React.FC<{ id: string }> = ({ id }) => {
   const Actions: React.FC = () => (
     <>
       <Button type="submit">Post</Button>
-      <Button secondary onClick={() => closeModal()}>Cancel</Button>
+      <Button secondary onClick={closeModal}>Cancel</Button>
     </>
   )
 
@@ -50,7 +50,7 @@ export const Commands: React.FC<{ id: string }> = ({ id }) => {
       closeModal={closeModal}
       content={<Thread title="New Thread" actions={<Actions />} onSubmit={onSubmit} />}
     >
-      <Button onClick={() => openModal()}>
+      <Button onClick={openModal}>
         New Thread
       </Button>
     </Modal>
