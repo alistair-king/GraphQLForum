@@ -14,7 +14,7 @@ import { ThreadPage } from './pages/threadpage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
 });
 
 
