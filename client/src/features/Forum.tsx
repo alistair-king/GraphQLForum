@@ -67,45 +67,42 @@ const Thread: React.FC<{
   thread: IThread
 }> = ({
   thread
-}) => {
-
-  return (
-    <tr>
-      <td className="pl-6 pr-2 py-4 border-b border-gray-200">
-        <div className="flex-shrink-0 text-gray-500">
-          <MdChatBubbleOutline />
+}) => (
+  <tr>
+    <td className="pl-6 pr-2 py-4 border-b border-gray-200">
+      <div className="flex-shrink-0 text-gray-500">
+        <MdChatBubbleOutline />
+      </div>
+    </td>
+  
+    <td className="px-0 py-4 w-full border-b border-gray-200">
+      <Link className="flex items-center" to={`/thread/${thread.id}`}>
+        <div className="ml-4">
+          <div className="text-sm leading-5 font-medium text-gray-900">{thread.title}</div>
+          <div className="text-sm leading-5 text-gray-500">{thread.author?.name} {timeAgo(thread.when)}</div>
         </div>
-      </td>
-    
-      <td className="px-0 py-4 w-full border-b border-gray-200">
-        <Link className="flex items-center" to={`/thread/${thread.id}`}>
-          <div className="ml-4">
-            <div className="text-sm leading-5 font-medium text-gray-900">{thread.title}</div>
-            <div className="text-sm leading-5 text-gray-500">{thread.author?.name} {timeAgo(thread.when)}</div>
+      </Link>
+    </td>
+  
+    <td className="px-0 py-4  border-b border-gray-200 whitespace-no-wrap">
+      {thread.lastReply?.count !== 0 &&
+        <>
+          <div className="text-sm leading-5 text-gray-500 text-right">
+            {thread.lastReply?.count}
           </div>
-        </Link>
-      </td>
-    
-      <td className="px-0 py-4  border-b border-gray-200 whitespace-no-wrap">
-        {thread.lastReply?.count !== 0 &&
-          <>
-            <div className="text-sm leading-5 text-gray-500 text-right">
-              {thread.lastReply?.count}
-            </div>
-            <div className="text-sm leading-5 text-gray-500 text-right">
-              by {thread.lastReply?.reply?.author?.name}{' '}
-              {timeAgo(thread.lastReply?.reply?.when)}
-            </div>
-          </>
-        }
-      </td>
+          <div className="text-sm leading-5 text-gray-500 text-right">
+            by {thread.lastReply?.reply?.author?.name}{' '}
+            {timeAgo(thread.lastReply?.reply?.when)}
+          </div>
+        </>
+      }
+    </td>
 
-      <td className="px-2 py-4  text-right border-b border-gray-200 text-sm leading-5 font-medium">
-        <NewPosts newposts={0} />
-      </td>
-    </tr>
-  )
-}
+    <td className="px-2 py-4  text-right border-b border-gray-200 text-sm leading-5 font-medium">
+      <NewPosts newposts={0} />
+    </td>
+  </tr>
+)
 
 
 const NewPosts: React.FC<{
