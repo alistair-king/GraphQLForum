@@ -2,6 +2,8 @@ import React, { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import cls from 'classnames'
 
+import { ValidationError } from '../components/ValidationError'
+
 export const Thread: React.FC<{
   title: string,
   actions: ReactNode,
@@ -31,7 +33,7 @@ export const Thread: React.FC<{
               ref={register}
               className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3"
             />
-            {errors.title && <span className="text-red-500">Required field!</span>}
+            <ValidationError error={errors.title} />
           </div>
         </div>
 
@@ -51,7 +53,7 @@ export const Thread: React.FC<{
                 }
               )}               
             />
-            {errors.content && <span className="text-red-500">Required field!</span>}
+            <ValidationError error={errors.content} />
           </div>
         </div>
       </div>

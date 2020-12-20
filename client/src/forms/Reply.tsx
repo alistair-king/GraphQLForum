@@ -2,6 +2,8 @@ import React, { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import cls from 'classnames'
 
+import { ValidationError } from '../components/ValidationError'
+
 export const Reply: React.FC<{
   title: string,
   actions: ReactNode,
@@ -32,7 +34,7 @@ export const Reply: React.FC<{
                   'bg-red-200 border-red-500': !!errors.content
                 }
               )} />
-            {errors.content && <span className="text-red-500">Required field!</span>}
+            <ValidationError error={errors.content} />
           </div>
         </div>
       </div>
