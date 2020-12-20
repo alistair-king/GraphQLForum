@@ -9,8 +9,8 @@ import ReactModal from 'react-modal'
 import { NavBar } from './components/NavBar'
 
 import { HomePage } from './pages/HomePage'
-import { ForumPage } from './pages/ForumPage'
-import { ThreadPage } from './pages/ThreadPage'
+import { ForumPage } from './pages/forumpage'
+import { ThreadPage } from './pages/threadpage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 const client = new ApolloClient({
