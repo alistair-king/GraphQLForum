@@ -46,8 +46,8 @@ export class RepliesService {
   async findAll(args: RepliesArgs): Promise<[Reply[], number]> {
     return this.repliesRepository.createQueryBuilder('reply')
       .where("reply.threadid = :id", { id: args.threadId })
-      .skip(args.skip)
-      .take(args.take)
+      .skip(args.page * 10)
+      .take(10)
       .leftJoinAndSelect("reply.author", "User")
       .getManyAndCount()
   }

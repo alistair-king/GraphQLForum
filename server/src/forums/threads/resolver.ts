@@ -15,6 +15,7 @@ import { UsersService } from '@server/users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
 import { UpdateThreadInput } from './dto/update-thread.input'
+import { DeleteThreadInput } from './dto/delete-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
 import { Thread } from './model'
 import { ThreadsService } from './service'
@@ -42,14 +43,12 @@ export class ThreadsResolver {
   @ResolveField()
   async replies(
     @Parent() thread: Thread,
-    @Args('skip', { type: () => Int }) skip: number,
-    @Args('take', { type: () => Int }) take: number
+    @Args('page', { type: () => Int }) page: number,
   ) {
     const { id } = thread;
     const result = await this.repliesService.findAll({
       threadId: id,
-      skip,
-      take
+      page,
     })
     return {
       items: result[0],
@@ -64,8 +63,7 @@ export class ThreadsResolver {
     const { id } = thread;
     const result = await this.repliesService.findLastReply({
       threadId: id,
-      skip: 0,
-      take: 1
+      page: 0
     })
     const replies = result[0]
     const reply = replies.length > 0
@@ -95,10 +93,13 @@ export class ThreadsResolver {
     return thread
   }
 
-  // @Mutation(returns => Boolean)
-  // async removeThread(@Args('id') id: string) {
-  //   return this.threadsService.remove(id)
-  // }
+  @Mutation(returns => Thread)
+  async deleteThread(
+    @Args('DeleteThreadInput') deletethreadinput: DeleteThreadInput) {
+    const result = await this.threadsService.delete(`${deletethreadinput.id}`)
+    console.log('AJK', result)
+    return result
+  }
 
   @Subscription(returns => Thread)
   threadAdded() {

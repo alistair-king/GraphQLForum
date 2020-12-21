@@ -1,5 +1,5 @@
 import { Injectable, Inject, forwardRef } from '@nestjs/common'
-import { Repository } from 'typeorm'
+import { Repository, DeleteResult} from 'typeorm'
 
 import { Constants } from '@server/common/constants'
 
@@ -8,6 +8,7 @@ import { UsersService } from '@server/users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
 import { UpdateThreadInput } from './dto/update-thread.input'
+import { DeleteThreadInput } from './dto/delete-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
 
 import { Thread } from './model'
@@ -35,6 +36,7 @@ export class ThreadsService {
     const thread = this.threadsRepository.create(rest)
     thread.forum = await this.forumsService.findOneById(forumId)
     thread.author = await this.usersService.findOneById(authorId)
+    thread.whenLastActivity = new Date()
     this.threadsRepository.save(thread)
     return thread
   }
@@ -51,8 +53,8 @@ export class ThreadsService {
     return this.threadsRepository.createQueryBuilder('thread')
       .where('thread.forumid = :id', { id: args.forumId })
       .orderBy('thread.whenLastActivity', 'DESC')
-      .skip(args.skip)
-      .take(args.take)
+      .skip(args.page * 10)
+      .take(10)
       .leftJoinAndSelect('thread.author', 'User')
       .getManyAndCount()
   }
@@ -70,10 +72,12 @@ export class ThreadsService {
       ...rest
     }
     await this.threadsRepository.save(thread)
-    return thread;
+    return thread
   }
 
-  // async remove(id: string): Promise<boolean> {
-  //   return true
-  // }
+  async delete(id: string): Promise<Thread> {
+    const thread = await this.findOneById(id);
+    await this.threadsRepository.delete(thread)
+    return thread
+  }
 }

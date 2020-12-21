@@ -1,7 +1,8 @@
 import React from 'react'
-import { MdDelete, MdLock, MdNotifications } from 'react-icons/md'
+import { MdLock, MdNotifications } from 'react-icons/md'
 
 import { IThread } from '../types'
+import { DeleteThread } from '../actions/DeleteThread'
 import { EditThread } from '../actions/EditThread'
 import { ActionButton } from '../components/ActionButton'
 import { Avatar } from '../components/Avatar'
@@ -46,7 +47,7 @@ export const Thread: React.FC<{
             <EditThread thread={thread} />
             <ActionButton tooltip="Notifications"><MdNotifications /></ActionButton>
             <ActionButton tooltip="Lock"><MdLock /></ActionButton>
-            <ActionButton warning tooltip="Delete"><MdDelete /></ActionButton>   
+            <DeleteThread thread={thread} />
           </div>
             
           <Pagination activepage={page} count={thread?.replies?.count || 0} setPage={setPage}/>

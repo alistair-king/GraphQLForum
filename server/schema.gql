@@ -1,0 +1,114 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+}
+
+type Reply {
+  id: ID!
+  when: Date!
+  content: String!
+  thread: Thread!
+  author: User!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Thread {
+  id: ID!
+  when: Date!
+  title: String!
+  content: String!
+  forum: Forum!
+  author: User!
+  userLastReply: User!
+  whenLastActivity: Date!
+  replies(page: Int!): PaginatedReplies!
+  lastReply: LastReply!
+}
+
+type PaginatedReplies {
+  items: [Reply!]!
+  count: Int!
+}
+
+type LastReply {
+  reply: Reply
+  count: Int!
+}
+
+type Forum {
+  id: ID!
+  name: String!
+  description: String!
+  threads(page: Int!): PaginatedThreads!
+}
+
+type PaginatedThreads {
+  items: [Thread!]!
+  count: Int!
+}
+
+type Query {
+  forum(id: String!): Forum!
+  forums(page: Int = 0): [Forum!]!
+  thread(id: String!): Thread!
+  user(id: String!): User!
+  users(skip: Int = 0, take: Int = 25): [User!]!
+  reply(id: String!): Reply!
+}
+
+type Mutation {
+  addForum(newForumData: NewForumInput!): Forum!
+  addThread(newThreadData: NewThreadInput!): Thread!
+  updateThread(updateThreadData: UpdateThreadInput!): Thread!
+  deleteThread(DeleteThreadInput: DeleteThreadInput!): Thread!
+  addUser(newUserData: NewUserInput!): User!
+  addReply(newReplyData: NewReplyInput!): Reply!
+}
+
+input NewForumInput {
+  name: String!
+}
+
+input NewThreadInput {
+  title: String!
+  content: String!
+  authorId: String!
+  forumId: String!
+}
+
+input UpdateThreadInput {
+  id: Float!
+  title: String!
+  content: String!
+}
+
+input DeleteThreadInput {
+  id: Float!
+}
+
+input NewUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input NewReplyInput {
+  threadId: String!
+  authorId: String!
+  content: String!
+}
+
+type Subscription {
+  forumAdded: Forum!
+  threadAdded: Thread!
+  userAdded: User!
+  replyAdded: Reply!
+}

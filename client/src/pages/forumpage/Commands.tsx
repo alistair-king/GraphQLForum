@@ -7,6 +7,8 @@ import { Modal } from '../../components/Modal'
 import { Thread } from '../../forms/Thread'
 import { useModal } from '../../hooks'
 
+import { GET_FORUM } from '.'
+
 const ADD_THREAD = gql`
   mutation AddThread($newThreadData: NewThreadInput!) {
     addThread(newThreadData: $newThreadData) {
@@ -16,10 +18,27 @@ const ADD_THREAD = gql`
   }
 `
 
-export const Commands: React.FC<{ id: string }> = ({ id }) => {
+export const Commands: React.FC<{
+  id: string,
+  page: number
+}> = ({
+  id,
+  page
+}) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const [addThread] = useMutation(ADD_THREAD)
-  
+  const [addThread] = useMutation(ADD_THREAD,
+    {
+      refetchQueries:[
+        {
+          query: GET_FORUM,
+          variables: {
+            id,
+            page
+          }
+        }
+      ]
+    }
+  );
   const Actions: React.FC = () => (
     <>
       <Button type="submit">Post</Button>

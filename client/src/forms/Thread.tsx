@@ -16,12 +16,12 @@ export const Thread: React.FC<{
   actions,
   onSubmit
 }) => {
-  const defaultValues = {
-    title: thread?.title || '',
-    content: thread?.content || '',
-  };
-  console.log('AJK defaultValues', defaultValues)
-  const { register, handleSubmit, errors } = useForm({ defaultValues })
+  const { register, handleSubmit, errors } = useForm({
+    defaultValues: {
+      title: thread?.title || '',
+      content: thread?.content || '',
+    }
+  })
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">

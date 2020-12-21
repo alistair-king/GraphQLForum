@@ -41,7 +41,6 @@ export const Modal: React.FC<{
             border: '1px solid #ccc',
             borderRadius: '4px',
             bottom: 'auto',
-            minHeight: '10rem',
             left: '50%',
             padding: 0,
             position: 'fixed',

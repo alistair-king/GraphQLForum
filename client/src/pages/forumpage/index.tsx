@@ -14,12 +14,12 @@ import { ErrorPage } from '../ErrorPage'
 
 import { Commands } from './Commands';
 
-const GET_FOURM = gql`
-  query getForum($id: String!, $skip: Int!, $take: Int!) {
+export const GET_FORUM = gql`
+  query getForum($id: String!, $page: Int!) {
     forum(id: $id) {
       id
       name
-      threads(skip: $skip, take: $take) {
+      threads(page: $page) {
         count,
         items {
           id
@@ -52,13 +52,12 @@ export const ForumPage: React.FC = () => {
   const history = useHistory()
   const setPage = (newPage: number) => { history.push(`/forum/${id}/${newPage}`) }
   
-  const { loading, error, data } = useQuery<{forum: IForum}, {id: string, skip: number, take: number}>(
-    GET_FOURM,
+  const { loading, error, data } = useQuery<{forum: IForum}, {id: string, page: number}>(
+    GET_FORUM,
     {
       variables: {
-        id: id as string,
-        skip: (page  * 10),
-        take: 10
+        id,
+        page
       }
     }
   )
@@ -70,7 +69,7 @@ export const ForumPage: React.FC = () => {
   return (
     <Page
       title={data?.forum?.name}
-      commands={<Commands id={id} />}
+      commands={<Commands id={id} page={page} />}
       back="/"
     >
       { loading || !data
