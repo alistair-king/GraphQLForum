@@ -4,11 +4,13 @@ import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { MdDelete } from 'react-icons/md'
 
-import { IThread } from '../types'
-import { ActionButton } from '../components/ActionButton'
-import { Button } from '../components/Button'
-import { Modal } from '../components/Modal'
-import { useModal } from '../hooks'
+import { IThread } from '../../types'
+import { ActionButton } from '../../components/ActionButton'
+import { Button } from '../../components/Button'
+import { Modal } from '../../components/Modal'
+import { useModal } from '../../hooks'
+
+import { GET_FORUM } from '.'
 
 const DELETE_THREAD = gql`
   mutation DeleteThread($deleteThreadData: DeleteThreadInput!) {
@@ -20,10 +22,29 @@ const DELETE_THREAD = gql`
   }
 `
 
-export const DeleteThread: React.FC<{ thread: IThread }> = ({ thread }) => {
+export const DeleteThread: React.FC<{
+  thread: IThread
+  label?: string
+  page: number
+}> = ({
+  thread,
+  label,
+  page
+}) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const [deleteThread] = useMutation(DELETE_THREAD)
   const history = useHistory();
+  const [deleteThread] = useMutation(DELETE_THREAD,
+    {
+      refetchQueries:[
+        {
+          query: GET_FORUM,
+          variables: {
+            id: thread?.forum?.id,
+            page
+          }
+        }
+      ]
+    })
 
   const Confirmation = () => (
     <>
@@ -52,7 +73,6 @@ export const DeleteThread: React.FC<{ thread: IThread }> = ({ thread }) => {
       }
     })
     closeModal();
-    history.goBack();
   }
 
   return (
@@ -61,9 +81,14 @@ export const DeleteThread: React.FC<{ thread: IThread }> = ({ thread }) => {
       closeModal={closeModal}
       content={<Confirmation />}
     >
-      <ActionButton warning tooltip="Delete" onClick={openModal}>
-        <MdDelete />
-      </ActionButton>
+      <div onClick={openModal} className="flex">
+        <ActionButton warning>
+          <MdDelete />
+        </ActionButton>
+        {label && <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+          {label}
+        </span>}
+      </div>        
     </Modal>
   )
 }

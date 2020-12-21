@@ -4,11 +4,11 @@ import { MdChatBubbleOutline } from 'react-icons/md'
 import cls from 'classnames'
 
 import { IForum, IThread } from '../types'
-
+import { ActionsMenu } from '../components/ActionsMenu'
 import { Card } from '../components/Card'
 import { Pagination } from '../components/Pagination'
-
 import { timeAgo } from '../helpers/timeAgo'
+import { DeleteThread } from '../pages/forumpage/DeleteThread'
 
 export const Forum: React.FC<{
   forum: IForum,
@@ -55,7 +55,7 @@ export const Forum: React.FC<{
       <table className="min-w-full">
         <Headings />
         <tbody className="bg-white">
-          { forum && forum.threads.items.map(thread => <Thread key={thread.id} thread={thread} />)}
+          { forum && forum.threads.items.map(thread => <Thread key={thread.id} thread={thread} page={page} />)}
         </tbody>
         <Footer />
       </table>
@@ -64,9 +64,11 @@ export const Forum: React.FC<{
 }
 
 const Thread: React.FC<{
-  thread: IThread
+  thread: IThread,
+  page: number
 }> = ({
-  thread
+  thread,
+  page
 }) => (
   <tr>
     <td className="pl-6 pr-2 py-4 border-b border-gray-200">
@@ -98,8 +100,10 @@ const Thread: React.FC<{
       }
     </td>
 
-    <td className="px-2 py-4  text-right border-b border-gray-200 text-sm leading-5 font-medium">
-      <NewPosts newposts={0} />
+    <td className="px-2 py-4 text-right border-b border-gray-200 text-sm leading-5 font-medium">
+      <ActionsMenu>
+        <DeleteThread thread={thread} page={page} label="Delete" />
+      </ActionsMenu>
     </td>
   </tr>
 )
