@@ -37,7 +37,7 @@ export interface IThreads {
 }
 
 export interface IForum {
-  id: number
+  id: string
   name: string
   description?: string
   threads: IThreads

@@ -2,10 +2,11 @@ import React, { useState, ReactNode } from 'react'
 
 export const StateContext = React.createContext({
   get: (key: 'FORUM' | 'THREAD') => ({
-    id: 0,
+    id: '',
     page: 0
   }),
-  set: (key: 'FORUM' | 'THREAD', id: number, page: number) => {}
+  set: (key: 'FORUM' | 'THREAD', id: string, page: number) => {},
+  userId: '1111111-1111-1111-1111-1111-11111111'
 });
 
 export const StateContextProvider:React.FC<{
@@ -15,17 +16,17 @@ export const StateContextProvider:React.FC<{
 }) => {
   const [state, setState] = useState({
     FORUM: {
-      id: 0,
+      id: '',
       page: 0
     },
     THREAD: {
-      id: 0,
+      id: '',
       page: 0
     }
   });
   const provided = {
     get: (key: 'FORUM' | 'THREAD') => state[key],
-    set: (key: 'FORUM' | 'THREAD', id: number, page: number) => {
+    set: (key: 'FORUM' | 'THREAD', id: string, page: number) => {
       if (id !== state[key].id || page !== state[key].page) {
         console.log('setState', key, id, page)
         setState({
@@ -37,6 +38,7 @@ export const StateContextProvider:React.FC<{
         })
       }
     },
+    userId: '1111111-1111-1111-1111-1111-11111111'
   }
   return (
     <StateContext.Provider value={provided}>

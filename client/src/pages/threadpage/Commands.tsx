@@ -23,6 +23,7 @@ export const Commands: React.FC<{
     id: threadId,
     page: threadPage
   } = state.get('THREAD');
+  const { userId } = state;
   const [addReply] = useMutation(ADD_REPLY,
     {
       refetchQueries:[
@@ -49,7 +50,7 @@ export const Commands: React.FC<{
         variables: {
           newReplyData: {
             threadId: id, 
-            authorId: '1',
+            authorId: userId,
             content: data.content
           }
         }

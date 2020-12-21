@@ -17,7 +17,9 @@ export class ForumsService {
   ) {}
 
   async create(data: NewForumInput): Promise<Forum> {
-    return {} as any
+    const forum = this.forumsRepository.create(data)
+    this.forumsRepository.save(forum)
+    return forum
   }
 
   async findOneById(id: string): Promise<Forum> {

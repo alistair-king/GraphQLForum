@@ -5,8 +5,8 @@ import { User } from '@server/users/entity'
 
 @Entity()
 export class Reply {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   when: Date

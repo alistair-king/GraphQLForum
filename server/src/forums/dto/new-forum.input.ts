@@ -6,4 +6,7 @@ export class NewForumInput {
   @Field()
   @MaxLength(255)
   name: string
+
+  @Field()
+  description: string
 }

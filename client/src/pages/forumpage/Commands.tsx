@@ -10,7 +10,9 @@ import { useModal } from '../../hooks'
 
 export const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()
-  const { id, page } = useContext(StateContext).get('FORUM');
+  const state = useContext(StateContext);
+  const { userId } = state;
+  const { id, page } = state.get('FORUM');
   const [addThread] = useMutation(ADD_THREAD,
     {
       refetchQueries:[
@@ -38,7 +40,7 @@ export const Commands: React.FC = () => {
         variables: {
           newThreadData: {
             forumId: id, 
-            authorId: '1',
+            authorId: userId,
             title: data.title,
             content: data.content
           }

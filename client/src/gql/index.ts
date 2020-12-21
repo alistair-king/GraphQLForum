@@ -1,5 +1,14 @@
 import gql from 'graphql-tag'
 
+export const ADD_FORUM = gql`
+mutation AddForum($newForumData: NewForumInput!) {
+  addForum(newForumData: $newForumData) {
+    name
+    description
+  }
+}
+`
+
 export const GET_FORUMS = gql`
   query getForums {
     forums {
@@ -8,7 +17,7 @@ export const GET_FORUMS = gql`
       description
     }
   }
-`;
+`
 
 export const GET_FORUM = gql`
   query getForum($id: String!, $page: Int!) {

@@ -31,8 +31,8 @@ export const ThreadPage: React.FC = () => {
   useEffect(() => {
     if (data) {
       state.set('THREAD', id, page);
-      if (state.get('FORUM').id === 0) {
-        state.set('FORUM', data?.thread?.forum?.id || 0, 0);
+      if (state.get('FORUM').id === '') {
+        state.set('FORUM', data?.thread?.forum?.id || '', 0);
       }
     }
   }, [data, state, id, page]);

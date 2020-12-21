@@ -8,7 +8,7 @@ import ReactModal from 'react-modal'
 // import { AnimatedSwitch } from './components/AnimatedSwitch'
 import { NavBar } from './components/NavBar'
 
-import { HomePage } from './pages/HomePage'
+import { HomePage } from './pages/homepage'
 import { ForumPage } from './pages/forumpage'
 import { ThreadPage } from './pages/threadpage'
 import { NotFoundPage } from './pages/NotFoundPage'

@@ -4,8 +4,8 @@ import { Thread } from './threads/entity'
 
 @Entity()
 export class Forum {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Column()
   name: string
