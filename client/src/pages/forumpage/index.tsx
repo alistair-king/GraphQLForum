@@ -1,57 +1,23 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 
+import { GET_FORUM } from '../../gql'
+import { StateContext } from '../../state'
 import { IForum } from '../../types'
-
 import { Page } from '../../components/Page'
 import { Spinner } from '../../components/Spinner'
-
 import { Forum } from '../../features/Forum'
-
 import { ErrorPage } from '../ErrorPage'
-
 import { Commands } from './Commands';
-
-export const GET_FORUM = gql`
-  query getForum($id: String!, $page: Int!) {
-    forum(id: $id) {
-      id
-      name
-      threads(page: $page) {
-        count,
-        items {
-          id
-          title
-          when
-          author {
-            id
-            name
-          }
-          lastReply {
-            count
-            reply {
-              id
-              when
-              author {
-                id
-                name
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
 
 export const ForumPage: React.FC = () => {
   const { id, pageString } = useParams()
   const page = parseInt(pageString || '0')
   const history = useHistory()
   const setPage = (newPage: number) => { history.push(`/forum/${id}/${newPage}`) }
-  
+  const state = useContext(StateContext);
+
   const { loading, error, data } = useQuery<{forum: IForum}, {id: string, page: number}>(
     GET_FORUM,
     {
@@ -61,7 +27,13 @@ export const ForumPage: React.FC = () => {
       }
     }
   )
-  
+
+  useEffect(() => {
+    if (data) {
+      state.set('FORUM', id, page);
+    }
+  }, [data, state, id, page]);
+
   if ( error ) {
     return <ErrorPage message={error?.message} />
   }
@@ -69,7 +41,7 @@ export const ForumPage: React.FC = () => {
   return (
     <Page
       title={data?.forum?.name}
-      commands={<Commands id={id} page={page} />}
+      commands={<Commands />}
       back="/"
     >
       { loading || !data

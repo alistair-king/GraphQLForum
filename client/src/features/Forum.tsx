@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { MdChatBubbleOutline } from 'react-icons/md'
-import cls from 'classnames'
 
 import { IForum, IThread } from '../types'
 import { ActionsMenu } from '../components/ActionsMenu'
@@ -102,36 +101,10 @@ const Thread: React.FC<{
 
     <td className="px-2 py-4 text-right border-b border-gray-200 text-sm leading-5 font-medium">
       <ActionsMenu>
-        <DeleteThread thread={thread} page={page} label="Delete" />
+        <DeleteThread thread={thread} label="Delete" />
       </ActionsMenu>
     </td>
   </tr>
 )
 
 
-const NewPosts: React.FC<{
-  newposts: number
-}> = ({
-  newposts
-}) => {
-  if (newposts === 0) {
-    return null;
-  }
-  const className = cls(
-    "p-1 border-2 border-transparent rounded focus:outline-none transition duration-150 ease-in-out ml-1",
-    {
-      'bg-red-700 text-white hover:bg-red-500 hover:text-gray-200': (newposts >= 8),
-      'bg-red-500 text-white hover:bg-red-300 hover:text-gray-200': (newposts >= 5 && newposts < 8),
-      'bg-gray-300 text-gray-700 hover:bg-gray-200 hover:text-gray-500': (newposts <= 5),
-    });
-  
-  return (
-    <Link to="/thread" >
-      <div className={className}>
-        <span className="whitespace-no-wrap">
-          {newposts} &gt;
-        </span>
-      </div>
-    </Link>
-  )
-}

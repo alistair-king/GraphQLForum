@@ -1,45 +1,32 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useContext } from 'react'
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import { MdDelete } from 'react-icons/md'
 
+import { DELETE_THREAD, GET_FORUM } from '../../gql'
+import { StateContext } from '../../state'
 import { IThread } from '../../types'
 import { ActionButton } from '../../components/ActionButton'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { useModal } from '../../hooks'
 
-import { GET_FORUM } from '.'
-
-const DELETE_THREAD = gql`
-  mutation DeleteThread($deleteThreadData: DeleteThreadInput!) {
-    deleteThread(DeleteThreadInput: $deleteThreadData) {
-      id
-      title
-      content
-    }
-  }
-`
 
 export const DeleteThread: React.FC<{
   thread: IThread
   label?: string
-  page: number
 }> = ({
   thread,
-  label,
-  page
+  label
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const history = useHistory();
+  const { id, page } = useContext(StateContext).get('FORUM');
   const [deleteThread] = useMutation(DELETE_THREAD,
     {
       refetchQueries:[
         {
           query: GET_FORUM,
           variables: {
-            id: thread?.forum?.id,
+            id,
             page
           }
         }

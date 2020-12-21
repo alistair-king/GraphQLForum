@@ -13,6 +13,8 @@ import { ForumPage } from './pages/forumpage'
 import { ThreadPage } from './pages/threadpage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
+import { StateContextProvider } from './state'
+
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
 });
@@ -22,14 +24,16 @@ export const App = () => {
   ReactModal.setAppElement('#root')
   return (
     <ApolloProvider client={client}>
-      <BrowserRouter>
-        <NavBar />
-        <Switch>
-          {Routes.map((routeprops, index) =>
-            <Route key={index} {...routeprops} />
-          )}
-        </Switch>
-      </BrowserRouter>
+      <StateContextProvider>
+        <BrowserRouter>
+          <NavBar />
+          <Switch>
+            {Routes.map((routeprops, index) =>
+              <Route key={index} {...routeprops} />
+            )}
+          </Switch>
+        </BrowserRouter>
+      </StateContextProvider>
     </ApolloProvider>
   )
 }

@@ -1,31 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
+import { ADD_THREAD, GET_FORUM } from '../../gql'
+import { StateContext } from '../../state'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { Thread } from '../../forms/Thread'
 import { useModal } from '../../hooks'
 
-import { GET_FORUM } from '.'
 
-const ADD_THREAD = gql`
-  mutation AddThread($newThreadData: NewThreadInput!) {
-    addThread(newThreadData: $newThreadData) {
-      title
-      content
-    }
-  }
-`
-
-export const Commands: React.FC<{
-  id: string,
-  page: number
-}> = ({
-  id,
-  page
-}) => {
+export const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()
+  const { id, page } = useContext(StateContext).get('FORUM');
   const [addThread] = useMutation(ADD_THREAD,
     {
       refetchQueries:[

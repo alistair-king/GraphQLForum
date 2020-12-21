@@ -1,20 +1,11 @@
 import React from 'react'
-
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 
+import { ADD_REPLY } from '../../gql'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { Reply } from '../../forms/Reply'
 import { useModal } from '../../hooks'
-
-const ADD_REPLY = gql`
-  mutation AddReply($newReplyData: NewReplyInput!) {
-    addReply(newReplyData: $newReplyData) {
-      content
-    }
-  }
-`
 
 export const Commands: React.FC<{ id: string }> = ({ id }) => {
   const { isOpen, openModal, closeModal } = useModal()

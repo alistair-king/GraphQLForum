@@ -1,28 +1,33 @@
-import React from 'react'
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import React, { useContext } from 'react'
+import { useMutation } from '@apollo/react-hooks'
 import { MdEdit } from 'react-icons/md'
 
+import { UPDATE_THREAD, GET_FORUM } from '../gql'
 import { IThread } from '../types'
+import { StateContext } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import { Thread } from '../forms/Thread'
 import { useModal } from '../hooks'
 
-const UPDATE_THREAD = gql`
-  mutation UpdateThread($updateThreadData: UpdateThreadInput!) {
-    updateThread(updateThreadData: $updateThreadData) {
-      id
-      title
-      content
-    }
-  }
-`
 
 export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const [updateThread] = useMutation(UPDATE_THREAD)
+  const { id, page } = useContext(StateContext).get('FORUM');
+  const [updateThread] = useMutation(UPDATE_THREAD,
+    {
+      refetchQueries:[
+        {
+          query: GET_FORUM,
+          variables: {
+            id,
+            page
+          }
+        }
+      ]
+    }
+  );
   
   const Actions = () => (
     <>
