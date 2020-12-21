@@ -1,26 +1,57 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useMutation } from '@apollo/react-hooks';
 
-import { ADD_REPLY } from '../../gql'
+import { ADD_REPLY, GET_THREAD, GET_FORUM } from '../../gql'
+import { StateContext } from '../../state'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { Reply } from '../../forms/Reply'
 import { useModal } from '../../hooks'
 
-export const Commands: React.FC<{ id: string }> = ({ id }) => {
+export const Commands: React.FC<{
+  id: string
+}> = ({
+  id
+}) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const [addReply] = useMutation(ADD_REPLY)
+  const state = useContext(StateContext);
+  const {
+    id: forumId,
+    page: forumPage
+  } = state.get('FORUM');
+  const {
+    id: threadId,
+    page: threadPage
+  } = state.get('THREAD');
+  const [addReply] = useMutation(ADD_REPLY,
+    {
+      refetchQueries:[
+        {
+          query: GET_THREAD,
+          variables: {
+            id: threadId,
+            page: threadPage
+          }
+        },
+        {
+          query: GET_FORUM,
+          variables: {
+            id: forumId,
+            page: forumPage
+          }
+        }        
+      ]
+    })
   
   const onSubmit = data => {
     if (data.content) {
-      const newReplyData = {
-        threadId: id, 
-        authorId: '1',
-        content: data.content
-      }
       addReply({
         variables: {
-          newReplyData
+          newReplyData: {
+            threadId: id, 
+            authorId: '1',
+            content: data.content
+          }
         }
       })
       closeModal();

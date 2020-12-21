@@ -9,7 +9,7 @@ import { Card } from '../components/Card'
 import { Content } from '../components/Content'
 import { Pagination } from '../components/Pagination'
 import { timeAgo } from '../helpers/timeAgo'
-// import { DeleteThread } from '../pages/forumpage/DeleteThread'
+import { DeleteThread } from '../pages/forumpage/DeleteThread'
 
 import { Reply } from './Reply'
 
@@ -47,7 +47,7 @@ export const Thread: React.FC<{
             <EditThread thread={thread} />
             <ActionButton tooltip="Notifications"><MdNotifications /></ActionButton>
             <ActionButton tooltip="Lock"><MdLock /></ActionButton>
-            {/* <DeleteThread thread={thread} /> */}
+            <DeleteThread thread={thread} />
           </div>
             
           <Pagination activepage={page} count={thread?.replies?.count || 0} setPage={setPage}/>

@@ -7,6 +7,7 @@ import { ThreadsService } from '@server/forums/threads/service'
 import { UsersService } from '@server/users/service'
 
 import { NewReplyInput } from './dto/new-reply.input'
+import { UpdateReplyInput } from './dto/update-reply.input'
 import { RepliesArgs } from './dto/replies.args'
 import { Reply } from './model'
 
@@ -61,7 +62,19 @@ export class RepliesService {
       .getManyAndCount()
   }
 
-  // async remove(id: string): Promise<boolean> {
-  //   return this.repliesRepository.delete(id)
-  // }
+  async update(updateData: UpdateReplyInput): Promise<Reply> {
+    const { id, ...rest } = updateData
+    const reply = {
+      ...(await this.findOneById(`${id}`)),
+      ...rest
+    }
+    await this.repliesRepository.save(reply)
+    return reply
+  }
+
+  async delete(id: string): Promise<Reply> {
+    const reply = await this.findOneById(id)
+    await this.repliesRepository.delete(reply)
+    return reply
+  }
 }

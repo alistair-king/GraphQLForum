@@ -6,6 +6,8 @@ import { ThreadsService } from '@server/forums/threads/service'
 import { UsersService } from '@server/users/service'
 
 import { NewReplyInput } from './dto/new-reply.input'
+import { UpdateReplyInput } from './dto/update-reply.input'
+import { DeleteReplyInput } from './dto/delete-reply.input'
 import { RepliesArgs } from './dto/replies.args'
 import { Reply } from './model'
 import { RepliesService } from './service'
@@ -37,10 +39,22 @@ export class RepliesResolver {
     return reply
   }
 
-  // @Mutation(returns => Boolean)
-  // async removeReply(@Args('id') id: string) {
-  //   return this.repliesService.remove(id)
-  // }
+  @Mutation(returns => Reply)
+  async updateReply(
+    @Args('updateReplyData') updateReplyData: UpdateReplyInput,
+  ): Promise<Reply> {
+    const thread = await this.repliesService.update(updateReplyData)
+    pubSub.publish('replyUpdated', { threadAdded: thread })
+    return thread
+  }
+
+  @Mutation(returns => Reply)
+  async deleteReply(
+    @Args('DeleteReplyInput') deletereplyinput: DeleteReplyInput) {
+    const result = await this.repliesService.delete(`${deletereplyinput.id}`)
+    console.log('AJK', result)
+    return result
+  }
 
   @Subscription(returns => Reply)
   replyAdded() {

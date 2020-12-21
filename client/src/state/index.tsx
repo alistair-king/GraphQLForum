@@ -36,7 +36,7 @@ export const StateContextProvider:React.FC<{
           }
         })
       }
-    }
+    },
   }
   return (
     <StateContext.Provider value={provided}>

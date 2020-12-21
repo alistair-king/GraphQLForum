@@ -8,7 +8,6 @@ import { Modal } from '../../components/Modal'
 import { Thread } from '../../forms/Thread'
 import { useModal } from '../../hooks'
 
-
 export const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()
   const { id, page } = useContext(StateContext).get('FORUM');
@@ -25,6 +24,7 @@ export const Commands: React.FC = () => {
       ]
     }
   );
+
   const Actions: React.FC = () => (
     <>
       <Button type="submit">Post</Button>
@@ -34,15 +34,14 @@ export const Commands: React.FC = () => {
 
   const onSubmit = data => {
     if (data.title && data.content) {
-      const newThreadData = {
-        forumId: id, 
-        authorId: '1',
-        title: data.title,
-        content: data.content
-      }
       addThread({
         variables: {
-          newThreadData
+          newThreadData: {
+            forumId: id, 
+            authorId: '1',
+            title: data.title,
+            content: data.content
+          }
         }
       })
       closeModal();

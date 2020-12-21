@@ -95,8 +95,6 @@ export const DELETE_THREAD = gql`
   mutation DeleteThread($deleteThreadData: DeleteThreadInput!) {
     deleteThread(DeleteThreadInput: $deleteThreadData) {
       id
-      title
-      content
     }
   }
 `
@@ -109,3 +107,19 @@ export const ADD_REPLY = gql`
   }
 `
 
+export const UPDATE_REPLY = gql`
+  mutation UpdateReply($updateReplyData: UpdateReplyInput!) {
+    updateReply(updateReplyData: $updateReplyData) {
+      id,
+      content
+    }
+  }
+`
+
+export const DELETE_REPLY = gql`
+  mutation DeleteReply($deleteReplyData: DeleteReplyInput!) {
+    deleteReply(DeleteReplyInput: $deleteReplyData) {
+      id
+    }
+  }
+`

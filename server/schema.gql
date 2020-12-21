@@ -71,6 +71,8 @@ type Mutation {
   deleteThread(DeleteThreadInput: DeleteThreadInput!): Thread!
   addUser(newUserData: NewUserInput!): User!
   addReply(newReplyData: NewReplyInput!): Reply!
+  updateReply(updateReplyData: UpdateReplyInput!): Reply!
+  deleteReply(DeleteReplyInput: DeleteReplyInput!): Reply!
 }
 
 input NewForumInput {
@@ -104,6 +106,15 @@ input NewReplyInput {
   threadId: String!
   authorId: String!
   content: String!
+}
+
+input UpdateReplyInput {
+  id: Float!
+  content: String!
+}
+
+input DeleteReplyInput {
+  id: Float!
 }
 
 type Subscription {
