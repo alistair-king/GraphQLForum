@@ -88,13 +88,13 @@ input NewThreadInput {
 }
 
 input UpdateThreadInput {
-  id: Float!
+  id: String!
   title: String!
   content: String!
 }
 
 input DeleteThreadInput {
-  id: Float!
+  id: String!
 }
 
 input NewUserInput {

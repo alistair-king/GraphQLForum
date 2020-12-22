@@ -51,12 +51,11 @@ export const DeleteThread: React.FC<{
   )
 
   const onDelete = () => {
-    const deleteThreadData = {
-      id: parseInt(thread.id), 
-    }
     deleteThread({
       variables: {
-        deleteThreadData
+        deleteThreadData: {
+          id: thread.id
+        }
       }
     })
     closeModal();

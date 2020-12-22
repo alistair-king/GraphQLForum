@@ -4,7 +4,7 @@ import { MaxLength } from 'class-validator'
 @InputType()
 export class UpdateThreadInput {
   @Field()
-  id: number
+  id: string
 
   @Field()
   @MaxLength(255)

@@ -39,7 +39,7 @@ export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
   const onSubmit = data => {
     if (data.title && data.content) {
       const updateThreadData = {
-        id: parseInt(thread.id), 
+        id: thread.id, 
         title: data.title,
         content: data.content
       }
