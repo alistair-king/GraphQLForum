@@ -12,17 +12,17 @@ import { ErrorPage } from '../ErrorPage'
 import { Commands } from './Commands';
 
 export const ForumPage: React.FC = () => {
-  const { id, pageString } = useParams()
-  const page = parseInt(pageString || '0')
+  const { forumId, forumPage = '0'} = useParams()
+  const page = parseInt(forumPage)
   const history = useHistory()
-  const setPage = (newPage: number) => { history.push(`/forum/${id}/${newPage}`) }
+  const setPage = (newPage: number) => { history.push(`${forumId}/${newPage}`) }
   const state = useContext(StateContext);
 
   const { loading, error, data } = useQuery<{forum: IForum}, {id: string, page: number}>(
     GET_FORUM,
     {
       variables: {
-        id,
+        id: forumId,
         page
       }
     }
@@ -30,9 +30,9 @@ export const ForumPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.set('FORUM', id, page);
+      state.set('FORUM', forumId, page);
     }
-  }, [data, state, id, page]);
+  }, [data, state, forumId, page]);
 
   if ( error ) {
     return <ErrorPage message={error?.message} />

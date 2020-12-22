@@ -77,7 +77,9 @@ export class ThreadsService {
 
   async delete(id: string): Promise<Thread> {
     const thread = await this.findOneById(id);
-    await this.threadsRepository.delete(thread)
+    if (thread) {
+      await this.threadsRepository.delete(thread)
+    }
     return thread
   }
 }

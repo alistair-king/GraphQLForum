@@ -54,7 +54,14 @@ export const Forum: React.FC<{
       <table className="min-w-full">
         <Headings />
         <tbody className="bg-white">
-          { forum && forum.threads.items.map(thread => <Thread key={thread.id} thread={thread} page={page} />)}
+          { forum && forum.threads.items.map(thread => 
+            <Thread
+              key={thread.id}
+              forum={forum}
+              thread={thread}
+              page={page}
+            />
+          )}
         </tbody>
         <Footer />
       </table>
@@ -63,9 +70,11 @@ export const Forum: React.FC<{
 }
 
 const Thread: React.FC<{
+  forum: IForum,
   thread: IThread,
   page: number
 }> = ({
+  forum,
   thread,
   page
 }) => (
@@ -77,7 +86,7 @@ const Thread: React.FC<{
     </td>
   
     <td className="px-0 py-4 w-full border-b border-gray-200">
-      <Link className="flex items-center" to={`/thread/${thread.id}`}>
+      <Link className="flex items-center" to={`/${forum.id}/${page}/${thread.id}`}>
         <div className="ml-4">
           <div className="text-sm leading-5 font-medium text-gray-900">{thread.title}</div>
           <div className="text-sm leading-5 text-gray-500">{thread.author?.name} {timeAgo(thread.when)}</div>

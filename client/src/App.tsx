@@ -46,17 +46,17 @@ const Routes: RouteProps[] = [
   },
   {
     path: [
-      '/forum/:id/:pageString',
-      '/forum/:id'
+      '/:forumId/:forumPage/:threadId/:threadPage',
+      '/:forumId/:forumPage/:threadId'
     ],
-    component: ForumPage
+    component: ThreadPage
   },
   {
     path: [
-      '/thread/:id/:pageString',
-      '/thread/:id'
+      '/:forumId/:forumPage',
+      '/:forumId'
     ],
-    component: ThreadPage
+    component: ForumPage
   },
   {
     component: NotFoundPage

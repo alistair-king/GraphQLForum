@@ -4,7 +4,7 @@ import { MaxLength } from 'class-validator'
 @InputType()
 export class UpdateReplyInput {
   @Field()
-  id: number
+  id: string
 
   @Field()
   content: string

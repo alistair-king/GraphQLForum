@@ -110,12 +110,12 @@ input NewReplyInput {
 }
 
 input UpdateReplyInput {
-  id: Float!
+  id: String!
   content: String!
 }
 
 input DeleteReplyInput {
-  id: Float!
+  id: String!
 }
 
 type Subscription {

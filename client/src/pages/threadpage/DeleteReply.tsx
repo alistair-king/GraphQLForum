@@ -66,12 +66,11 @@ export const DeleteReply: React.FC<{
   )
 
   const onDelete = () => {
-    const deleteReplyData = {
-      id: parseInt(`${reply.id}`),
-    }
     deleteReply({
       variables: {
-        deleteReplyData
+        deleteReplyData: {
+          id: reply.id,
+        }
       }
     })
     closeModal();

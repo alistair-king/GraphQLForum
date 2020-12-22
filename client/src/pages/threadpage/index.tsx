@@ -12,17 +12,22 @@ import { ErrorPage } from '../ErrorPage'
 import { Commands } from './Commands'
 
 export const ThreadPage: React.FC = () => {
-  const { id, pageString } = useParams()
-  const page = parseInt(pageString || '0')
+  const {
+    forumId,
+    forumPage,
+    threadId,
+    threadPage
+  } = useParams()
+  const page = parseInt(threadPage || '0')
   const history = useHistory()
-  const setPage = (newPage: number) => { history.push(`/thread/${id}/${newPage}`) }
+  const setPage = (newPage: number) => { history.push(`/${forumId}/${forumPage}/${threadId}/${newPage}`) }
   const state = useContext(StateContext);
 
   const { loading, error, data } = useQuery<{thread: IThread}, {id: string, page: number}>(
     GET_THREAD,
     {
       variables: {
-        id,
+        id: threadId,
         page
       }
     }
@@ -30,12 +35,12 @@ export const ThreadPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.set('THREAD', id, page);
+      state.set('THREAD', threadId, page);
       if (state.get('FORUM').id === '') {
         state.set('FORUM', data?.thread?.forum?.id || '', 0);
       }
     }
-  }, [data, state, id, page]);
+  }, [data, state, threadId, page]);
 
   if ( error ) {
     return <ErrorPage message={error?.message} />
@@ -45,8 +50,8 @@ export const ThreadPage: React.FC = () => {
     <>
       <Page
         title={`${data?.thread?.title}`}
-        commands={<Commands id={id} />}
-        back={`/forum/${data?.thread?.forum?.id}`}
+        commands={<Commands id={threadId} />}
+        back={`/${forumId}/${forumPage}`}
       >
         { loading || !data
           ? <Spinner className="w-full flex justify-center pt-8" />

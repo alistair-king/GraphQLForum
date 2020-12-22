@@ -60,7 +60,7 @@ export const EditReply: React.FC<{
       updateReply({
         variables: {
           updateReplyData: {
-            id: parseInt(`${reply.id}`), 
+            id: reply.id, 
             title: data.title,
             content: data.content
           }
