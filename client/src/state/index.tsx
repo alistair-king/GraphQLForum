@@ -28,7 +28,6 @@ export const StateContextProvider:React.FC<{
     get: (key: 'FORUM' | 'THREAD') => state[key],
     set: (key: 'FORUM' | 'THREAD', id: string, page: number) => {
       if (id !== state[key].id || page !== state[key].page) {
-        console.log('setState', key, id, page)
         setState({
           ...state,
           [key]: {

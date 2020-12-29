@@ -6,7 +6,7 @@ export interface IUser {
 }
 
 export interface IReply {
-  id: number
+  id: string
   when: Date
   content: string  
   author?: IUser
