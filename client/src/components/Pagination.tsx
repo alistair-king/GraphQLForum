@@ -14,9 +14,9 @@ export const Pagination: React.FC<{
   setPage
 }) => {
   
-  const pages = Math.round(count / perPage)
-  const first = Math.max(0, activepage-2)
-  const last = Math.min(activepage+2, pages)
+  const pages = Math.floor((count - 1) / perPage)
+  const first = Math.max(0, activepage - 2)
+  const last = Math.min(activepage + 2, pages)
 
   const pageNumbers: number[] = []
   for ( let i = first; i <= last; i++ ) {

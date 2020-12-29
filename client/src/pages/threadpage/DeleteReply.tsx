@@ -82,14 +82,12 @@ export const DeleteReply: React.FC<{
       closeModal={closeModal}
       content={<Confirmation />}
     >
-      <div onClick={openModal} className="flex">
-        <ActionButton warning>
-          <MdDelete />
-        </ActionButton>
-        {label && <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
-          {label}
-        </span>}
-      </div>        
+      <ActionButton warning onClick={openModal}>
+        <MdDelete />
+      </ActionButton>
+      {label && <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" onClick={openModal}>
+        {label}
+      </span>}
     </Modal>
   )
 }

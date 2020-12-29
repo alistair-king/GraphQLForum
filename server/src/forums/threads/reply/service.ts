@@ -47,7 +47,7 @@ export class RepliesService {
   async findAll(args: RepliesArgs): Promise<[Reply[], number]> {
     return this.repliesRepository.createQueryBuilder('reply')
       .where("reply.threadid = :id", { id: args.threadId })
-      .orderBy('reply.when', 'DESC')
+      .orderBy('reply.when', 'ASC')
       .skip(args.page * 10)
       .take(10)
       .leftJoinAndSelect("reply.author", "User")
@@ -57,7 +57,7 @@ export class RepliesService {
   async findLastReply(args: RepliesArgs): Promise<[Reply[], number]> {
     return this.repliesRepository.createQueryBuilder('reply')
       .where("reply.threadid = :id", { id: args.threadId })
-      .orderBy('reply.when', 'DESC')
+      .orderBy('reply.when', 'ASC')
       .take(1)
       .leftJoinAndSelect("reply.author", "User")
       .getManyAndCount()
