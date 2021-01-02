@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
 import { PubSub } from 'apollo-server-express'
 
+import { LoginUserInput } from './dto/login-user.input'
 import { NewUserInput } from './dto/new-user.input'
 import { UsersArgs } from './dto/users.args'
 import { User } from './model'
@@ -14,12 +15,11 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Query(returns => User)
-  async user(@Args('id') id: string): Promise<User> {
-    const user = await this.usersService.findOneById(id)
-    if (!user) {
-      throw new NotFoundException(id)
-    }
-    return user
+  async user(
+    @Args('email') email: string,
+    @Args('code') code: string,
+  ): Promise<User> {
+    return await this.usersService.currentUser(email, code)
   }
 
   @Query(returns => [User])
@@ -28,11 +28,13 @@ export class UsersResolver {
   }
 
   @Mutation(returns => User)
-  async addUser(
-    @Args('newUserData') newUserData: NewUserInput,
+  async loginUser(
+    @Args('loginUserData') loginUserData: LoginUserInput,
   ): Promise<User> {
-    const user = await this.usersService.create(newUserData)
-    pubSub.publish('userAdded', { userAdded: user })
+    console.log('AJK login user', loginUserData)
+
+    const user = await this.usersService.login(loginUserData)
+    pubSub.publish('userLoggedIn', { userLoggedIn: user })
     return user
   }
 

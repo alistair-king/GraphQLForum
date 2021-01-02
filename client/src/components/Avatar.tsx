@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaUserAlt } from 'react-icons/fa'
 
 export const Avatar: React.FC<{
   user?: string,
@@ -6,7 +7,7 @@ export const Avatar: React.FC<{
   caption?: string,
   onClick?: () => void
 }> = ({
-  user = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  user,
   size = 24,
   caption,
   onClick
@@ -15,7 +16,10 @@ export const Avatar: React.FC<{
     <button className="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-white transition duration-150 ease-in-out z-20"
       onClick={onClick}
     >
-      <img className={`h-${size} w-${size} rounded-full`} src={user} alt="" />
+      { user
+        ? <img className={`h-${size} w-${size} rounded-full`} src={user} alt="" />
+        : <FaUserAlt color="white" />
+      }
     </button>
     {caption && 
       <>

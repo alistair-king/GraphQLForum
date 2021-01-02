@@ -6,11 +6,20 @@ export class User {
   id: string
 
   @Field()
-  name: string
-
-  @Field()
   email: string
 
   @Field()
-  password: string
+  code: string
+
+  @Field()
+  name: string
+
+  @Field()
+  picture: string
+
+  @Field()
+  logins: number
+
+  @Field()
+  lastLogin: Date
 }

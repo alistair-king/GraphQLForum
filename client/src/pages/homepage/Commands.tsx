@@ -1,5 +1,6 @@
 import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
+import { useAuth } from 'react-use-auth'
 
 import { ADD_FORUM, GET_FORUMS } from '../../gql'
 import { Button } from '../../components/Button'
@@ -8,6 +9,8 @@ import { Forum } from '../../forms/Forum'
 import { useModal } from '../../hooks'
 
 export const Commands: React.FC = () => {
+  const { login, logout, isAuthenticated } = useAuth()
+  
   const { isOpen, openModal, closeModal } = useModal()
   const [addForum] = useMutation(ADD_FORUM,
     {
@@ -41,14 +44,19 @@ export const Commands: React.FC = () => {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      closeModal={closeModal}
-      content={<Forum title="New Forum" actions={<Actions />} onSubmit={onSubmit} />}
-    >
-      <Button onClick={openModal}>
-        New Forum
-      </Button>
-    </Modal>
+    <>
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        content={<Forum title="New Forum" actions={<Actions />} onSubmit={onSubmit} />}
+      >
+        <Button onClick={openModal} className="mr-1">
+          New Forum
+        </Button>
+      </Modal>
+        <Button onClick={isAuthenticated() ? logout : login}>
+          {isAuthenticated() ? 'Logout' : 'Login'}
+        </Button>
+    </>
   )
 }

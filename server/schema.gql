@@ -4,10 +4,16 @@
 
 type User {
   id: ID!
-  name: String!
   email: String!
-  password: String!
+  code: String!
+  name: String!
+  picture: String!
+  logins: Float!
+  lastLogin: Date!
 }
+
+"""Date custom scalar type"""
+scalar Date
 
 type Reply {
   id: ID!
@@ -16,9 +22,6 @@ type Reply {
   thread: Thread!
   author: User!
 }
-
-"""Date custom scalar type"""
-scalar Date
 
 type Thread {
   id: ID!
@@ -59,7 +62,7 @@ type Query {
   forum(id: String!): Forum!
   forums(page: Int = 0): [Forum!]!
   thread(id: String!): Thread!
-  user(id: String!): User!
+  user(code: String!, email: String!): User!
   users(skip: Int = 0, take: Int = 25): [User!]!
   reply(id: String!): Reply!
 }
@@ -69,7 +72,7 @@ type Mutation {
   addThread(newThreadData: NewThreadInput!): Thread!
   updateThread(updateThreadData: UpdateThreadInput!): Thread!
   deleteThread(DeleteThreadInput: DeleteThreadInput!): Thread!
-  addUser(newUserData: NewUserInput!): User!
+  loginUser(loginUserData: LoginUserInput!): User!
   addReply(newReplyData: NewReplyInput!): Reply!
   updateReply(updateReplyData: UpdateReplyInput!): Reply!
   deleteReply(DeleteReplyInput: DeleteReplyInput!): Reply!
@@ -97,10 +100,11 @@ input DeleteThreadInput {
   id: String!
 }
 
-input NewUserInput {
-  name: String!
+input LoginUserInput {
   email: String!
-  password: String!
+  code: String!
+  name: String!
+  picture: String!
 }
 
 input NewReplyInput {

@@ -6,11 +6,20 @@ export class User {
   id: string
 
   @Column()
-  name: string
-
-  @Column()
   email: string
 
   @Column()
-  password: string
+  code: string
+
+  @Column()
+  name: string
+
+  @Column()
+  picture: string
+
+  @Column()
+  logins: number
+
+  @Column()
+  lastLogin: Date
 }

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_REPLY, GET_FORUM, GET_THREAD } from '../gql'
 import { IReply } from '../types'
-import { StateContext } from '../state'
+import { useAppState } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
@@ -18,31 +18,17 @@ export const EditReply: React.FC<{
   reply
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useContext(StateContext)
-  const {
-    id: forumId,
-    page: forumPage
-  } = state.get('FORUM');
-  const {
-    id: threadId,
-    page: threadPage
-  } = state.get('THREAD');
+  const state = useAppState()
   const [updateReply] = useMutation(UPDATE_REPLY,
     {
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: {
-            id: threadId,
-            page: threadPage
-          }
+          variables: state.getNavigation('THREAD')
         },
         {
           query: GET_FORUM,
-          variables: {
-            id: forumId,
-            page: forumPage
-          }
+          variables: state.getNavigation('FORUM')
         }
       ]
     }

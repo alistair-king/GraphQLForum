@@ -1,20 +1,25 @@
-import React, { useState, ReactNode } from 'react'
+import React, { useContext, useState, ReactNode } from 'react'
+import { useQuery } from '@apollo/react-hooks';
+
+import { GET_USER } from '../gql'
+import { IUser } from '../types'
 
 export const StateContext = React.createContext({
-  get: (key: 'FORUM' | 'THREAD') => ({
+  getNavigation: (key: 'FORUM' | 'THREAD') => ({
     id: '',
     page: 0
   }),
-  set: (key: 'FORUM' | 'THREAD', id: string, page: number) => {},
-  userId: '1111111-1111-1111-1111-1111-11111111'
-});
+  setNavigation: (key: 'FORUM' | 'THREAD', id: string, page: number) => {},
+  getUser: (): IUser | undefined => undefined,
+  setUser: (email: string, code: string) => {}
+ });
 
 export const StateContextProvider:React.FC<{
   children: ReactNode
 }> = ({
   children
 }) => {
-  const [state, setState] = useState({
+  const [navigation, setNavigation] = useState({
     FORUM: {
       id: '',
       page: 0
@@ -22,14 +27,30 @@ export const StateContextProvider:React.FC<{
     THREAD: {
       id: '',
       page: 0
+    },
+  })
+
+  const [userData, setUserData] = useState({
+    email: '',
+    code:  '',
+  })
+  const [user, setUser] = useState<IUser>();
+  const { data } = useQuery<{user: any}, {email: string, code: string}>(
+    GET_USER,
+    {
+      variables: userData
     }
-  });
+  )
+  if (data && data.user.id !== user?.id) {
+    setUser(data.user)
+  }
+
   const provided = {
-    get: (key: 'FORUM' | 'THREAD') => state[key],
-    set: (key: 'FORUM' | 'THREAD', id: string, page: number) => {
-      if (id !== state[key].id || page !== state[key].page) {
-        setState({
-          ...state,
+    getNavigation: (key: 'FORUM' | 'THREAD') => navigation[key],
+    setNavigation: (key: 'FORUM' | 'THREAD', id: string, page: number) => {
+      if (id !== navigation[key].id || page !== navigation[key].page) {
+        setNavigation({
+          ...navigation,
           [key]: {
             id,
             page
@@ -37,7 +58,13 @@ export const StateContextProvider:React.FC<{
         })
       }
     },
-    userId: '1111111-1111-1111-1111-1111-11111111'
+    getUser: () => user,
+    setUser: (email: string, code: string) => {
+      setUserData({
+        email,
+        code
+      })
+    }
   }
   return (
     <StateContext.Provider value={provided}>
@@ -45,3 +72,5 @@ export const StateContextProvider:React.FC<{
     </StateContext.Provider>
   )
 }
+
+export const useAppState = () => useContext(StateContext)

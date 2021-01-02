@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_THREAD } from '../../gql'
-import { StateContext } from '../../state'
+import { useAppState } from '../../state'
 import { IThread } from '../../types'
 import { Page } from '../../components/Page'
 import { Spinner } from '../../components/Spinner'
@@ -21,7 +21,7 @@ export const ThreadPage: React.FC = () => {
   const page = parseInt(threadPage || '0')
   const history = useHistory()
   const setPage = (newPage: number) => { history.push(`/${forumId}/${forumPage}/${threadId}/${newPage}`) }
-  const state = useContext(StateContext);
+  const state = useAppState()
 
   const { loading, error, data } = useQuery<{thread: IThread}, {id: string, page: number}>(
     GET_THREAD,
@@ -35,9 +35,9 @@ export const ThreadPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.set('THREAD', threadId, page);
-      if (state.get('FORUM').id === '') {
-        state.set('FORUM', data?.thread?.forum?.id || '', 0);
+      state.setNavigation('THREAD', threadId, page);
+      if (state.getNavigation('FORUM').id === '') {
+        state.setNavigation('FORUM', data?.thread?.forum?.id || '', 0);
       }
     }
   }, [data, state, threadId, page]);

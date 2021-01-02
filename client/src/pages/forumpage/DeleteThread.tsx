@@ -1,15 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
 import { MdDelete } from 'react-icons/md'
 
 import { DELETE_THREAD, GET_FORUM } from '../../gql'
-import { StateContext } from '../../state'
+import { useAppState } from '../../state'
 import { IThread } from '../../types'
 import { ActionButton } from '../../components/ActionButton'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { useModal } from '../../hooks'
-
 
 export const DeleteThread: React.FC<{
   thread: IThread
@@ -19,16 +18,13 @@ export const DeleteThread: React.FC<{
   label
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const { id, page } = useContext(StateContext).get('FORUM');
+  const state = useAppState()
   const [deleteThread] = useMutation(DELETE_THREAD,
     {
       refetchQueries:[
         {
           query: GET_FORUM,
-          variables: {
-            id,
-            page
-          }
+          variables: state.getNavigation('FORUM')
         }
       ]
     })

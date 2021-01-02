@@ -3,7 +3,7 @@ import { Repository } from 'typeorm'
 
 import { Constants } from '@server/common/constants'
 
-import { NewUserInput } from './dto/new-user.input'
+import { LoginUserInput } from './dto/login-user.input'
 import { UsersArgs } from './dto/users.args'
 import { User } from './model'
 
@@ -14,8 +14,13 @@ export class UsersService {
     private usersRepository: Repository<User>
   ) {}
 
-  async create(data: NewUserInput): Promise<User> {
-    return {} as any
+  async currentUser(email: string, code: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: {
+        email,
+        code
+      }
+    })
   }
 
   async findOneById(id: string): Promise<User> {
@@ -25,6 +30,27 @@ export class UsersService {
   async findAll(usersArgs: UsersArgs): Promise<User[]> {
     return this.usersRepository.find()
   }
+
+  async login(data: LoginUserInput): Promise<User> {
+    let user = await this.usersRepository.findOne({
+      where: {
+        email: data.email,
+        code: data.code
+      }
+    })
+    if (!user) {
+      user = new User()
+      user.email = data.email
+      user.code = data.code
+      user.name = data.name
+      user.logins = 0
+    }
+    user.picture = data.picture
+    user.logins++
+    user.lastLogin = new Date()
+    return this.usersRepository.save(user)
+  }
+
 
   // async remove(id: string): Promise<boolean> {
   //   return this.usersRepository.delete(id)

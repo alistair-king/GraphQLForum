@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
 import { MdDelete } from 'react-icons/md'
 
 import { DELETE_REPLY, GET_FORUM, GET_THREAD } from '../../gql'
-import { StateContext } from '../../state'
+import { useAppState } from '../../state'
 import { IReply } from '../../types'
 import { ActionButton } from '../../components/ActionButton'
 import { Button } from '../../components/Button'
@@ -19,31 +19,17 @@ export const DeleteReply: React.FC<{
   label
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useContext(StateContext)
-  const {
-    id: forumId,
-    page: forumPage
-  } = state.get('FORUM');
-  const {
-    id: threadId,
-    page: threadPage
-  } = state.get('THREAD');
+  const state = useAppState()
   const [deleteReply] = useMutation(DELETE_REPLY,
     {
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: {
-            id: threadId,
-            page: threadPage
-          }
+          variables: state.getNavigation('THREAD')
         },
         {
           query: GET_FORUM,
-          variables: {
-            id: forumId,
-            page: forumPage
-          }
+          variables: state.getNavigation('FORUM')
         }
       ]
     })

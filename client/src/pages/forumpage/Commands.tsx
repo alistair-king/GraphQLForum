@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
 
 import { ADD_THREAD, GET_FORUM } from '../../gql'
-import { StateContext } from '../../state'
+import { useAppState } from '../../state'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { Thread } from '../../forms/Thread'
@@ -10,18 +10,14 @@ import { useModal } from '../../hooks'
 
 export const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useContext(StateContext);
-  const { userId } = state;
-  const { id, page } = state.get('FORUM');
+  const state = useAppState();
+
   const [addThread] = useMutation(ADD_THREAD,
     {
       refetchQueries:[
         {
           query: GET_FORUM,
-          variables: {
-            id,
-            page
-          }
+          variables: state.getNavigation('FORUM')
         }
       ]
     }
@@ -39,8 +35,8 @@ export const Commands: React.FC = () => {
       addThread({
         variables: {
           newThreadData: {
-            forumId: id, 
-            authorId: userId,
+            forumId: state.getNavigation('FORUM').id, 
+            authorId: state.getUser()?.id,
             title: data.title,
             content: data.content
           }

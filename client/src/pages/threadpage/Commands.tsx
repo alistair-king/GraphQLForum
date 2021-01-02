@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks';
 
 import { ADD_REPLY, GET_THREAD, GET_FORUM } from '../../gql'
-import { StateContext } from '../../state'
+import { useAppState } from '../../state'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { Reply } from '../../forms/Reply'
@@ -14,32 +14,18 @@ export const Commands: React.FC<{
   id
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useContext(StateContext);
-  const {
-    id: forumId,
-    page: forumPage
-  } = state.get('FORUM');
-  const {
-    id: threadId,
-    page: threadPage
-  } = state.get('THREAD');
-  const { userId } = state;
+  const state = useAppState()
+
   const [addReply] = useMutation(ADD_REPLY,
     {
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: {
-            id: threadId,
-            page: threadPage
-          }
+          variables: state.getNavigation('FORUM')
         },
         {
           query: GET_FORUM,
-          variables: {
-            id: forumId,
-            page: forumPage
-          }
+          variables: state.getNavigation('THREAD')
         }        
       ]
     })
@@ -50,7 +36,7 @@ export const Commands: React.FC<{
         variables: {
           newReplyData: {
             threadId: id, 
-            authorId: userId,
+            authorId: state.getUser()?.id,
             content: data.content
           }
         }

@@ -1,12 +1,33 @@
 import gql from 'graphql-tag'
 
-export const ADD_FORUM = gql`
-mutation AddForum($newForumData: NewForumInput!) {
-  addForum(newForumData: $newForumData) {
-    name
-    description
+export const GET_USER = gql`
+  query user($email: String!, $code: String!) {
+    user(email: $email, code: $code) {
+      id
+      name
+      picture
+    }
   }
-}
+`
+
+export const LOGIN_USER = gql`
+  mutation LoginUser($loginUserData: LoginUserInput!) {
+    loginUser(loginUserData: $loginUserData) {
+      email
+      code
+      name
+      picture
+    }
+  }
+`
+
+export const ADD_FORUM = gql`
+  mutation AddForum($newForumData: NewForumInput!) {
+    addForum(newForumData: $newForumData) {
+      name
+      description
+    }
+  }
 `
 
 export const GET_FORUMS = gql`
@@ -83,6 +104,7 @@ export const GET_THREAD = gql`
       author {
         id
         name
+        picture
       }
       replies(page: $page) {
         count,
@@ -93,6 +115,7 @@ export const GET_THREAD = gql`
           author {
             id
             name
+            picture
           }          
         }
       }

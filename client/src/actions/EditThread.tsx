@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_THREAD, GET_FORUM } from '../gql'
 import { IThread } from '../types'
-import { StateContext } from '../state'
+import { useAppState } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
@@ -14,16 +14,13 @@ import { useModal } from '../hooks'
 
 export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const { id, page } = useContext(StateContext).get('FORUM');
+  const state = useAppState()
   const [updateThread] = useMutation(UPDATE_THREAD,
     {
       refetchQueries:[
         {
           query: GET_FORUM,
-          variables: {
-            id,
-            page
-          }
+          variables: state.getNavigation('FORUM')
         }
       ]
     }
