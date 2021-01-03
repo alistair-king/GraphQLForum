@@ -9,5 +9,5 @@ Mainly just an opportunity to try new things.
 - tailwind
 - react hook form
 - typeORM
-
-
+- useAuth
+- auth0
