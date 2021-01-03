@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks'
 
 import { GET_THREAD } from '../../gql'
 import { useAppState } from '../../state'
@@ -35,12 +35,12 @@ export const ThreadPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.setNavigation('THREAD', threadId, page);
+      state.setNavigation('THREAD', threadId, page)
       if (state.getNavigation('FORUM').id === '') {
-        state.setNavigation('FORUM', data?.thread?.forum?.id || '', 0);
+        state.setNavigation('FORUM', data?.thread?.forum?.id || '', 0)
       }
     }
-  }, [data, state, threadId, page]);
+  }, [data, state, threadId, page])
 
   if ( error ) {
     return <ErrorPage message={error?.message} />

@@ -7,7 +7,7 @@ export const ActionsMenu: React.FC<{
 }> = ({
   children
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   const toggleIsOpen = () => setIsOpen(!isOpen)
   return (
     <div className="relative inline-block text-left">

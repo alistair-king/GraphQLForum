@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks'
 
 import { GET_FORUMS } from '../../gql'
 import { IForum } from '../../types'

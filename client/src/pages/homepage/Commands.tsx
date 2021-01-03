@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks'
 
 import { ADD_FORUM, GET_FORUMS } from '../../gql'
 import { IsAdmin } from '../../components/auth/IsAdmin'
@@ -18,7 +18,7 @@ export const Commands: React.FC = () => {
         }
       ]
     }
-  );
+  )
 
   const Actions: React.FC = () => (
     <>
@@ -37,7 +37,7 @@ export const Commands: React.FC = () => {
           }
         }
       })
-      closeModal();
+      closeModal()
     }
   }
 

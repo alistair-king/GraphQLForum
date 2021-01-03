@@ -1,5 +1,5 @@
 import React from 'react'
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/react-hooks'
 import ApolloClient from 'apollo-boost'
 import {
   BrowserRouter,
@@ -24,7 +24,7 @@ import { LoggedInCallbackPage } from './pages/LoggedInCallbackPage'
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
-});
+})
 
 export const App = () => {
   ReactModal.setAppElement('#root')

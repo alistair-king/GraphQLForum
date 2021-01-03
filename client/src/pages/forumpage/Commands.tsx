@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks'
 
 import { ADD_THREAD, GET_FORUM } from '../../gql'
 import { useAppState } from '../../state'
@@ -11,7 +11,7 @@ import { useModal } from '../../hooks'
 
 export const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useAppState();
+  const state = useAppState()
 
   const [addThread] = useMutation(ADD_THREAD,
     {
@@ -22,7 +22,7 @@ export const Commands: React.FC = () => {
         }
       ]
     }
-  );
+  )
 
   const Actions: React.FC = () => (
     <>
@@ -43,7 +43,7 @@ export const Commands: React.FC = () => {
           }
         }
       })
-      closeModal();
+      closeModal()
     }
   }
 

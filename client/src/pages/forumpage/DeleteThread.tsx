@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks'
 import { MdDelete } from 'react-icons/md'
 
 import { DELETE_THREAD, GET_FORUM } from '../../gql'
@@ -54,7 +54,7 @@ export const DeleteThread: React.FC<{
         }
       }
     })
-    closeModal();
+    closeModal()
   }
 
   return (

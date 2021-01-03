@@ -24,7 +24,7 @@ export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
         }
       ]
     }
-  );
+  )
   
   const Actions = () => (
     <>
@@ -45,7 +45,7 @@ export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
           updateThreadData
         }
       })
-      closeModal();
+      closeModal()
     }
   }
 

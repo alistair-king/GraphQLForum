@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks'
 
 import { ADD_REPLY, GET_THREAD, GET_FORUM } from '../../gql'
 import { useAppState } from '../../state'
@@ -42,7 +42,7 @@ export const Commands: React.FC<{
           }
         }
       })
-      closeModal();
+      closeModal()
     }
   }
   

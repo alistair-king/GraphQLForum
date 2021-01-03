@@ -1,12 +1,12 @@
 import React, { useContext, useState, ReactNode } from 'react'
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks'
 import { useAuth } from 'react-use-auth'
-import createPersistedState from 'use-persisted-state';
+import createPersistedState from 'use-persisted-state'
 
 import { GET_USER } from '../gql'
 import { IUser } from '../types'
 
-const useCode = createPersistedState('code');
+const useCode = createPersistedState('code')
 
 export const StateContext = React.createContext({
   getNavigation: (key: 'FORUM' | 'THREAD') => ({
@@ -17,7 +17,7 @@ export const StateContext = React.createContext({
   getUser: (): IUser | undefined => undefined,
   setCode: (code: string) => {},
   logoutUser: (): void => {}
- });
+ })
 
 export const StateContextProvider:React.FC<{
   children: ReactNode
@@ -36,7 +36,7 @@ export const StateContextProvider:React.FC<{
   })
 
   const [code, setCode] = useCode('')
-  const [user, setUser] = useState<IUser>();
+  const [user, setUser] = useState<IUser>()
   const { data } = useQuery<{user: any}, {code: string}>(
     GET_USER,
     {
@@ -67,7 +67,6 @@ export const StateContextProvider:React.FC<{
     getUser: () => user,
     setCode,
     logoutUser: () => {
-      console.log('AJK logout user')
       setCode('')
       logout()
     }

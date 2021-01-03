@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks'
 
 import { GET_FORUM } from '../../gql'
 import { useAppState } from '../../state'
@@ -9,7 +9,7 @@ import { Page } from '../../components/Page'
 import { Spinner } from '../../components/Spinner'
 import { Forum } from '../../features/Forum'
 import { ErrorPage } from '../ErrorPage'
-import { Commands } from './Commands';
+import { Commands } from './Commands'
 
 export const ForumPage: React.FC = () => {
   const { forumId, forumPage = '0'} = useParams()
@@ -30,7 +30,7 @@ export const ForumPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.setNavigation('FORUM', forumId, page);
+      state.setNavigation('FORUM', forumId, page)
     }
   }, [data, state, forumId, page])
 

@@ -32,7 +32,7 @@ export const EditReply: React.FC<{
         }
       ]
     }
-  );
+  )
   
   const Actions = () => (
     <>
@@ -52,7 +52,7 @@ export const EditReply: React.FC<{
           }
         }
       })
-      closeModal();
+      closeModal()
     }
   }
 

@@ -14,7 +14,7 @@ export const LoggedInCallbackPage = () => {
   const { user, isAuthenticated } = useAuth()
   const [loginUser] = useMutation(LOGIN_USER)
   const history = useHistory()
-  const { setCode } = useAppState();
+  const { setCode } = useAppState()
 
   React.useEffect(() => {
     if (isAuthenticated()) {
