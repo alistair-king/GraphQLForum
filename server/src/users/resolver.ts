@@ -1,9 +1,7 @@
-import { NotFoundException } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
 import { PubSub } from 'apollo-server-express'
 
 import { LoginUserInput } from './dto/login-user.input'
-import { NewUserInput } from './dto/new-user.input'
 import { UsersArgs } from './dto/users.args'
 import { User } from './model'
 import { UsersService } from './service'
@@ -16,10 +14,9 @@ export class UsersResolver {
 
   @Query(returns => User)
   async user(
-    @Args('email') email: string,
     @Args('code') code: string,
   ): Promise<User> {
-    return await this.usersService.currentUser(email, code)
+    return await this.usersService.currentUser(code)
   }
 
   @Query(returns => [User])
@@ -37,11 +34,6 @@ export class UsersResolver {
     pubSub.publish('userLoggedIn', { userLoggedIn: user })
     return user
   }
-
-  // @Mutation(returns => Boolean)
-  // async removeUser(@Args('id') id: string) {
-  //   return this.usersService.remove(id)
-  // }
 
   @Subscription(returns => User)
   userAdded() {

@@ -14,7 +14,7 @@ export const LoggedInCallbackPage = () => {
   const { user, isAuthenticated } = useAuth()
   const [loginUser] = useMutation(LOGIN_USER)
   const history = useHistory()
-  const { setUser } = useAppState();
+  const { setCode } = useAppState();
 
   React.useEffect(() => {
     if (isAuthenticated()) {
@@ -28,10 +28,10 @@ export const LoggedInCallbackPage = () => {
           }
         }
       })
-      setUser(user.email, user.sub)
+      setCode(user.sub)
       history.push(HOME)
     }
-  }, [user, isAuthenticated, loginUser, history, setUser])
+  }, [user, isAuthenticated, loginUser, history, setCode])
 
   return (
     <Page title="Welcome back">

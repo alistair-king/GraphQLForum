@@ -14,10 +14,9 @@ export class UsersService {
     private usersRepository: Repository<User>
   ) {}
 
-  async currentUser(email: string, code: string): Promise<User> {
+  async currentUser(code: string): Promise<User> {
     return this.usersRepository.findOne({
       where: {
-        email,
         code
       }
     })

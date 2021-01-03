@@ -1,8 +1,12 @@
 import React, { useContext, useState, ReactNode } from 'react'
 import { useQuery } from '@apollo/react-hooks';
+import { useAuth } from 'react-use-auth'
+import createPersistedState from 'use-persisted-state';
 
 import { GET_USER } from '../gql'
 import { IUser } from '../types'
+
+const useCode = createPersistedState('code');
 
 export const StateContext = React.createContext({
   getNavigation: (key: 'FORUM' | 'THREAD') => ({
@@ -11,7 +15,8 @@ export const StateContext = React.createContext({
   }),
   setNavigation: (key: 'FORUM' | 'THREAD', id: string, page: number) => {},
   getUser: (): IUser | undefined => undefined,
-  setUser: (email: string, code: string) => {}
+  setCode: (code: string) => {},
+  logoutUser: (): void => {}
  });
 
 export const StateContextProvider:React.FC<{
@@ -30,20 +35,21 @@ export const StateContextProvider:React.FC<{
     },
   })
 
-  const [userData, setUserData] = useState({
-    email: '',
-    code:  '',
-  })
+  const [code, setCode] = useCode('')
   const [user, setUser] = useState<IUser>();
-  const { data } = useQuery<{user: any}, {email: string, code: string}>(
+  const { data } = useQuery<{user: any}, {code: string}>(
     GET_USER,
     {
-      variables: userData
+      variables: {
+        code
+      }
     }
   )
   if (data && data.user.id !== user?.id) {
     setUser(data.user)
   }
+
+  const { logout } = useAuth()
 
   const provided = {
     getNavigation: (key: 'FORUM' | 'THREAD') => navigation[key],
@@ -59,11 +65,11 @@ export const StateContextProvider:React.FC<{
       }
     },
     getUser: () => user,
-    setUser: (email: string, code: string) => {
-      setUserData({
-        email,
-        code
-      })
+    setCode,
+    logoutUser: () => {
+      console.log('AJK logout user')
+      setCode('')
+      logout()
     }
   }
   return (

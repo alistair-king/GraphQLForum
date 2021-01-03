@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import { ADD_REPLY, GET_THREAD, GET_FORUM } from '../../gql'
 import { useAppState } from '../../state'
+import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { Reply } from '../../forms/Reply'
@@ -53,15 +54,17 @@ export const Commands: React.FC<{
   )
 
   return (
-    <Modal
-      isOpen={isOpen}
-      closeModal={closeModal}
-      content={<Reply title="Reply" actions={<Actions />} onSubmit={onSubmit}/>}
-    >
-      <Button onClick={openModal}>
-        Reply
-      </Button>
-    </Modal>
+    <IsAuthenticated>
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        content={<Reply title="Reply" actions={<Actions />} onSubmit={onSubmit}/>}
+      >
+        <Button onClick={openModal}>
+          Reply
+        </Button>
+      </Modal>
+    </IsAuthenticated>
   )
 }
 

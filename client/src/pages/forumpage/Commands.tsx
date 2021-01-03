@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import { ADD_THREAD, GET_FORUM } from '../../gql'
 import { useAppState } from '../../state'
+import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { Thread } from '../../forms/Thread'
@@ -47,14 +48,16 @@ export const Commands: React.FC = () => {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      closeModal={closeModal}
-      content={<Thread title="New Thread" actions={<Actions />} onSubmit={onSubmit} />}
-    >
-      <Button onClick={openModal}>
-        New Thread
-      </Button>
-    </Modal>
+    <IsAuthenticated>
+      <Modal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        content={<Thread title="New Thread" actions={<Actions />} onSubmit={onSubmit} />}
+      >
+        <Button onClick={openModal}>
+          New Thread
+        </Button>
+      </Modal>
+    </IsAuthenticated>
   )
 }

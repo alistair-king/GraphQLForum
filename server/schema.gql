@@ -62,7 +62,7 @@ type Query {
   forum(id: String!): Forum!
   forums(page: Int = 0): [Forum!]!
   thread(id: String!): Thread!
-  user(code: String!, email: String!): User!
+  user(code: String!): User!
   users(skip: Int = 0, take: Int = 25): [User!]!
   reply(id: String!): Reply!
 }

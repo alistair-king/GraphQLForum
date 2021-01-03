@@ -26,7 +26,8 @@
     "react-scripts": "3.4.0",
     "react-spinners": "^0.8.3",
     "react-use-auth": "^2.0.2",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "use-persisted-state": "^0.3.3"
   },
   "scripts": {
     "lint": "eslint 'src/**/*.{ts,tsx}'",

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const GET_USER = gql`
-  query user($email: String!, $code: String!) {
-    user(email: $email, code: $code) {
+  query user($code: String!) {
+    user(code: $code) {
       id
       name
       picture

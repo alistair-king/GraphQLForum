@@ -1,11 +1,12 @@
 import React, { ReactNode } from 'react'
-// import { Link } from 'react-router-dom'
+import { useAuth } from 'react-use-auth'
 import cls from 'classnames'
 import { MdMenu, MdNotifications } from 'react-icons/md'
-import { useAuth } from 'react-use-auth'
+import { FaUserAlt } from 'react-icons/fa'
 
 import { useAppState } from '../state'
-
+import { IsAuthenticated } from '../components/auth/IsAuthenticated'
+import { IsNotAuthenticated } from '../components/auth/IsNotAuthenticated'
 import { Avatar } from './Avatar'
 import { Logo } from './Logo'
 
@@ -27,10 +28,15 @@ export const NavBar: React.FC = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <BellButton />
-            <div className="ml-3 relative">
-              <DropMenu />
-            </div>
+            <IsAuthenticated>
+              <BellButton />
+              <div className="ml-3 relative">
+                <DropMenu />
+              </div>
+            </IsAuthenticated>              
+            <IsNotAuthenticated>
+              <LoginButton />
+            </IsNotAuthenticated>
           </div>
         </div>
       </div>
@@ -47,7 +53,16 @@ export const NavBar: React.FC = () => {
 // }) => (
 //   <Link to={to} className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">{children}</Link>
 // )
-    
+
+const LoginButton: React.FC = () => {
+  const { login } = useAuth()
+  return (
+    <button onClick={login} className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
+      <FaUserAlt />
+    </button>
+  )
+}
+  
 const BellButton: React.FC = () => (
   <button className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
     <MdNotifications />
@@ -56,8 +71,7 @@ const BellButton: React.FC = () => (
   
 const DropMenu:React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false)
-  const { logout } = useAuth()
-  const { getUser } = useAppState()
+  const { getUser, logoutUser } = useAppState()
   const user = getUser()
   return (
     <>
@@ -65,7 +79,7 @@ const DropMenu:React.FC = () => {
       <DropMenuPane isOpen={isOpen}>
         <DropMenuItem>Your Profile</DropMenuItem>
         <DropMenuItem>Settings</DropMenuItem>
-        <DropMenuAction onClick={logout}>Sign out</DropMenuAction>
+        <DropMenuAction onClick={logoutUser}>Sign out</DropMenuAction>
       </DropMenuPane>
     </>
   )
@@ -90,7 +104,7 @@ const DropMenuItem: React.FC<{
 )
 
 const DropMenuAction: React.FC<{
-  onClick?: () => {},
+  onClick?: () => void,
   children: ReactNode
 }> = ({
   onClick,
