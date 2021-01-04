@@ -4,23 +4,22 @@ import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_THREAD, GET_FORUM } from '../gql'
 import { IThread } from '../types'
-import { useAppState } from '../state'
+import { useNavigationState } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import { Thread } from '../forms/Thread'
 import { useModal } from '../hooks'
 
-
 export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useAppState()
+  const state = useNavigationState()
   const [updateThread] = useMutation(UPDATE_THREAD,
     {
       refetchQueries:[
         {
           query: GET_FORUM,
-          variables: state.getNavigation('FORUM')
+          variables: state.get('FORUM')
         }
       ]
     }

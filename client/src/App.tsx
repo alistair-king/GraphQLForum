@@ -13,7 +13,8 @@ import { Auth0 } from 'react-use-auth/auth0'
 import ReactModal from 'react-modal'
 
 import * as URL from './urls'
-import { StateContextProvider } from './state'
+import { AuthContextProvider } from './state/AuthContext'
+import { NavigationContextProvider } from './state/NavigationContext'
 import { NavBar } from './components/NavBar'
 import { HomePage } from './pages/homepage'
 import { ForumPage } from './pages/forumpage'
@@ -32,9 +33,11 @@ export const App = () => {
   return (
     <ApolloProvider client={client}>
       <BrowserRouter>
-        <StateContextProvider>
-          <AuthedSection />
-        </StateContextProvider>
+        <NavigationContextProvider>
+          <AuthContextProvider>
+            <AuthedSection />
+          </AuthContextProvider>
+        </NavigationContextProvider>
       </BrowserRouter>
     </ApolloProvider>
   )

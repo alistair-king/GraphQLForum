@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
 import { GET_FORUM } from '../../gql'
-import { useAppState } from '../../state'
+import { useNavigationState } from '../../state'
 import { IForum } from '../../types'
 import { Page } from '../../components/Page'
 import { Spinner } from '../../components/Spinner'
@@ -16,7 +16,7 @@ export const ForumPage: React.FC = () => {
   const page = parseInt(forumPage)
   const history = useHistory()
   const setPage = (newPage: number) => { history.push(`${forumId}/${newPage}`) }
-  const state = useAppState()
+  const state = useNavigationState()
 
   const { loading, error, data } = useQuery<{forum: IForum}, {id: string, page: number}>(
     GET_FORUM,
@@ -30,7 +30,7 @@ export const ForumPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.setNavigation('FORUM', forumId, page)
+      state.set('FORUM', forumId, page)
     }
   }, [data, state, forumId, page])
 

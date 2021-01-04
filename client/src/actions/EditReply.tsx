@@ -4,7 +4,7 @@ import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_REPLY, GET_FORUM, GET_THREAD } from '../gql'
 import { IReply } from '../types'
-import { useAppState } from '../state'
+import { useNavigationState } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
@@ -18,17 +18,17 @@ export const EditReply: React.FC<{
   reply
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useAppState()
+  const state = useNavigationState()
   const [updateReply] = useMutation(UPDATE_REPLY,
     {
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: state.getNavigation('THREAD')
+          variables: state.get('THREAD')
         },
         {
           query: GET_FORUM,
-          variables: state.getNavigation('FORUM')
+          variables: state.get('FORUM')
         }
       ]
     }

@@ -4,7 +4,7 @@ import { useAuth } from 'react-use-auth'
 import { useHistory } from 'react-router-dom'
 
 import { LOGIN_USER } from '../gql'
-import { useAppState } from '../state'
+import { useAuthState } from '../state'
 import { HOME } from '../urls'
 
 import { Page } from '../components/Page'
@@ -14,7 +14,7 @@ export const LoggedInCallbackPage = () => {
   const { user, isAuthenticated } = useAuth()
   const [loginUser] = useMutation(LOGIN_USER)
   const history = useHistory()
-  const { setCode } = useAppState()
+  const { setCode } = useAuthState()
 
   React.useEffect(() => {
     if (isAuthenticated()) {

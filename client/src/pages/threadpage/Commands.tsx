@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 
 import { PAGE_SIZE } from '../../constants'
 import { ADD_REPLY, GET_THREAD, GET_FORUM } from '../../gql'
-import { useAppState } from '../../state'
+import { useAuthState, useNavigationState } from '../../state'
 import { IThread } from '../../types'
 import { makeThreadUrl } from '../../urls'
 import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
@@ -19,7 +19,8 @@ export const Commands: React.FC<{
   thread
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const state = useAppState()
+  const { getUser } = useAuthState()
+  const state = useNavigationState()
   const history = useHistory()
   const {
     forumId,
@@ -33,11 +34,11 @@ export const Commands: React.FC<{
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: state.getNavigation('THREAD')
+          variables: state.get('THREAD')
         },
         {
           query: GET_FORUM,
-          variables: state.getNavigation('FORUM')
+          variables: state.get('FORUM')
         }        
       ]
     }
@@ -51,7 +52,7 @@ export const Commands: React.FC<{
         variables: {
           newReplyData: {
             threadId: thread?.id, 
-            authorId: state.getUser()?.id,
+            authorId: getUser()?.id,
             content: data.content
           }
         }

@@ -4,7 +4,7 @@ import cls from 'classnames'
 import { MdMenu, MdNotifications } from 'react-icons/md'
 import { FaUserAlt } from 'react-icons/fa'
 
-import { useAppState } from '../state'
+import { useAuthState } from '../state'
 import { IsAuthenticated } from '../components/auth/IsAuthenticated'
 import { IsNotAuthenticated } from '../components/auth/IsNotAuthenticated'
 import { Avatar } from './Avatar'
@@ -71,11 +71,11 @@ const BellButton: React.FC = () => (
   
 const DropMenu:React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false)
-  const { getUser, logoutUser } = useAppState()
-  const user = getUser()
+  const { getUser, logoutUser } = useAuthState()
+  const { picture } = getUser() || {}
   return (
     <>
-      <Avatar size={8} user={user?.picture} onClick={() => setIsOpen(!isOpen)} />
+      <Avatar size={8} user={picture} onClick={() => setIsOpen(!isOpen)} />
       <DropMenuPane isOpen={isOpen}>
         <DropMenuItem>Your Profile</DropMenuItem>
         <DropMenuItem>Settings</DropMenuItem>
