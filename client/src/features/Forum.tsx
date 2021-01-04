@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { MdChatBubbleOutline } from 'react-icons/md'
 
 import { IForum, IThread } from '../types'
+import { makeThreadUrl } from '../urls'
 import { ActionsMenu } from '../components/ActionsMenu'
 import { Card } from '../components/Card'
 import { Pagination } from '../components/Pagination'
@@ -87,7 +88,7 @@ const Thread: React.FC<{
     </td>
   
     <td className="px-0 py-4 w-full border-b border-gray-200">
-      <Link className="flex items-center" to={`/${forum.id}/${page}/${thread.id}`}>
+      <Link className="flex items-center" to={makeThreadUrl(forum.id, page, thread.id)}>
         <div className="ml-4">
           <div className="text-sm leading-5 font-medium text-gray-900">{thread.title}</div>
           <div className="text-sm leading-5 text-gray-500">{thread.author?.name} {timeAgo(thread.when)}</div>

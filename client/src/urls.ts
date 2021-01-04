@@ -14,7 +14,7 @@ export const THREAD_PAGE1 = '/:forumId/:forumPage/:threadId/:threadPage'
 export const THREAD_PAGE2 = '/:forumId/:forumPage/:threadId'
 export const makeThreadUrl = (
   forumId: string,
-  forumPage: string,
+  forumPage: string | number,
   threadId: string,
   threadPage?: string | number
 ) =>
