@@ -7,3 +7,4 @@ export enum Constants {
 	USER_REPO = 'USERS_REPOSITORY'
 }
 
+export const PAGE_SIZE = 10

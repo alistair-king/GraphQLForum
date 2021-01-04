@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { GET_THREAD } from '../../gql'
 import { useAppState } from '../../state'
 import { IThread } from '../../types'
+import { makeForumUrl, makeThreadUrl } from '../../urls'
 import { Page } from '../../components/Page'
 import { Spinner } from '../../components/Spinner'
 import { Thread } from '../../features/Thread'
@@ -20,7 +21,8 @@ export const ThreadPage: React.FC = () => {
   } = useParams()
   const page = parseInt(threadPage || '0')
   const history = useHistory()
-  const setPage = (newPage: number) => { history.push(`/${forumId}/${forumPage}/${threadId}/${newPage}`) }
+  const setPage = (newPage: number) =>
+    history.push(makeThreadUrl(forumId, forumPage, threadId, newPage))
   const state = useAppState()
 
   const { loading, error, data } = useQuery<{thread: IThread}, {id: string, page: number}>(
@@ -50,8 +52,8 @@ export const ThreadPage: React.FC = () => {
     <>
       <Page
         title={`${data?.thread?.title}`}
-        commands={<Commands id={threadId} />}
-        back={`/${forumId}/${forumPage}`}
+        commands={<Commands thread={data?.thread} />}
+        back={makeForumUrl(forumId, forumPage)}
       >
         { loading || !data
           ? <Spinner className="w-full flex justify-center pt-8" />

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from 'react-use-auth'
 
-import { POST_LOGIN_CALLBACK } from '../UrlConstants'
+import { POST_LOGIN_CALLBACK } from '../urls'
 
 export const Auth0CallbackPage = () => {
   const { handleAuthentication } = useAuth()

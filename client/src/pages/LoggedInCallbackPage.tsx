@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 
 import { LOGIN_USER } from '../gql'
 import { useAppState } from '../state'
-import { HOME } from '../UrlConstants'
+import { HOME } from '../urls'
 
 import { Page } from '../components/Page'
 import { Spinner } from '../components/Spinner'

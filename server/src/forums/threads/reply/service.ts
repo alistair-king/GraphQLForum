@@ -1,7 +1,7 @@
 import { Injectable, Inject, forwardRef } from '@nestjs/common'
 import { Repository } from 'typeorm'
 
-import { Constants } from '@server/common/constants'
+import { Constants, PAGE_SIZE } from '@server/common/constants'
 
 import { ThreadsService } from '@server/forums/threads/service'
 import { UsersService } from '@server/users/service'
@@ -48,7 +48,7 @@ export class RepliesService {
     return this.repliesRepository.createQueryBuilder('reply')
       .where("reply.threadid = :id", { id: args.threadId })
       .orderBy('reply.when', 'ASC')
-      .skip(args.page * 10)
+      .skip(args.page * PAGE_SIZE)
       .take(10)
       .leftJoinAndSelect("reply.author", "User")
       .getManyAndCount()

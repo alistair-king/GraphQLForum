@@ -12,7 +12,7 @@ import { AuthConfig } from 'react-use-auth'
 import { Auth0 } from 'react-use-auth/auth0'
 import ReactModal from 'react-modal'
 
-import * as URL from './UrlConstants'
+import * as URL from './urls'
 import { StateContextProvider } from './state'
 import { NavBar } from './components/NavBar'
 import { HomePage } from './pages/homepage'
