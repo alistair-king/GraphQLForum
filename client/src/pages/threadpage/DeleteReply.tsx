@@ -1,10 +1,13 @@
 import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
+import { useHistory, useParams } from 'react-router-dom'
 import { MdDelete } from 'react-icons/md'
 
+import { PAGE_SIZE } from '../../constants'
 import { DELETE_REPLY, GET_FORUM, GET_THREAD } from '../../gql'
 import { useAppState } from '../../state'
-import { IReply } from '../../types'
+import { IReply, IThread } from '../../types'
+import { makeThreadUrl } from '../../urls'
 import { ActionButton } from '../../components/ActionButton'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
@@ -13,13 +16,23 @@ import { useModal } from '../../hooks'
 
 export const DeleteReply: React.FC<{
   reply: IReply
+  thread?: IThread,
   label?: string
 }> = ({
   reply,
+  thread,
   label
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const state = useAppState()
+  const history = useHistory()
+  const {
+    forumId,
+    forumPage,
+    threadId,
+    threadPage
+  } = useParams()
+
   const [deleteReply] = useMutation(DELETE_REPLY,
     {
       refetchQueries:[
@@ -32,7 +45,8 @@ export const DeleteReply: React.FC<{
           variables: state.getNavigation('FORUM')
         }
       ]
-    })
+    }
+  )
 
   const Confirmation = () => (
     <>
@@ -60,6 +74,9 @@ export const DeleteReply: React.FC<{
       }
     })
     closeModal()
+    if ((thread?.replies?.count || 0) % PAGE_SIZE === 1) {
+      history.push(makeThreadUrl(forumId, forumPage, threadId, Number(threadPage || '1') - 1))
+    }
   }
 
   return (

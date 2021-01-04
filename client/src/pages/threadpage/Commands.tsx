@@ -40,7 +40,8 @@ export const Commands: React.FC<{
           variables: state.getNavigation('FORUM')
         }        
       ]
-    })
+    }
+  )
   
   const countReplies = thread?.replies?.count || 0
 

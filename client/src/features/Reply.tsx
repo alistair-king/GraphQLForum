@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { IReply } from '../types'
+import { IReply, IThread } from '../types'
 import { EditReply } from '../actions/EditReply'
 import { Avatar } from '../components/Avatar'
 import { Card } from '../components/Card'
@@ -9,9 +9,11 @@ import { timeAgo } from '../helpers/timeAgo'
 import { DeleteReply } from '../pages/threadpage/DeleteReply'
 
 export const Reply: React.FC<{
-  reply: IReply
+  reply: IReply,
+  thread?: IThread
 }> = ({
-  reply
+  reply,
+  thread
 }) => (
   <>
     <Card anchor={reply.id}>
@@ -33,7 +35,7 @@ export const Reply: React.FC<{
       <div className="px-2 py-2 border-b border-gray-200 bg-gray-100 text-xs leading-4 font-medium text-gray-500 flex justify-between">
         <div>
           <EditReply reply={reply} />
-          <DeleteReply reply={reply} />
+          <DeleteReply reply={reply} thread={thread} />
         </div>
       </div>
 

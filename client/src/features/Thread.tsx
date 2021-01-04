@@ -47,7 +47,7 @@ export const Thread: React.FC<{
       </Card>
 
       {thread && thread.replies && thread.replies.items && thread?.replies?.items.map(reply =>
-        <Reply key={reply.id} reply={reply} />
+        <Reply key={reply.id} reply={reply} thread={thread} />
       )}
 
     </>
