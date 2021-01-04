@@ -4,7 +4,7 @@ import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_REPLY, GET_FORUM, GET_THREAD } from '../gql'
 import { IReply } from '../types'
-import { useNavigationState } from '../state'
+import { useNavigationState, NavType } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
@@ -24,11 +24,11 @@ export const EditReply: React.FC<{
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: state.get('THREAD')
+          variables: state.get(NavType.THREAD)
         },
         {
           query: GET_FORUM,
-          variables: state.get('FORUM')
+          variables: state.get(NavType.FORUM)
         }
       ]
     }

@@ -4,7 +4,7 @@ import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_THREAD, GET_FORUM } from '../gql'
 import { IThread } from '../types'
-import { useNavigationState } from '../state'
+import { useNavigationState, NavType } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
@@ -19,7 +19,7 @@ export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
       refetchQueries:[
         {
           query: GET_FORUM,
-          variables: state.get('FORUM')
+          variables: state.get(NavType.FORUM)
         }
       ]
     }

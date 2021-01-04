@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 
 import { PAGE_SIZE } from '../../constants'
 import { ADD_REPLY, GET_THREAD, GET_FORUM } from '../../gql'
-import { useAuthState, useNavigationState } from '../../state'
+import { useAuthState, useNavigationState, NavType } from '../../state'
 import { IThread } from '../../types'
 import { makeThreadUrl } from '../../urls'
 import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
@@ -34,11 +34,11 @@ export const Commands: React.FC<{
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: state.get('THREAD')
+          variables: state.get(NavType.THREAD)
         },
         {
           query: GET_FORUM,
-          variables: state.get('FORUM')
+          variables: state.get(NavType.FORUM)
         }        
       ]
     }

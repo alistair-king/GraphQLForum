@@ -5,7 +5,7 @@ import { MdDelete } from 'react-icons/md'
 
 import { PAGE_SIZE } from '../../constants'
 import { DELETE_REPLY, GET_FORUM, GET_THREAD } from '../../gql'
-import { useNavigationState } from '../../state'
+import { useNavigationState, NavType } from '../../state'
 import { IReply, IThread } from '../../types'
 import { makeThreadUrl } from '../../urls'
 import { ActionButton } from '../../components/ActionButton'
@@ -38,11 +38,11 @@ export const DeleteReply: React.FC<{
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: state.get('THREAD')
+          variables: state.get(NavType.THREAD)
         },
         {
           query: GET_FORUM,
-          variables: state.get('FORUM')
+          variables: state.get(NavType.FORUM)
         }
       ]
     }

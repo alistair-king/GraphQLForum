@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { MdDelete } from 'react-icons/md'
 
 import { DELETE_THREAD, GET_FORUM } from '../../gql'
-import { useNavigationState } from '../../state'
+import { useNavigationState, NavType } from '../../state'
 import { IThread } from '../../types'
 import { ActionButton } from '../../components/ActionButton'
 import { Button } from '../../components/Button'
@@ -24,7 +24,7 @@ export const DeleteThread: React.FC<{
       refetchQueries:[
         {
           query: GET_FORUM,
-          variables: state.get('FORUM')
+          variables: state.get(NavType.FORUM)
         }
       ]
     })

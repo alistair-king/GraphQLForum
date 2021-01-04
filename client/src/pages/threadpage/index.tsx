@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
 import { GET_THREAD } from '../../gql'
-import { useNavigationState } from '../../state'
+import { useNavigationState, NavType } from '../../state'
 import { IThread } from '../../types'
 import { makeForumUrl, makeThreadUrl } from '../../urls'
 import { Page } from '../../components/Page'
@@ -37,9 +37,9 @@ export const ThreadPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.set('THREAD', threadId, page)
-      if (state.get('FORUM').id === '') {
-        state.set('FORUM', data?.thread?.forum?.id || '', 0)
+      state.set(NavType.THREAD, threadId, page)
+      if (state.get(NavType.FORUM).id === '') {
+        state.set(NavType.FORUM, data?.thread?.forum?.id || '', 0)
       }
     }
   }, [data, state, threadId, page])

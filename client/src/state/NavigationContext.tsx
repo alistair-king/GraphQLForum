@@ -1,11 +1,16 @@
 import React, { useState, ReactNode } from 'react'
 
+export enum NavType {
+  FORUM = 'FORUM',
+  THREAD = 'THREAD'
+}
+
 export const NavigationContext = React.createContext({
-  get: (key: 'FORUM' | 'THREAD') => ({
+  get: (key: NavType) => ({
     id: '',
     page: 0
   }),
-  set: (key: 'FORUM' | 'THREAD', id: string, page: number) => {},
+  set: (key: NavType, id: string, page: number) => {},
  })
 
 export const NavigationContextProvider:React.FC<{
@@ -25,8 +30,8 @@ export const NavigationContextProvider:React.FC<{
   })
 
   const provided = {
-    get: (key: 'FORUM' | 'THREAD') => navigation[key],
-    set: (key: 'FORUM' | 'THREAD', id: string, page: number) => {
+    get: (key: NavType) => navigation[key],
+    set: (key: NavType, id: string, page: number) => {
       if (id !== navigation[key].id || page !== navigation[key].page) {
         setNavigation({
           ...navigation,
