@@ -29,8 +29,9 @@ export const Forum: React.FC<{
       <thead>
         <tr>
           <Cell />
-          <Cell>Title</Cell>
+          <Cell>Title / Starter</Cell>
           <Cell>Replies</Cell>
+          <Cell>Last reply</Cell>
           <Cell />
         </tr>
       </thead>
@@ -94,17 +95,18 @@ const Thread: React.FC<{
       </Link>
     </td>
   
+    <td className="px-4 py-4 border-b border-gray-200 whitespace-no-wrap text-right text-gray-500">
+      {thread.lastReply?.count}
+    </td>
+
     <td className="px-0 py-4  border-b border-gray-200 whitespace-no-wrap">
       {thread.lastReply?.count !== 0 &&
-        <>
-          <div className="text-sm leading-5 text-gray-500 text-right">
-            {thread.lastReply?.count}
-          </div>
-          <div className="text-sm leading-5 text-gray-500 text-right">
-            by {thread.lastReply?.reply?.author?.name}{' '}
-            {timeAgo(thread.lastReply?.reply?.when)}
-          </div>
-        </>
+        <div className="text-xs leading-5 text-gray-500 text-right">
+          by {thread.lastReply?.reply?.author?.name}{' '}
+        <div className="text-xs leading-5 text-gray-500 text-right">
+        </div>
+          {timeAgo(thread.lastReply?.reply?.when)}
+        </div>
       }
     </td>
 

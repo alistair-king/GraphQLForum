@@ -22,11 +22,11 @@ export const Commands: React.FC<{
       refetchQueries:[
         {
           query: GET_THREAD,
-          variables: state.getNavigation('FORUM')
+          variables: state.getNavigation('THREAD')
         },
         {
           query: GET_FORUM,
-          variables: state.getNavigation('THREAD')
+          variables: state.getNavigation('FORUM')
         }        
       ]
     })
