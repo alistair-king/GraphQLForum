@@ -75,7 +75,7 @@ const DropMenu:React.FC = () => {
   const { picture } = getUser() || {}
   return (
     <>
-      <Avatar size={8} user={picture} onClick={() => setIsOpen(!isOpen)} />
+      <Avatar size={8} picture={picture} onClick={() => setIsOpen(!isOpen)} />
       <DropMenuPane isOpen={isOpen}>
         <DropMenuItem>Your Profile</DropMenuItem>
         <DropMenuItem>Settings</DropMenuItem>
