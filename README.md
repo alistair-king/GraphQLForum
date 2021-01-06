@@ -1,6 +1,6 @@
 # GraphQLForum
 
-A small project, re-implementing a old school style photography/discussion forum with modern techniques.
+A small project, re-implementing an old school style photography/discussion forum with modern techniques.
 
 Mainly just an opportunity to try new things. 
 
