@@ -1,11 +1,9 @@
 import React, { ReactNode } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import FroalaEditorComponent from 'react-froala-wysiwyg';
-import { useAuth } from 'react-use-auth'
+import { useForm } from 'react-hook-form'
 
 import { IThread } from '../types'
+import { TextEditor } from '../components/TextEditor'
 import { ValidationError } from '../components/ValidationError'
-import { getEditorConfig } from '../helpers/froala'
 
 export const Thread: React.FC<{
   thread?: IThread,
@@ -24,9 +22,6 @@ export const Thread: React.FC<{
       content: thread?.content || '',
     }
   })
-  
-  const { isAuthenticated } = useAuth()
-  const config = getEditorConfig(isAuthenticated('adminstrator'))
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -56,16 +51,7 @@ export const Thread: React.FC<{
             <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor="grid-post">
               Post
             </label>
-            <Controller
-              control={control}
-              name="content"
-              render={({ onChange, onBlur, value }) => (
-                <FroalaEditorComponent
-                  model={value}
-                  onModelChange={onChange}
-                  config={config}
-                />
-              )} />
+            <TextEditor name="content" control={control} />
             <ValidationError error={errors.content} />
           </div>
         </div>
@@ -79,10 +65,3 @@ export const Thread: React.FC<{
     </form>
   )
 }
-
-// editorClass: cls('appearance-none block w-full text-grey-darker border rounded py-3 px-4 mb-3',
-//   {
-//     'bg-grey-lighter border-grey-lighter': !errors.content,
-//     'bg-red-200 border-red-500': !!errors.content
-//   }
-// )
