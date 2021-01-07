@@ -5,13 +5,17 @@ import createPersistedState from 'use-persisted-state'
 
 import { GET_USER } from '../gql'
 import { IUser } from '../types'
+import { HOME, POST_LOGOUT_CALLBACK } from '../urls'
 
 const useCode = createPersistedState('code')
+const useRedir = createPersistedState('redir')
 
 export const AuthContext = React.createContext({
   getUser: (): IUser | undefined => undefined,
   setCode: (code: string) => {},
-  logoutUser: (): void => {}
+  logoutUser: (): void => {},
+  getRedir: (): string => HOME,
+  setRedir: (url: string) => {}
  })
 
 export const AuthContextProvider:React.FC<{
@@ -21,7 +25,8 @@ export const AuthContextProvider:React.FC<{
 }) => {
   const [code, setCode] = useCode('')
   const [user, setUser] = useState<IUser>()
-  const { data } = useQuery<{user: any}, {code: string}>(
+  const [redir, setRedir] = useRedir(HOME)
+    const { data } = useQuery<{user: any}, {code: string}>(
     GET_USER,
     {
       variables: {
@@ -40,8 +45,10 @@ export const AuthContextProvider:React.FC<{
     getUser: () => user,
     logoutUser: () => {
       setCode('')
-      logout()
-    }
+      logout(POST_LOGOUT_CALLBACK)
+    },
+    setRedir,
+    getRedir: (): string => redir,
   }
   return (
     <AuthContext.Provider value={provided}>

@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { useAuth } from 'react-use-auth'
+import { useLocation } from 'react-router-dom'
 import cls from 'classnames'
 import { MdMenu, MdNotifications } from 'react-icons/md'
 import { FaUserAlt } from 'react-icons/fa'
@@ -56,10 +57,18 @@ export const NavBar: React.FC = () => {
 
 const LoginButton: React.FC = () => {
   const { login } = useAuth()
+  const location = useLocation()
+  const { setRedir } = useAuthState()
+  const doLogin = () => {
+    setRedir(location.pathname)
+    login()
+  }
   return (
-    <button onClick={login} className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
-      <FaUserAlt />
-    </button>
+    <>
+      <button onClick={doLogin} className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
+        <FaUserAlt />
+      </button>
+    </>
   )
 }
   

@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom'
 
 import { LOGIN_USER } from '../gql'
 import { useAuthState } from '../state'
-import { HOME } from '../urls'
 
 import { Page } from '../components/Page'
 import { Spinner } from '../components/Spinner'
@@ -14,7 +13,7 @@ export const LoggedInCallbackPage = () => {
   const { user, isAuthenticated } = useAuth()
   const [loginUser] = useMutation(LOGIN_USER)
   const history = useHistory()
-  const { setCode } = useAuthState()
+  const { setCode, getRedir } = useAuthState()
 
   React.useEffect(() => {
     if (isAuthenticated()) {
@@ -29,9 +28,9 @@ export const LoggedInCallbackPage = () => {
         }
       })
       setCode(user.sub)
-      history.push(HOME)
+      history.push(getRedir())
     }
-  }, [user, isAuthenticated, loginUser, history, setCode])
+  }, [user, isAuthenticated, loginUser, history, setCode, getRedir])
 
   return (
     <Page title="Welcome back">

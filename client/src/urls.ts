@@ -1,7 +1,7 @@
 export const HOME = '/'
-export const LOGOUT = '/logout'
 export const POST_AUTH0_CALLBACK = '/auth0_callback'
 export const POST_LOGIN_CALLBACK = '/loggedin_callback'
+export const POST_LOGOUT_CALLBACK = '/loggedout_callback'
 
 export const FORUM_PAGE1 = '/:forumId/:forumPage'
 export const FORUM_PAGE2 = '/:forumId'

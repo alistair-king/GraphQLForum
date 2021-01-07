@@ -22,6 +22,7 @@ import { ThreadPage } from './pages/threadpage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { Auth0CallbackPage } from './pages/Auth0CallbackPage'
 import { LoggedInCallbackPage } from './pages/LoggedInCallbackPage'
+import { LoggedOutCallbackPage } from './pages/LoggedOutCallbackPage'
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
@@ -69,7 +70,6 @@ const Routes: RouteProps[] = [
   {
     path: [
       URL.HOME,
-      URL.LOGOUT
     ],
     component: HomePage,
     exact: true
@@ -81,6 +81,10 @@ const Routes: RouteProps[] = [
   {
     path: URL.POST_LOGIN_CALLBACK,
     component: LoggedInCallbackPage
+  },
+  {
+    path: URL.POST_LOGOUT_CALLBACK,
+    component: LoggedOutCallbackPage
   },
   {
     path: [
