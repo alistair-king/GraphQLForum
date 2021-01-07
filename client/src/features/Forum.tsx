@@ -4,6 +4,7 @@ import { MdChatBubbleOutline } from 'react-icons/md'
 
 import { IForum, IThread } from '../types'
 import { makeThreadUrl } from '../urls'
+import { IsAdmin } from '../components/auth/IsAdmin'
 import { ActionsMenu } from '../components/ActionsMenu'
 import { Card } from '../components/Card'
 import { Pagination } from '../components/Pagination'
@@ -112,9 +113,11 @@ const Thread: React.FC<{
     </td>
 
     <td className="px-2 py-4 text-right border-b border-gray-200 text-sm leading-5 font-medium">
-      <ActionsMenu>
-        <DeleteThread thread={thread} label="Delete" />
-      </ActionsMenu>
+      <IsAdmin>
+        <ActionsMenu>
+          <DeleteThread thread={thread} label="Delete" />
+        </ActionsMenu>
+      </IsAdmin>
     </td>
   </tr>
 )

@@ -2,6 +2,8 @@ import React from 'react'
 
 import { IReply, IThread } from '../types'
 import { EditReply } from '../actions/EditReply'
+import { IsAdmin } from '../components/auth/IsAdmin'
+import { IsAuthor } from '../components/auth/IsAuthor'
 import { Avatar } from '../components/Avatar'
 import { Card } from '../components/Card'
 import { Content } from '../components/Content'
@@ -34,8 +36,12 @@ export const Reply: React.FC<{
 
       <div className="px-2 py-2 border-b border-gray-200 bg-gray-100 text-xs leading-4 font-medium text-gray-500 flex justify-between">
         <div>
-          <EditReply reply={reply} />
-          <DeleteReply reply={reply} thread={thread} />
+          <IsAuthor author={reply.author}>
+            <EditReply reply={reply} />
+          </IsAuthor>
+          <IsAdmin>
+            <DeleteReply reply={reply} thread={thread} />
+          </IsAdmin>
         </div>
       </div>
 

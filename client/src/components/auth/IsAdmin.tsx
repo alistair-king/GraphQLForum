@@ -6,8 +6,8 @@ export const IsAdmin: React.FC<{
 }> = ({
   children
 }) => {
-  const { isAuthenticated } = useAuth()
-  if (!isAuthenticated('Adminstrator')) {
+  const { isAuthorized } = useAuth()
+  if (!isAuthorized('Administrator')) {
     return null
   }
   return (
