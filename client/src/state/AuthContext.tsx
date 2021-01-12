@@ -23,9 +23,10 @@ export const AuthContextProvider:React.FC<{
 }> = ({
   children
 }) => {
-  const [code, setCode] = useCode('')
+  const { logout } = useAuth()
+  const [code, setCode] = useCode<String>('')
   const [user, setUser] = useState<IUser>()
-  const [redir, setRedir] = useRedir(HOME)
+  const [redir, setRedir] = useRedir<String>(HOME)
     const { data } = useQuery<{user: any}, {code: string}>(
     GET_USER,
     {
@@ -38,8 +39,6 @@ export const AuthContextProvider:React.FC<{
     setUser(data.user)
   }
 
-  const { logout } = useAuth()
-
   const provided = {
     setCode,
     getUser: () => user,
@@ -48,7 +47,7 @@ export const AuthContextProvider:React.FC<{
       logout(POST_LOGOUT_CALLBACK)
     },
     setRedir,
-    getRedir: (): string => redir,
+    getRedir: () => redir,
   }
   return (
     <AuthContext.Provider value={provided}>

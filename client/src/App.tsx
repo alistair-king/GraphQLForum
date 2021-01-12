@@ -53,7 +53,7 @@ const AuthedSection: React.FC = () => {
       params={{
           domain: process.env.REACT_APP_AUTH0_DOMAIN,
           clientID: process.env.REACT_APP_AUTH0_CLIENTID,
-          customPropertyNamespace: 'https://127.0.0.1',
+          customPropertyNamespace: process.env.REACT_APP_AUTH0_CUSTOM_PROPERTY_NAME_SPACE,
       }}
     >
       <NavBar />
