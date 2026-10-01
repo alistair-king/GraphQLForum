@@ -1,13 +1,12 @@
 import React, { ReactNode } from 'react'
-import { useAuth } from 'react-use-auth'
 import { useLocation } from 'react-router-dom'
 import cls from 'classnames'
 import { MdMenu, MdNotifications } from 'react-icons/md'
 import { FaUserAlt } from 'react-icons/fa'
 
 import { useAuthState } from '../state'
-import { IsAuthenticated } from '../components/auth/IsAuthenticated'
-import { IsNotAuthenticated } from '../components/auth/IsNotAuthenticated'
+import { IsAuthenticated } from './auth/IsAuthenticated'
+import { IsNotAuthenticated } from './auth/IsNotAuthenticated'
 import { Avatar } from './Avatar'
 import { Logo } from './Logo'
 
@@ -24,7 +23,7 @@ export const NavBar: React.FC = () => {
             </button>
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <Logo className="relative" />
             </div>
           </div>
@@ -34,7 +33,7 @@ export const NavBar: React.FC = () => {
               <div className="ml-3 relative">
                 <DropMenu />
               </div>
-            </IsAuthenticated>              
+            </IsAuthenticated>
             <IsNotAuthenticated>
               <LoginButton />
             </IsNotAuthenticated>
@@ -45,58 +44,43 @@ export const NavBar: React.FC = () => {
   )
 }
 
-// const MenuItem: React.FC<{
-//   to?: string,
-//   children: ReactNode
-// }> = ({
-//   to = '/',
-//   children
-// }) => (
-//   <Link to={to} className="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">{children}</Link>
-// )
-
 const LoginButton: React.FC = () => {
-  const { login } = useAuth()
   const location = useLocation()
-  const { setRedir } = useAuthState()
-  const doLogin = () => {
-    setRedir(location.pathname)
-    login()
-  }
+  const { login } = useAuthState()
   return (
-    <>
-      <button onClick={doLogin} className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
-        <FaUserAlt />
-      </button>
-    </>
+    <button
+      onClick={() => login(location.pathname)}
+      className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+    >
+      <FaUserAlt />
+    </button>
   )
 }
-  
+
 const BellButton: React.FC = () => (
   <button className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-white focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">
     <MdNotifications />
   </button>
 )
-  
-const DropMenu:React.FC = () => {
+
+const DropMenu: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false)
-  const { getUser, logoutUser } = useAuthState()
-  const { picture } = getUser() || {}
+  const { me, logout } = useAuthState()
   return (
     <>
-      <Avatar size={8} picture={picture} onClick={() => setIsOpen(!isOpen)} />
+      <Avatar size={8} picture={me?.picture} onClick={() => setIsOpen(!isOpen)} />
       <DropMenuPane isOpen={isOpen}>
         <DropMenuItem>Your Profile</DropMenuItem>
         <DropMenuItem>Settings</DropMenuItem>
-        <DropMenuAction onClick={logoutUser}>Sign out</DropMenuAction>
+        <DropMenuAction onClick={logout}>Sign out</DropMenuAction>
       </DropMenuPane>
     </>
   )
 }
 
-const DropMenuPane: React.FC<{isOpen: boolean, children: ReactNode}> = ({isOpen, children}) => (
+const DropMenuPane: React.FC<{ isOpen: boolean, children: ReactNode }> = ({ isOpen, children }) => (
   <div className={cls('origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg', { 'hidden': !isOpen })}>
-    <div className="py-1 rounded-md bg-white shadow-xs">
+    <div className="py-1 rounded-md bg-white shadow-sm">
       {children}
     </div>
   </div>
@@ -119,5 +103,5 @@ const DropMenuAction: React.FC<{
   onClick,
   children
 }) => (
-  <span onClick={onClick} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{children}</span>
+  <span onClick={onClick} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out cursor-pointer">{children}</span>
 )

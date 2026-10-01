@@ -1,0 +1,17 @@
+services:
+  db:
+    image: mysql:8
+    container_name: graphqlforum-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: graphqlforum
+      MYSQL_DATABASE: graphqlforum
+      MYSQL_USER: graphqlforum
+      MYSQL_PASSWORD: graphqlforum
+    ports:
+      - "3306:3306"
+    volumes:
+      - graphqlforum-db-data:/var/lib/mysql
+
+volumes:
+  graphqlforum-db-data:

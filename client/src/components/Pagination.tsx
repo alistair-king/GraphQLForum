@@ -29,7 +29,7 @@ export const Pagination: React.FC<{
   return (
     <>
       <div className="flex flex-row-reverse">
-        <ul className="flex list-reset border border-grey-light rounded bg-white font-sans">
+        <ul className="flex list-none border border-gray-300 rounded bg-white font-sans">
           {(pageNumbers[0] > 0) &&
             <Item page={0} activepage={activepage} setPage={setPage}>
               <MdChevronLeft />
@@ -65,7 +65,7 @@ const Item: React.FC<{
   <li className={cls('block px-3 py-2 border-r',
     {
       'text-white bg-blue-500  hover:bg-blue-700 border-blue': (page === activepage),
-      'hover:text-white hover:bg-blue-700 border-grey-light': (page !== activepage)
+      'hover:text-white hover:bg-blue-700 border-gray-300': (page !== activepage)
     })}
     onClick={() => {setPage(page)}}>
       {children}

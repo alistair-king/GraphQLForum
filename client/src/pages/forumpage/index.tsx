@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
 
 import { GET_FORUM } from '../../gql'
 import { useNavigationState, NavType } from '../../state'
 import { IForum } from '../../types'
+import { makeForumUrl } from '../../urls'
 import { Page } from '../../components/Page'
 import { Spinner } from '../../components/Spinner'
 import { Forum } from '../../features/Forum'
@@ -12,17 +13,17 @@ import { ErrorPage } from '../ErrorPage'
 import { Commands } from './Commands'
 
 export const ForumPage: React.FC = () => {
-  const { forumId, forumPage = '0'} = useParams()
+  const { forumId, forumPage = '0' } = useParams()
   const page = parseInt(forumPage)
-  const history = useHistory()
-  const setPage = (newPage: number) => { history.push(`${forumId}/${newPage}`) }
+  const navigate = useNavigate()
+  const setPage = (newPage: number) => { navigate(makeForumUrl(forumId, newPage)) }
   const state = useNavigationState()
 
-  const { loading, error, data } = useQuery<{forum: IForum}, {id: string, page: number}>(
+  const { loading, error, data } = useQuery<{ forum: IForum }, { id: string, page: number }>(
     GET_FORUM,
     {
       variables: {
-        id: forumId,
+        id: forumId ?? '',
         page
       }
     }
@@ -30,21 +31,21 @@ export const ForumPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      state.set(NavType.FORUM, forumId, page)
+      state.set(NavType.FORUM, forumId ?? '', page)
     }
   }, [data, state, forumId, page])
 
-  if ( error ) {
+  if (error) {
     return <ErrorPage message={error?.message} />
   }
-  
+
   return (
     <Page
       title={data?.forum?.name}
       commands={<Commands />}
       back="/"
     >
-      { loading || !data
+      {loading || !data
         ? <Spinner className="w-full flex justify-center pt-8" />
         : <Forum forum={data.forum} page={page} setPage={setPage} />
       }

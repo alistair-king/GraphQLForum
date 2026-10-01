@@ -1,85 +1,92 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common'
-import { Repository, DeleteResult} from 'typeorm'
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
-import { Constants, PAGE_SIZE } from '@server/common/constants'
+import { AuthUser } from '../../auth/auth-user'
+import { ROLE_ADMIN, PAGE_SIZE } from '../../common/constants'
 
-import { ForumsService } from '@server/forums/service'
-import { UsersService } from '@server/users/service'
+import { Forum } from '../entity'
+import { User } from '../../users/entity'
 
 import { NewThreadInput } from './dto/new-thread.input'
 import { UpdateThreadInput } from './dto/update-thread.input'
-import { DeleteThreadInput } from './dto/delete-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
-
-import { Thread } from './model'
-import { Reply } from './reply/model'
+import { Thread } from './entity'
 
 @Injectable()
 export class ThreadsService {
   constructor(
-    @Inject(Constants.THREAD_REPO)
+    @InjectRepository(Thread)
     private threadsRepository: Repository<Thread>,
 
-    @Inject(forwardRef(() => ForumsService))
-    private forumsService: ForumsService,
+    @InjectRepository(Forum)
+    private forumsRepository: Repository<Forum>,
 
-    @Inject(forwardRef(() => UsersService))
-    private usersService: UsersService
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
-  async create(data: NewThreadInput): Promise<Thread> {
-    const {
-      forumId,
-      authorId,
-      ...rest
-    } = data
+  async create(data: NewThreadInput, author: User): Promise<Thread> {
+    const { forumId, ...rest } = data
+    const forum = await this.forumsRepository.findOneBy({ id: forumId })
+    if (!forum) {
+      throw new NotFoundException(`Forum ${forumId} not found`)
+    }
     const thread = this.threadsRepository.create(rest)
-    thread.forum = await this.forumsService.findOneById(forumId)
-    thread.author = await this.usersService.findOneById(authorId)
-    thread.whenLastActivity = new Date()
-    this.threadsRepository.save(thread)
-    return thread
+    thread.forum = forum
+    thread.author = author
+    thread.when = new Date()
+    thread.whenLastActivity = thread.when
+    return this.threadsRepository.save(thread)
   }
 
   async findOneById(id: string): Promise<Thread> {
-    return this.threadsRepository.createQueryBuilder('thread')
-      .where('thread.id = :id', { id })
-      .leftJoinAndSelect('thread.forum', 'Forum') 
-      .leftJoinAndSelect('thread.author', 'User') 
-      .getOne()
+    return this.threadsRepository.findOne({
+      where: { id },
+      relations: { forum: true, author: true },
+    })
   }
 
   async findThreads(args: ThreadsArgs): Promise<[Thread[], number]> {
-    return this.threadsRepository.createQueryBuilder('thread')
-      .where('thread.forumid = :id', { id: args.forumId })
+    return this.threadsRepository
+      .createQueryBuilder('thread')
+      .where('thread.forumId = :id', { id: args.forumId })
       .orderBy('thread.whenLastActivity', 'DESC')
       .skip(args.page * PAGE_SIZE)
-      .take(10)
-      .leftJoinAndSelect('thread.author', 'User')
+      .take(PAGE_SIZE)
+      .leftJoinAndSelect('thread.author', 'author')
       .getManyAndCount()
   }
-  
-  async recordActivity(thread: Thread, reply: Reply) {
-    thread.userLastReply = reply.author
-    thread.whenLastActivity = reply.when
-    this.threadsRepository.save(thread)
+
+  async update(data: UpdateThreadInput, actor: AuthUser): Promise<Thread> {
+    const { id, title, content } = data
+    const thread = await this.findOneById(id)
+    if (!thread) {
+      throw new NotFoundException(`Thread ${id} not found`)
+    }
+    this.assertCanModify(thread, actor)
+    thread.title = title
+    thread.content = content
+    return this.threadsRepository.save(thread)
   }
 
-  async update(updateData: UpdateThreadInput): Promise<Thread> {
-    const { id, ...rest } = updateData;
-    const thread = {
-      ...(await this.findOneById(`${id}`)),
-      ...rest
+  async delete(id: string, actor: AuthUser): Promise<Thread> {
+    const thread = await this.findOneById(id)
+    if (!thread) {
+      throw new NotFoundException(`Thread ${id} not found`)
     }
-    await this.threadsRepository.save(thread)
+    this.assertCanModify(thread, actor)
+    await this.threadsRepository.remove(thread)
     return thread
   }
 
-  async delete(id: string): Promise<Thread> {
-    const thread = await this.findOneById(id);
-    if (thread) {
-      await this.threadsRepository.delete(thread)
+  private assertCanModify(thread: Thread, actor: AuthUser): void {
+    if (actor.roles.includes(ROLE_ADMIN)) {
+      return
     }
-    return thread
+    if (thread.author?.code === actor.sub) {
+      return
+    }
+    throw new ForbiddenException('You can only modify your own threads')
   }
 }

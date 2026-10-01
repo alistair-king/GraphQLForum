@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { ADD_FORUM, GET_FORUMS } from '../../gql'
 import { IsAdmin } from '../../components/auth/IsAdmin'
@@ -12,7 +12,7 @@ export const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()
   const [addForum] = useMutation(ADD_FORUM,
     {
-      refetchQueries:[
+      refetchQueries: [
         {
           query: GET_FORUMS
         }
@@ -27,7 +27,7 @@ export const Commands: React.FC = () => {
     </>
   )
 
-  const onSubmit = data => {
+  const onSubmit = (data: { name: string, description: string }) => {
     if (data.name) {
       addForum({
         variables: {

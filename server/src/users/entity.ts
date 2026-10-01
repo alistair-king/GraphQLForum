@@ -1,25 +1,34 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
+@ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
+  @Field(type => ID)
   id: string
 
-  @Column()
+  @Column({ type: 'varchar' })
+  @Field()
   email: string
 
-  @Column()
+  /** Auth0 `sub` for this user; never exposed over GraphQL. */
+  @Column({ type: 'varchar' })
   code: string
 
-  @Column()
+  @Column({ type: 'varchar' })
+  @Field()
   name: string
 
-  @Column()
+  @Column({ type: 'varchar' })
+  @Field()
   picture: string
 
-  @Column()
+  @Column({ type: 'int' })
+  @Field()
   logins: number
 
-  @Column()
+  @Column({ type: 'timestamp', nullable: true })
+  @Field({ nullable: true })
   lastLogin: Date
 }

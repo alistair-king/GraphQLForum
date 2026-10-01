@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { MaxLength } from 'class-validator'
+import { MaxLength, MinLength } from 'class-validator'
 
 @InputType()
 export class UpdateReplyInput {
@@ -7,5 +7,7 @@ export class UpdateReplyInput {
   id: string
 
   @Field()
+  @MinLength(1)
+  @MaxLength(65535)
   content: string
 }

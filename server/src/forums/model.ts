@@ -1,30 +1,12 @@
-import { Type } from '@nestjs/common';
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql'
+import { Field, Int, ObjectType } from '@nestjs/graphql'
 
-import { Thread } from './threads/model'
+import { Thread } from './threads/entity'
 
 @ObjectType({ isAbstract: true })
-abstract class PaginatedThreads {
+export class PaginatedThreads {
   @Field(type => [Thread])
-  items: Thread[];
+  items: Thread[]
 
   @Field(type => Int)
-  count: number;
+  count: number
 }
-
-@ObjectType()
-export class Forum {
-  @Field(type => ID)
-  id: string
-
-  @Field()
-  name: string
-
-  @Field()
-  description: string
-
-  @Field(type => PaginatedThreads)
-  threads: PaginatedThreads;
-}
-
-

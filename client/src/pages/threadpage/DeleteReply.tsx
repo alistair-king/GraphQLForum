@@ -1,6 +1,6 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
-import { useHistory, useParams } from 'react-router-dom'
+import { useMutation } from '@apollo/client'
+import { useNavigate, useParams } from 'react-router-dom'
 import { MdDelete } from 'react-icons/md'
 
 import { PAGE_SIZE } from '../../constants'
@@ -13,7 +13,6 @@ import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
 import { useModal } from '../../hooks'
 
-
 export const DeleteReply: React.FC<{
   reply: IReply
   thread?: IThread,
@@ -25,7 +24,7 @@ export const DeleteReply: React.FC<{
 }) => {
   const { isOpen, openModal, closeModal } = useModal()
   const state = useNavigationState()
-  const history = useHistory()
+  const navigate = useNavigate()
   const {
     forumId,
     forumPage,
@@ -35,7 +34,7 @@ export const DeleteReply: React.FC<{
 
   const [deleteReply] = useMutation(DELETE_REPLY,
     {
-      refetchQueries:[
+      refetchQueries: [
         {
           query: GET_THREAD,
           variables: state.get(NavType.THREAD)
@@ -68,14 +67,14 @@ export const DeleteReply: React.FC<{
   const onDelete = () => {
     deleteReply({
       variables: {
-        deleteReplyData: {
+        data: {
           id: reply.id,
         }
       }
     })
     closeModal()
     if ((thread?.replies?.count || 0) % PAGE_SIZE === 1) {
-      history.push(makeThreadUrl(forumId, forumPage, threadId, Number(threadPage || '1') - 1))
+      navigate(makeThreadUrl(forumId, forumPage, threadId, Number(threadPage || '1') - 1))
     }
   }
 

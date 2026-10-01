@@ -32,9 +32,9 @@ export const useCloseModalOnBack = ({
   }, [handleModal])
 }
 
-export const useKeyboardEvent = (key, callback) => {
+export const useKeyboardEvent = (key: string, callback: () => void) => {
   useEffect(() => {
-    const handler = (event) => {
+    const handler = (event: KeyboardEvent) => {
       if (event.key === key) {
         callback()
       }

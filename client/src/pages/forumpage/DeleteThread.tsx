@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { MdDelete } from 'react-icons/md'
 
 import { DELETE_THREAD, GET_FORUM } from '../../gql'
@@ -21,7 +21,7 @@ export const DeleteThread: React.FC<{
   const state = useNavigationState()
   const [deleteThread] = useMutation(DELETE_THREAD,
     {
-      refetchQueries:[
+      refetchQueries: [
         {
           query: GET_FORUM,
           variables: state.get(NavType.FORUM)
@@ -49,7 +49,7 @@ export const DeleteThread: React.FC<{
   const onDelete = () => {
     deleteThread({
       variables: {
-        deleteThreadData: {
+        data: {
           id: thread.id
         }
       }
@@ -70,7 +70,7 @@ export const DeleteThread: React.FC<{
         {label && <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
           {label}
         </span>}
-      </div>        
+      </div>
     </Modal>
   )
 }

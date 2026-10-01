@@ -1,33 +1,50 @@
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { Field, ID, ObjectType } from '@nestjs/graphql'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 
-import { Forum } from '@server/forums/entity'
-import { User } from '@server/users/entity'
+import { Forum } from '../entity'
+import { User } from '../../users/entity'
 
 @Entity()
+@ObjectType()
 export class Thread {
   @PrimaryGeneratedColumn('uuid')
+  @Field(type => ID)
   id: string
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Field()
   when: Date
 
-  @Column()
+  @Column({ type: 'varchar' })
+  @Field()
   title: string
 
   @Column('text')
+  @Field()
   content: string
 
   @ManyToOne(type => User, { nullable: true })
-  userLastReply: User
-  
-  @Column({ type: "timestamp" })
-  whenLastActivity: Date  
+  @JoinColumn()
+  @Field(type => User, { nullable: true })
+  userLastReply: User | null
+
+  @Column({ type: 'timestamp' })
+  @Field()
+  whenLastActivity: Date
 
   @ManyToOne(type => Forum)
   @JoinColumn()
-  forum: Forum;
-  
+  @Field(type => Forum)
+  forum: Forum
+
   @ManyToOne(type => User)
   @JoinColumn()
+  @Field(type => User)
   author: User
 }

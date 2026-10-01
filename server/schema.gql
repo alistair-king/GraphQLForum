@@ -5,22 +5,10 @@
 type User {
   id: ID!
   email: String!
-  code: String!
   name: String!
   picture: String!
   logins: Float!
-  lastLogin: Date!
-}
-
-"""Date custom scalar type"""
-scalar Date
-
-type Reply {
-  id: ID!
-  when: Date!
-  content: String!
-  thread: Thread!
-  author: User!
+  lastLogin: Date
 }
 
 type Thread {
@@ -28,10 +16,10 @@ type Thread {
   when: Date!
   title: String!
   content: String!
+  userLastReply: User
+  whenLastActivity: Date!
   forum: Forum!
   author: User!
-  userLastReply: User!
-  whenLastActivity: Date!
   replies(page: Int!): PaginatedReplies!
   lastReply: LastReply!
 }
@@ -58,24 +46,35 @@ type PaginatedThreads {
   count: Int!
 }
 
+type Reply {
+  id: ID!
+  when: Date!
+  content: String!
+  thread: Thread!
+  author: User!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
 type Query {
+  me: User!
+  users(skip: Int! = 0, take: Int! = 25): [User!]!
   forum(id: String!): Forum!
-  forums(page: Int = 0): [Forum!]!
+  forums(page: Int! = 0): [Forum!]!
   thread(id: String!): Thread!
-  user(code: String!): User!
-  users(skip: Int = 0, take: Int = 25): [User!]!
   reply(id: String!): Reply!
 }
 
 type Mutation {
+  login: User!
   addForum(newForumData: NewForumInput!): Forum!
   addThread(newThreadData: NewThreadInput!): Thread!
   updateThread(updateThreadData: UpdateThreadInput!): Thread!
-  deleteThread(DeleteThreadInput: DeleteThreadInput!): Thread!
-  loginUser(loginUserData: LoginUserInput!): User!
+  deleteThread(data: DeleteThreadInput!): Thread!
   addReply(newReplyData: NewReplyInput!): Reply!
   updateReply(updateReplyData: UpdateReplyInput!): Reply!
-  deleteReply(DeleteReplyInput: DeleteReplyInput!): Reply!
+  deleteReply(data: DeleteReplyInput!): Reply!
 }
 
 input NewForumInput {
@@ -86,7 +85,6 @@ input NewForumInput {
 input NewThreadInput {
   title: String!
   content: String!
-  authorId: String!
   forumId: String!
 }
 
@@ -100,16 +98,8 @@ input DeleteThreadInput {
   id: String!
 }
 
-input LoginUserInput {
-  email: String!
-  code: String!
-  name: String!
-  picture: String!
-}
-
 input NewReplyInput {
   threadId: String!
-  authorId: String!
   content: String!
 }
 
@@ -125,6 +115,5 @@ input DeleteReplyInput {
 type Subscription {
   forumAdded: Forum!
   threadAdded: Thread!
-  userAdded: User!
   replyAdded: Reply!
 }

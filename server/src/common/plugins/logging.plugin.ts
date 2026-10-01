@@ -1,17 +1,20 @@
-import { Plugin } from '@nestjs/graphql'
 import {
   ApolloServerPlugin,
   GraphQLRequestListener,
-} from 'apollo-server-plugin-base'
+} from '@apollo/server'
 
-@Plugin()
-export class LoggingPlugin implements ApolloServerPlugin {
-  requestDidStart(): GraphQLRequestListener {
-    console.log('Request started')
+export const LoggingPlugin: ApolloServerPlugin = {
+  async requestDidStart(
+    requestContext,
+  ): Promise<GraphQLRequestListener<any>> {
+    const startedAt = Date.now()
+    const label =
+      requestContext.request.operationName ?? 'anonymous operation'
     return {
-      willSendResponse() {
-        console.log('Will send response')
+      async willSendResponse() {
+        const ms = Date.now() - startedAt
+        console.log(`GraphQL ${label} completed in ${ms}ms`)
       },
     }
-  }
+  },
 }

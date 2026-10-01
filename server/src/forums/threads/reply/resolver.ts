@@ -1,24 +1,31 @@
-import { NotFoundException } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
-import { PubSub } from 'apollo-server-express'
+import { Inject, NotFoundException, UseGuards } from '@nestjs/common'
+import {
+  Args,
+  Mutation,
+  Query,
+  Resolver,
+  Subscription,
+} from '@nestjs/graphql'
+import { PubSub } from 'graphql-subscriptions'
 
-import { ThreadsService } from '@server/forums/threads/service'
-import { UsersService } from '@server/users/service'
+import { AuthUser } from '../../../auth/auth-user'
+import { CurrentUser } from '../../../auth/current-user.decorator'
+import { GqlAuthGuard } from '../../../auth/gql-auth.guard'
+import { Constants } from '../../../common/constants'
+import { UsersService } from '../../../users/service'
 
 import { NewReplyInput } from './dto/new-reply.input'
 import { UpdateReplyInput } from './dto/update-reply.input'
 import { DeleteReplyInput } from './dto/delete-reply.input'
-import { RepliesArgs } from './dto/replies.args'
-import { Reply } from './model'
+import { Reply } from './entity'
 import { RepliesService } from './service'
-
-
-const pubSub = new PubSub()
 
 @Resolver(of => Reply)
 export class RepliesResolver {
   constructor(
-    private readonly repliesService: RepliesService
+    private readonly repliesService: RepliesService,
+    private readonly usersService: UsersService,
+    @Inject(Constants.PUB_SUB) private readonly pubSub: PubSub,
   ) {}
 
   @Query(returns => Reply)
@@ -30,34 +37,38 @@ export class RepliesResolver {
     return reply
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(returns => Reply)
   async addReply(
     @Args('newReplyData') newReplyData: NewReplyInput,
+    @CurrentUser() authUser: AuthUser,
   ): Promise<Reply> {
-    const reply = await this.repliesService.create(newReplyData)
-    pubSub.publish('replyAdded', { replyAdded: reply })
+    const author = await this.usersService.getOrCreateByAuthUser(authUser)
+    const reply = await this.repliesService.create(newReplyData, author)
+    this.pubSub.publish('replyAdded', { replyAdded: reply })
     return reply
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(returns => Reply)
   async updateReply(
     @Args('updateReplyData') updateReplyData: UpdateReplyInput,
+    @CurrentUser() authUser: AuthUser,
   ): Promise<Reply> {
-    const thread = await this.repliesService.update(updateReplyData)
-    pubSub.publish('replyUpdated', { threadAdded: thread })
-    return thread
+    return this.repliesService.update(updateReplyData, authUser)
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(returns => Reply)
   async deleteReply(
-    @Args('DeleteReplyInput') deletereplyinput: DeleteReplyInput) {
-    const result = await this.repliesService.delete(`${deletereplyinput.id}`)
-    console.log('AJK', result)
-    return result
+    @Args('data') data: DeleteReplyInput,
+    @CurrentUser() authUser: AuthUser,
+  ): Promise<Reply> {
+    return this.repliesService.delete(data.id, authUser)
   }
 
   @Subscription(returns => Reply)
   replyAdded() {
-    return pubSub.asyncIterator('replyAdded')
+    return this.pubSub.asyncIterableIterator('replyAdded')
   }
 }

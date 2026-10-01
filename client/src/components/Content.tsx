@@ -9,6 +9,6 @@ export const Content: React.FC<{
   ...rest
 }) => (
   <>
-    { content && <div className={className} {...rest} dangerouslySetInnerHTML={{ __html: content }} /> }
+    {content && <div className={`forum-content ${className}`} {...rest} dangerouslySetInnerHTML={{ __html: content }} />}
   </>
 )

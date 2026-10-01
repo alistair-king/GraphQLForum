@@ -1,26 +1,15 @@
 import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { DatabaseModule } from '@server/db/module'
+import { CommonModule } from '../common/common.module'
 
-import { ForumProviders } from './providers'
+import { Forum } from './entity'
 import { ForumsResolver } from './resolver'
 import { ForumsService } from './service'
-import { Forum } from './entity'
-
-import { ThreadProviders } from './threads/providers'
 import { ThreadsModule } from './threads/module'
-import { ThreadsService } from './threads/service'
-import { Thread } from './threads/entity'
 
 @Module({
-  imports: [
-    DatabaseModule,
-    ThreadsModule
-  ],
-  providers: [
-    ...ForumProviders,
-    ForumsResolver,
-    ForumsService
-  ]
+  imports: [TypeOrmModule.forFeature([Forum]), CommonModule, ThreadsModule],
+  providers: [ForumsResolver, ForumsService],
 })
 export class ForumsModule {}

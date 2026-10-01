@@ -1,31 +1,34 @@
-import { NotFoundException } from '@nestjs/common'
+import { Inject, NotFoundException, UseGuards } from '@nestjs/common'
 import {
   Args,
   Int,
   Mutation,
+  Parent,
   Query,
+  ResolveField,
   Resolver,
   Subscription,
-  Parent,
-  ResolveField
 } from '@nestjs/graphql'
-import { PubSub } from 'apollo-server-express'
+import { PubSub } from 'graphql-subscriptions'
 
-import { NewForumInput } from './dto/new-forum.input'
+import { AuthUser } from '../auth/auth-user'
+import { CurrentUser } from '../auth/current-user.decorator'
+import { GqlAuthGuard } from '../auth/gql-auth.guard'
+import { Constants } from '../common/constants'
+
 import { ForumsArgs } from './dto/forums.args'
-import { Forum } from './model'
+import { NewForumInput } from './dto/new-forum.input'
+import { Forum } from './entity'
+import { PaginatedThreads } from './model'
 import { ForumsService } from './service'
-
-import { Thread } from './threads/model'
 import { ThreadsService } from './threads/service'
-
-const pubSub = new PubSub()
 
 @Resolver(of => Forum)
 export class ForumsResolver {
   constructor(
     private readonly forumsService: ForumsService,
-    private readonly threadsService: ThreadsService
+    private readonly threadsService: ThreadsService,
+    @Inject(Constants.PUB_SUB) private readonly pubSub: PubSub,
   ) {}
 
   @Query(returns => Forum)
@@ -42,38 +45,34 @@ export class ForumsResolver {
     return this.forumsService.findAll(forumsArgs)
   }
 
-  @ResolveField()
+  @ResolveField(returns => PaginatedThreads)
   async threads(
     @Parent() forum: Forum,
     @Args('page', { type: () => Int }) page: number,
   ) {
-    const { id } = forum;
     const result = await this.threadsService.findThreads({
-      forumId: id,
-      page
-    });
+      forumId: forum.id,
+      page,
+    })
     return {
       items: result[0],
-      count: result[1]
+      count: result[1],
     }
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(returns => Forum)
   async addForum(
     @Args('newForumData') newForumData: NewForumInput,
+    @CurrentUser() _authUser: AuthUser,
   ): Promise<Forum> {
     const forum = await this.forumsService.create(newForumData)
-    pubSub.publish('forumAdded', { forumAdded: forum })
+    this.pubSub.publish('forumAdded', { forumAdded: forum })
     return forum
   }
 
-  // @Mutation(returns => Boolean)
-  // async removeForum(@Args('id') id: string) {
-  //   return this.forumsService.remove(id)
-  // }
-
   @Subscription(returns => Forum)
   forumAdded() {
-    return pubSub.asyncIterator('forumAdded')
+    return this.pubSub.asyncIterableIterator('forumAdded')
   }
 }

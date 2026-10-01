@@ -14,7 +14,7 @@ export const Home: React.FC<{
   
   const Headings: React.FC = () => {
     const Cell: React.FC<{children?: ReactNode}> = ({children}) => (
-      <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase whitespace-no-wrap">
+      <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase whitespace-nowrap">
         {children}
       </th>
     )
@@ -52,7 +52,7 @@ const Forum: React.FC<{
   return (
     <tr>
       <td className="pl-6 pr-2 py-4 border-b border-gray-200">
-        <div className="flex-shrink-0 text-gray-500">
+        <div className="shrink-0 text-gray-500">
           <MdChatBubbleOutline />
         </div>
       </td>
@@ -66,7 +66,7 @@ const Forum: React.FC<{
         </Link>
       </td>
     
-      <td className="px-0 py-4  border-b border-gray-200 whitespace-no-wrap">
+      <td className="px-0 py-4  border-b border-gray-200 whitespace-nowrap">
       </td>
 
       <td className="px-2 py-4  text-right border-b border-gray-200 text-sm leading-5 font-medium">

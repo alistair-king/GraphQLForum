@@ -83,7 +83,7 @@ const Thread: React.FC<{
 }) => (
   <tr>
     <td className="pl-6 pr-2 py-4 border-b border-gray-200">
-      <div className="flex-shrink-0 text-gray-500">
+      <div className="shrink-0 text-gray-500">
         <MdChatBubbleOutline />
       </div>
     </td>
@@ -97,11 +97,11 @@ const Thread: React.FC<{
       </Link>
     </td>
   
-    <td className="px-4 py-4 border-b border-gray-200 whitespace-no-wrap text-right text-gray-500">
+    <td className="px-4 py-4 border-b border-gray-200 whitespace-nowrap text-right text-gray-500">
       {thread.lastReply?.count}
     </td>
 
-    <td className="px-0 py-4  border-b border-gray-200 whitespace-no-wrap">
+    <td className="px-0 py-4  border-b border-gray-200 whitespace-nowrap">
       {thread.lastReply?.count !== 0 &&
         <div className="text-xs leading-5 text-gray-500 text-right">
           by {thread.lastReply?.reply?.author?.name}{' '}

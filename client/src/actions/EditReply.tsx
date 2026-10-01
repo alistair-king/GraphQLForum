@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_REPLY, GET_FORUM, GET_THREAD } from '../gql'
