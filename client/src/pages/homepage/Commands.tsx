@@ -5,7 +5,7 @@ import { ADD_FORUM, GET_FORUMS } from '../../gql'
 import { IsAdmin } from '../../components/auth/IsAdmin'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
-import { Forum } from '../../forms/Forum'
+import { Forum, ForumFormValues } from '../../forms/Forum'
 import { useModal } from '../../hooks'
 
 export const Commands: React.FC = () => {
@@ -27,7 +27,7 @@ export const Commands: React.FC = () => {
     </>
   )
 
-  const onSubmit = (data: { name: string, description: string }) => {
+  const onSubmit = (data: ForumFormValues) => {
     if (data.name) {
       addForum({
         variables: {

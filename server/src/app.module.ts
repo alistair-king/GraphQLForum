@@ -6,10 +6,26 @@ import { GraphQLModule } from '@nestjs/graphql'
 
 import { AuthModule } from './auth/module'
 import { CommonModule } from './common/common.module'
-import { LoggingPlugin } from './common/plugins/logging.plugin'
 import { DatabaseModule } from './db/module'
 import { ForumsModule } from './forums/module'
 import { UsersModule } from './users/module'
+
+// Inline so the Apollo plugin is contextually typed by the driver config;
+// @apollo/server ships dual esm/cjs type declarations that don't structurally
+// match across import resolutions, so a shared typed const would need a cast
+const loggingPlugin = {
+  async requestDidStart(requestContext) {
+    const startedAt = Date.now()
+    const label =
+      requestContext.request.operationName ?? 'anonymous operation'
+    return {
+      async willSendResponse() {
+        const ms = Date.now() - startedAt
+        console.log(`GraphQL ${label} completed in ${ms}ms`)
+      },
+    }
+  },
+}
 
 @Module({
   imports: [
@@ -19,11 +35,7 @@ import { UsersModule } from './users/module'
       subscriptions: {
         'graphql-ws': true,
       },
-      plugins: [
-        // cast needed: @apollo/server ships dual esm/cjs type declarations
-        // that don't structurally match @nestjs/apollo's compiled imports
-        LoggingPlugin as any,
-      ],
+      plugins: [loggingPlugin],
     }),
     CommonModule,
     DatabaseModule,

@@ -10,7 +10,7 @@ import { makeThreadUrl } from '../../urls'
 import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
-import { Reply } from '../../forms/Reply'
+import { Reply, ReplyFormValues } from '../../forms/Reply'
 import { useModal } from '../../hooks'
 
 export const Commands: React.FC<{
@@ -45,7 +45,7 @@ export const Commands: React.FC<{
 
   const countReplies = thread?.replies?.count || 0
 
-  const onSubmit = (data: { content: string }) => {
+  const onSubmit = (data: ReplyFormValues) => {
     if (data.content) {
       addReply({
         variables: {

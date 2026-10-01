@@ -6,7 +6,7 @@ import { useNavigationState, NavType } from '../../state'
 import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
 import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
-import { Thread } from '../../forms/Thread'
+import { Thread, ThreadFormValues } from '../../forms/Thread'
 import { useModal } from '../../hooks'
 
 export const Commands: React.FC = () => {
@@ -31,7 +31,7 @@ export const Commands: React.FC = () => {
     </>
   )
 
-  const onSubmit = (data: { title: string, content: string }) => {
+  const onSubmit = (data: ThreadFormValues) => {
     if (data.title && data.content) {
       addThread({
         variables: {

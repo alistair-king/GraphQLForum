@@ -8,7 +8,7 @@ import { useNavigationState, NavType } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
-import { Reply } from '../forms/Reply'
+import { Reply, ReplyFormValues } from '../forms/Reply'
 import { useModal } from '../hooks'
 
 
@@ -41,13 +41,12 @@ export const EditReply: React.FC<{
     </>
   )
 
-  const onSubmit = data => {
+  const onSubmit = (data: ReplyFormValues) => {
     if (data.content) {
       updateReply({
         variables: {
           updateReplyData: {
-            id: reply.id, 
-            title: data.title,
+            id: reply.id,
             content: data.content
           }
         }

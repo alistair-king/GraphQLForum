@@ -8,7 +8,7 @@ import { useNavigationState, NavType } from '../state'
 import { ActionButton } from '../components/ActionButton'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
-import { Thread } from '../forms/Thread'
+import { Thread, ThreadFormValues } from '../forms/Thread'
 import { useModal } from '../hooks'
 
 export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
@@ -32,7 +32,7 @@ export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
     </>
   )
 
-  const onSubmit = data => {
+  const onSubmit = (data: ThreadFormValues) => {
     if (data.title && data.content) {
       const updateThreadData = {
         id: thread.id, 

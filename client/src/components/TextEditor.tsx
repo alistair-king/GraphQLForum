@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { Controller } from 'react-hook-form'
+import {
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  RegisterOptions,
+} from 'react-hook-form'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from '@tiptap/extension-text-align'
@@ -32,15 +38,15 @@ const ToolButton: React.FC<{
  * Rich text editor built on TipTap. Produces plain HTML which is stored
  * and rendered by <Content />. Administrators get a raw HTML source view.
  */
-export const TextEditor: React.FC<{
-  control: any,
-  name: string,
-  rules?: Record<string, any>
-}> = ({
+export function TextEditor<TFieldValues extends FieldValues>({
   control,
   name,
-  rules = {}
-}) => {
+  rules = {},
+}: {
+  control: Control<TFieldValues>
+  name: Path<TFieldValues>
+  rules?: RegisterOptions<TFieldValues, Path<TFieldValues>>
+}) {
   const { isAdmin } = useAuthState()
   const [showHtml, setShowHtml] = useState(false)
 
@@ -50,7 +56,13 @@ export const TextEditor: React.FC<{
       name={name}
       rules={rules}
       render={({ field: { onChange, value } }) => (
-        <EditorWithToolbar onChange={onChange} value={value} isAdmin={isAdmin} showHtml={showHtml} setShowHtml={setShowHtml} />
+        <EditorWithToolbar
+          onChange={onChange}
+          value={(value as string) ?? ''}
+          isAdmin={isAdmin}
+          showHtml={showHtml}
+          setShowHtml={setShowHtml}
+        />
       )}
     />
   )

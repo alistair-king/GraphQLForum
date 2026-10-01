@@ -32,12 +32,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  validate(payload: Record<string, any>): AuthUser {
+  validate(payload: Record<string, unknown>): AuthUser {
+    const claim = (key: string): string | undefined =>
+      payload[key] as string | undefined
     return {
-      sub: payload.sub,
-      email: payload[`${namespace}/email`] ?? payload.email,
-      name: payload[`${namespace}/name`] ?? payload.name,
-      picture: payload[`${namespace}/picture`] ?? payload.picture,
+      sub: claim('sub') as string,
+      email: claim(`${namespace}/email`) ?? claim('email'),
+      name: claim(`${namespace}/name`) ?? claim('name'),
+      picture: claim(`${namespace}/picture`) ?? claim('picture'),
       roles: rolesFromClaims(payload[`${namespace}/roles`] ?? payload.roles),
     }
   }

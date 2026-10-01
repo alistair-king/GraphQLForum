@@ -6,6 +6,8 @@ import { RepliesService } from './service'
 import { Reply } from './entity'
 import { Thread } from '../entity'
 import { User } from '../../../users/entity'
+import { UsersService } from '../../../users/service'
+import { Repository } from 'typeorm'
 
 const makeRepos = () => ({
   repliesRepository: {
@@ -48,16 +50,16 @@ describe('RepliesService authorization', () => {
   it('lets the author update their own reply', async () => {
     const repos = makeRepos()
     const service = new RepliesService(
-      repos.repliesRepository as any,
-      repos.threadsRepository as any,
-      {} as any,
+      repos.repliesRepository as unknown as Repository<Reply>,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      {} as UsersService,
     )
     const author = makeUser()
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeReply(author))
 
     const updated = await service.update(
       { id: 'reply-1', content: '<p>edited</p>' },
-      authorActor as any,
+      authorActor,
     )
 
     expect(updated.content).toBe('<p>edited</p>')
@@ -67,14 +69,14 @@ describe('RepliesService authorization', () => {
   it('blocks a stranger from updating someone else\'s reply', async () => {
     const repos = makeRepos()
     const service = new RepliesService(
-      repos.repliesRepository as any,
-      repos.threadsRepository as any,
-      {} as any,
+      repos.repliesRepository as unknown as Repository<Reply>,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      {} as UsersService,
     )
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeReply(makeUser()))
 
     await expect(
-      service.update({ id: 'reply-1', content: 'x' }, strangerActor as any),
+      service.update({ id: 'reply-1', content: 'x' }, strangerActor),
     ).rejects.toThrow(ForbiddenException)
     expect(repos.repliesRepository.save).not.toHaveBeenCalled()
   })
@@ -82,29 +84,29 @@ describe('RepliesService authorization', () => {
   it('lets an administrator update anyone\'s reply', async () => {
     const repos = makeRepos()
     const service = new RepliesService(
-      repos.repliesRepository as any,
-      repos.threadsRepository as any,
-      {} as any,
+      repos.repliesRepository as unknown as Repository<Reply>,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      {} as UsersService,
     )
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeReply(makeUser()))
 
     await expect(
-      service.update({ id: 'reply-1', content: 'x' }, adminActor as any),
+      service.update({ id: 'reply-1', content: 'x' }, adminActor),
     ).resolves.toBeDefined()
   })
 
   it('lets the author delete their own reply', async () => {
     const repos = makeRepos()
     const service = new RepliesService(
-      repos.repliesRepository as any,
-      repos.threadsRepository as any,
-      {} as any,
+      repos.repliesRepository as unknown as Repository<Reply>,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      {} as UsersService,
     )
     const author = makeUser()
     const reply = makeReply(author)
     vi.spyOn(service, 'findOneById').mockResolvedValue(reply)
 
-    const deleted = await service.delete('reply-1', authorActor as any)
+    const deleted = await service.delete('reply-1', authorActor)
 
     expect(deleted.id).toBe('reply-1')
     expect(repos.repliesRepository.remove).toHaveBeenCalledWith(reply)
@@ -113,14 +115,14 @@ describe('RepliesService authorization', () => {
   it('blocks a stranger from deleting someone else\'s reply', async () => {
     const repos = makeRepos()
     const service = new RepliesService(
-      repos.repliesRepository as any,
-      repos.threadsRepository as any,
-      {} as any,
+      repos.repliesRepository as unknown as Repository<Reply>,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      {} as UsersService,
     )
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeReply(makeUser()))
 
     await expect(
-      service.delete('reply-1', strangerActor as any),
+      service.delete('reply-1', strangerActor),
     ).rejects.toThrow(ForbiddenException)
     expect(repos.repliesRepository.remove).not.toHaveBeenCalled()
   })
@@ -130,9 +132,9 @@ describe('RepliesService.create', () => {
   it('creates a reply and bumps thread activity', async () => {
     const repos = makeRepos()
     const service = new RepliesService(
-      repos.repliesRepository as any,
-      repos.threadsRepository as any,
-      {} as any,
+      repos.repliesRepository as unknown as Repository<Reply>,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      {} as UsersService,
     )
     const author = makeUser()
     const thread = { id: 'thread-1', userLastReply: null, whenLastActivity: new Date() } as Thread
@@ -151,9 +153,9 @@ describe('RepliesService.create', () => {
   it('rejects replies to unknown threads', async () => {
     const repos = makeRepos()
     const service = new RepliesService(
-      repos.repliesRepository as any,
-      repos.threadsRepository as any,
-      {} as any,
+      repos.repliesRepository as unknown as Repository<Reply>,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      {} as UsersService,
     )
     repos.threadsRepository.findOneBy.mockResolvedValue(undefined)
 

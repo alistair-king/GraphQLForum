@@ -1,22 +1,27 @@
 import React, { ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import cls from 'classnames'
 
 import { IForum } from '../types'
 import { ValidationError } from '../components/ValidationError'
 
+export interface ForumFormValues {
+  name: string
+  description: string
+}
+
 export const Forum: React.FC<{
   forum?: IForum,
   title: string,
   actions: ReactNode,
-  onSubmit: any
+  onSubmit: SubmitHandler<ForumFormValues>
 }> = ({
   forum,
   title,
   actions,
   onSubmit
 }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm<ForumFormValues>({
     defaultValues: {
       name: forum?.name || '',
       description: forum?.description || '',

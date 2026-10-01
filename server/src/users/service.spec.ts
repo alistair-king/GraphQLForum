@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { UsersService } from './service'
 import { User } from './entity'
+import { Repository } from 'typeorm'
 
 const makeRepo = () => ({
   findOneBy: vi.fn(),
@@ -21,7 +22,7 @@ describe('UsersService', () => {
   it('creates a user on first login and counts the login', async () => {
     const repo = makeRepo()
     repo.findOneBy.mockResolvedValue(undefined)
-    const service = new UsersService(repo as any)
+    const service = new UsersService(repo as unknown as Repository<User>)
 
     const user = await service.login(authUser)
 
@@ -43,7 +44,7 @@ describe('UsersService', () => {
       logins: 4,
       lastLogin: new Date('2020-01-01'),
     })
-    const service = new UsersService(repo as any)
+    const service = new UsersService(repo as unknown as Repository<User>)
 
     const user = await service.login(authUser)
 
@@ -55,7 +56,7 @@ describe('UsersService', () => {
   it('me() creates the user without counting a login', async () => {
     const repo = makeRepo()
     repo.findOneBy.mockResolvedValue(undefined)
-    const service = new UsersService(repo as any)
+    const service = new UsersService(repo as unknown as Repository<User>)
 
     const user = await service.me(authUser)
 
@@ -66,7 +67,7 @@ describe('UsersService', () => {
   it('findAll honours skip/take', async () => {
     const repo = makeRepo()
     repo.find.mockResolvedValue([])
-    const service = new UsersService(repo as any)
+    const service = new UsersService(repo as unknown as Repository<User>)
 
     await service.findAll({ skip: 10, take: 5 })
 

@@ -1,22 +1,27 @@
 import React, { ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { IThread } from '../types'
 import { TextEditor } from '../components/TextEditor'
 import { ValidationError } from '../components/ValidationError'
 
+export interface ThreadFormValues {
+  title: string
+  content: string
+}
+
 export const Thread: React.FC<{
   thread?: IThread,
   title: string,
   actions: ReactNode,
-  onSubmit: any
+  onSubmit: SubmitHandler<ThreadFormValues>
 }> = ({
   thread,
   title,
   actions,
   onSubmit
 }) => {
-  const { register, handleSubmit, formState: { errors }, control } = useForm({
+  const { register, handleSubmit, formState: { errors }, control } = useForm<ThreadFormValues>({
     defaultValues: {
       title: thread?.title || '',
       content: thread?.content || '',

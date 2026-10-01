@@ -1,22 +1,26 @@
 import React, { ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { IReply } from '../types'
 import { TextEditor } from '../components/TextEditor'
 import { ValidationError } from '../components/ValidationError'
 
+export interface ReplyFormValues {
+  content: string
+}
+
 export const Reply: React.FC<{
   reply?: IReply,
   title: string,
   actions: ReactNode,
-  onSubmit: any
+  onSubmit: SubmitHandler<ReplyFormValues>
 }> = ({
   reply,
   title,
   actions,
   onSubmit
 }) => {
-  const { handleSubmit, formState: { errors }, control } = useForm({
+  const { handleSubmit, formState: { errors }, control } = useForm<ReplyFormValues>({
     defaultValues: {
       content: reply?.content || '',
     }

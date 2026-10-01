@@ -5,6 +5,8 @@ import { ForbiddenException } from '@nestjs/common'
 import { ThreadsService } from './service'
 import { Thread } from './entity'
 import { User } from '../../users/entity'
+import { Repository } from 'typeorm'
+import { Forum } from '../entity'
 
 const makeRepos = () => ({
   threadsRepository: {
@@ -50,16 +52,16 @@ describe('ThreadsService authorization', () => {
   it('lets the author update their own thread', async () => {
     const repos = makeRepos()
     const service = new ThreadsService(
-      repos.threadsRepository as any,
-      repos.forumsRepository as any,
-      repos.usersRepository as any,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      repos.forumsRepository as unknown as Repository<Forum>,
+      repos.usersRepository as unknown as Repository<User>,
     )
     const author = makeUser()
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeThread(author))
 
     const updated = await service.update(
       { id: 'thread-1', title: 'New title', content: '<p>new</p>' },
-      authorActor as any,
+      authorActor,
     )
 
     expect(updated.title).toBe('New title')
@@ -69,16 +71,16 @@ describe('ThreadsService authorization', () => {
   it('blocks a stranger from updating someone else\'s thread', async () => {
     const repos = makeRepos()
     const service = new ThreadsService(
-      repos.threadsRepository as any,
-      repos.forumsRepository as any,
-      repos.usersRepository as any,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      repos.forumsRepository as unknown as Repository<Forum>,
+      repos.usersRepository as unknown as Repository<User>,
     )
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeThread(makeUser()))
 
     await expect(
       service.update(
         { id: 'thread-1', title: 'hacked', content: 'x' },
-        strangerActor as any,
+        strangerActor,
       ),
     ).rejects.toThrow(ForbiddenException)
     expect(repos.threadsRepository.save).not.toHaveBeenCalled()
@@ -87,14 +89,14 @@ describe('ThreadsService authorization', () => {
   it('lets an administrator delete any thread', async () => {
     const repos = makeRepos()
     const service = new ThreadsService(
-      repos.threadsRepository as any,
-      repos.forumsRepository as any,
-      repos.usersRepository as any,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      repos.forumsRepository as unknown as Repository<Forum>,
+      repos.usersRepository as unknown as Repository<User>,
     )
     const thread = makeThread(makeUser())
     vi.spyOn(service, 'findOneById').mockResolvedValue(thread)
 
-    const deleted = await service.delete('thread-1', adminActor as any)
+    const deleted = await service.delete('thread-1', adminActor)
 
     expect(deleted.id).toBe('thread-1')
     expect(repos.threadsRepository.remove).toHaveBeenCalledWith(thread)
@@ -103,14 +105,14 @@ describe('ThreadsService authorization', () => {
   it('blocks a stranger from deleting someone else\'s thread', async () => {
     const repos = makeRepos()
     const service = new ThreadsService(
-      repos.threadsRepository as any,
-      repos.forumsRepository as any,
-      repos.usersRepository as any,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      repos.forumsRepository as unknown as Repository<Forum>,
+      repos.usersRepository as unknown as Repository<User>,
     )
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeThread(makeUser()))
 
     await expect(
-      service.delete('thread-1', strangerActor as any),
+      service.delete('thread-1', strangerActor),
     ).rejects.toThrow(ForbiddenException)
     expect(repos.threadsRepository.remove).not.toHaveBeenCalled()
   })
@@ -120,9 +122,9 @@ describe('ThreadsService.create', () => {
   it('creates a thread with author, forum and activity timestamp', async () => {
     const repos = makeRepos()
     const service = new ThreadsService(
-      repos.threadsRepository as any,
-      repos.forumsRepository as any,
-      repos.usersRepository as any,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      repos.forumsRepository as unknown as Repository<Forum>,
+      repos.usersRepository as unknown as Repository<User>,
     )
     const author = makeUser()
     const forum = { id: 'forum-1' }
@@ -144,9 +146,9 @@ describe('ThreadsService.create', () => {
   it('rejects threads in unknown forums', async () => {
     const repos = makeRepos()
     const service = new ThreadsService(
-      repos.threadsRepository as any,
-      repos.forumsRepository as any,
-      repos.usersRepository as any,
+      repos.threadsRepository as unknown as Repository<Thread>,
+      repos.forumsRepository as unknown as Repository<Forum>,
+      repos.usersRepository as unknown as Repository<User>,
     )
     repos.forumsRepository.findOneBy.mockResolvedValue(undefined)
 
