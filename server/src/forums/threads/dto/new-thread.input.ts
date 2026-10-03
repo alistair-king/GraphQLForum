@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { MaxLength, MinLength } from 'class-validator'
+import { MaxLength, MinLength, IsNotEmpty } from 'class-validator'
 
 @InputType()
 export class NewThreadInput {
@@ -14,5 +14,6 @@ export class NewThreadInput {
   content: string
 
   @Field(type => String)
+  @IsNotEmpty()
   forumId: string
 }

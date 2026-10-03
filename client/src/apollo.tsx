@@ -14,35 +14,32 @@ import { createClient } from 'graphql-ws'
 
 /**
  * Apollo provider that attaches the Auth0 access token to every
- * request/subscription once the user is authenticated.
+ * request/subscription. getAccessTokenSilently throws when logged out,
+ * which we treat as "send the request anonymously".
  */
 export const AuthedApolloProvider: React.FC<{
   children: ReactNode
 }> = ({
   children
 }) => {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
-  const authedRef = React.useRef(isAuthenticated)
-
-  React.useEffect(() => {
-    authedRef.current = isAuthenticated
-  }, [isAuthenticated])
+  const { getAccessTokenSilently } = useAuth0()
 
   const [client] = React.useState(() => {
     const endpoint = import.meta.env.VITE_GRAPHQL_ENDPOINT ?? '/graphql'
 
-    const authLink = setContext(async (_, { headers }) => {
-      if (!authedRef.current) {
-        return { headers }
-      }
+    const getToken = async (): Promise<string | undefined> => {
       try {
-        const token = await getAccessTokenSilently()
-        return {
-          headers: { ...headers, authorization: `Bearer ${token}` },
-        }
+        return await getAccessTokenSilently()
       } catch {
-        return { headers }
+        return undefined
       }
+    }
+
+    const authLink = setContext(async (_, { headers }) => {
+      const token = await getToken()
+      return token
+        ? { headers: { ...headers, authorization: `Bearer ${token}` } }
+        : { headers }
     })
 
     const httpLink = createHttpLink({ uri: endpoint })
@@ -54,16 +51,8 @@ export const AuthedApolloProvider: React.FC<{
       createClient({
         url: wsUrl,
         connectionParams: async () => {
-          if (!authedRef.current) {
-            return {}
-          }
-          try {
-            return {
-              authorization: `Bearer ${await getAccessTokenSilently()}`,
-            }
-          } catch {
-            return {}
-          }
+          const token = await getToken()
+          return token ? { authorization: `Bearer ${token}` } : {}
         },
       }),
     )

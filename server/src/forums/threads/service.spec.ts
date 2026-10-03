@@ -4,6 +4,7 @@ import { ForbiddenException } from '@nestjs/common'
 
 import { ThreadsService } from './service'
 import { Thread } from './entity'
+import { Reply } from './reply/entity'
 import { User } from '../../users/entity'
 import { Repository } from 'typeorm'
 import { Forum } from '../entity'
@@ -12,7 +13,11 @@ const makeRepos = () => ({
   threadsRepository: {
     create: vi.fn(),
     save: vi.fn(async (thread: Thread) => thread),
-    remove: vi.fn(async (thread: Thread) => thread),
+    // mimic TypeORM: remove() detaches the entity and nulls its id
+    remove: vi.fn(async (thread: Thread) => {
+      thread.id = undefined as unknown as string
+      return thread
+    }),
     findOne: vi.fn(),
     createQueryBuilder: vi.fn(),
   },
@@ -21,6 +26,9 @@ const makeRepos = () => ({
   },
   usersRepository: {
     findOneBy: vi.fn(),
+  },
+  repliesRepository: {
+    delete: vi.fn(async () => ({})),
   },
 })
 
@@ -55,6 +63,7 @@ describe('ThreadsService authorization', () => {
       repos.threadsRepository as unknown as Repository<Thread>,
       repos.forumsRepository as unknown as Repository<Forum>,
       repos.usersRepository as unknown as Repository<User>,
+      repos.repliesRepository as unknown as Repository<Reply>,
     )
     const author = makeUser()
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeThread(author))
@@ -74,6 +83,7 @@ describe('ThreadsService authorization', () => {
       repos.threadsRepository as unknown as Repository<Thread>,
       repos.forumsRepository as unknown as Repository<Forum>,
       repos.usersRepository as unknown as Repository<User>,
+      repos.repliesRepository as unknown as Repository<Reply>,
     )
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeThread(makeUser()))
 
@@ -92,6 +102,7 @@ describe('ThreadsService authorization', () => {
       repos.threadsRepository as unknown as Repository<Thread>,
       repos.forumsRepository as unknown as Repository<Forum>,
       repos.usersRepository as unknown as Repository<User>,
+      repos.repliesRepository as unknown as Repository<Reply>,
     )
     const thread = makeThread(makeUser())
     vi.spyOn(service, 'findOneById').mockResolvedValue(thread)
@@ -108,6 +119,7 @@ describe('ThreadsService authorization', () => {
       repos.threadsRepository as unknown as Repository<Thread>,
       repos.forumsRepository as unknown as Repository<Forum>,
       repos.usersRepository as unknown as Repository<User>,
+      repos.repliesRepository as unknown as Repository<Reply>,
     )
     vi.spyOn(service, 'findOneById').mockResolvedValue(makeThread(makeUser()))
 
@@ -125,6 +137,7 @@ describe('ThreadsService.create', () => {
       repos.threadsRepository as unknown as Repository<Thread>,
       repos.forumsRepository as unknown as Repository<Forum>,
       repos.usersRepository as unknown as Repository<User>,
+      repos.repliesRepository as unknown as Repository<Reply>,
     )
     const author = makeUser()
     const forum = { id: 'forum-1' }
@@ -149,6 +162,7 @@ describe('ThreadsService.create', () => {
       repos.threadsRepository as unknown as Repository<Thread>,
       repos.forumsRepository as unknown as Repository<Forum>,
       repos.usersRepository as unknown as Repository<User>,
+      repos.repliesRepository as unknown as Repository<Reply>,
     )
     repos.forumsRepository.findOneBy.mockResolvedValue(undefined)
 

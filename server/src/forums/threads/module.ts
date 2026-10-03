@@ -6,6 +6,7 @@ import { UsersModule } from '../../users/module'
 
 import { Forum } from '../entity'
 import { Thread } from './entity'
+import { Reply } from './reply/entity'
 import { User } from '../../users/entity'
 import { ThreadsResolver } from './resolver'
 import { ThreadsService } from './service'
@@ -13,7 +14,7 @@ import { RepliesModule } from './reply/module'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Thread, Forum, User]),
+    TypeOrmModule.forFeature([Thread, Forum, User, Reply]),
     CommonModule,
     UsersModule,
     RepliesModule,

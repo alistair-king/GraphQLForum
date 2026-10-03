@@ -91,8 +91,10 @@ export class RepliesService {
       throw new NotFoundException(`Reply ${id} not found`)
     }
     this.assertCanModify(reply, actor)
+    // remove() nulls the entity's id; keep a copy for the return value
+    const deleted = { ...reply }
     await this.repliesRepository.remove(reply)
-    return reply
+    return deleted
   }
 
   private assertCanModify(reply: Reply, actor: AuthUser): void {

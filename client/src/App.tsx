@@ -70,6 +70,10 @@ const Auth0ProviderWithNavigate: React.FC<{
       onRedirectCallback={(appState?: AppState) => {
         navigate(appState?.returnTo ?? window.location.pathname)
       }}
+      // renew via refresh token + POST instead of the hidden-iframe
+      // flow, which embedded browsers and Safari's ITP block
+      useRefreshTokens
+      cacheLocation="localstorage"
     >
       {children}
     </Auth0Provider>

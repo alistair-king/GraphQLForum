@@ -70,8 +70,6 @@ const DropMenu: React.FC = () => {
     <>
       <Avatar size={8} picture={me?.picture} onClick={() => setIsOpen(!isOpen)} />
       <DropMenuPane isOpen={isOpen}>
-        <DropMenuItem>Your Profile</DropMenuItem>
-        <DropMenuItem>Settings</DropMenuItem>
         <DropMenuAction onClick={logout}>Sign out</DropMenuAction>
       </DropMenuPane>
     </>
@@ -84,16 +82,6 @@ const DropMenuPane: React.FC<{ isOpen: boolean, children: ReactNode }> = ({ isOp
       {children}
     </div>
   </div>
-)
-
-const DropMenuItem: React.FC<{
-  href?: string,
-  children: ReactNode
-}> = ({
-  href = '/',
-  children
-}) => (
-  <a href={href} className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">{children}</a>
 )
 
 const DropMenuAction: React.FC<{

@@ -12,6 +12,7 @@ import { NewThreadInput } from './dto/new-thread.input'
 import { UpdateThreadInput } from './dto/update-thread.input'
 import { ThreadsArgs } from './dto/threads.args'
 import { Thread } from './entity'
+import { Reply } from './reply/entity'
 
 @Injectable()
 export class ThreadsService {
@@ -24,6 +25,9 @@ export class ThreadsService {
 
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+
+    @InjectRepository(Reply)
+    private repliesRepository: Repository<Reply>,
   ) {}
 
   async create(data: NewThreadInput, author: User): Promise<Thread> {
@@ -76,8 +80,13 @@ export class ThreadsService {
       throw new NotFoundException(`Thread ${id} not found`)
     }
     this.assertCanModify(thread, actor)
+    // remove the thread's replies first: reply.threadId references the
+    // thread and the FK would otherwise reject the delete
+    await this.repliesRepository.delete({ thread: { id: thread.id } })
+    // remove() nulls the entity's id; keep a copy for the return value
+    const deleted = { ...thread }
     await this.threadsRepository.remove(thread)
-    return thread
+    return deleted
   }
 
   private assertCanModify(thread: Thread, actor: AuthUser): void {

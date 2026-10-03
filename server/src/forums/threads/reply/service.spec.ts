@@ -13,7 +13,11 @@ const makeRepos = () => ({
   repliesRepository: {
     create: vi.fn(),
     save: vi.fn(async (reply: Reply) => reply),
-    remove: vi.fn(async (reply: Reply) => reply),
+    // mimic TypeORM: remove() detaches the entity and nulls its id
+    remove: vi.fn(async (reply: Reply) => {
+      reply.id = undefined as unknown as string
+      return reply
+    }),
     findOne: vi.fn(),
     createQueryBuilder: vi.fn(),
   },

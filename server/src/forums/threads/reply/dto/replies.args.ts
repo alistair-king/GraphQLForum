@@ -1,9 +1,10 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql'
-import { Min } from 'class-validator'
+import { Min, IsNotEmpty } from 'class-validator'
 
 @ArgsType()
 export class RepliesArgs {
   @Field(type => String)
+  @IsNotEmpty()
   threadId: string
 
   @Field(type => Int)

@@ -1,9 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql'
-import { MaxLength, MinLength } from 'class-validator'
+import { MaxLength, MinLength, IsNotEmpty } from 'class-validator'
 
 @InputType()
 export class NewReplyInput {
   @Field(type => String)
+  @IsNotEmpty()
   threadId: string
 
   @Field(type => String)
