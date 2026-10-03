@@ -4,9 +4,10 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { useMutation, useQuery } from '@apollo/client'
+import { useApolloClient, useMutation, useQuery } from '@apollo/client'
 import { useAuth0 } from '@auth0/auth0-react'
 
+import { setLoggingOut } from '../apollo'
 import { LOGIN, ME } from '../gql'
 import { IUser } from '../types'
 import { HOME, POST_LOGOUT_CALLBACK } from '../urls'
@@ -48,6 +49,7 @@ export const AuthContextProvider: React.FC<{
   const [doLogin] = useMutation(LOGIN)
   const [me, setMe] = useState<IUser>()
   const loginSent = useRef(false)
+  const apolloClient = useApolloClient()
 
   const { data } = useQuery<{ me: IUser }>(ME, {
     skip: !isAuthenticated,
@@ -60,6 +62,9 @@ export const AuthContextProvider: React.FC<{
   }, [data])
 
   useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      setLoggingOut(false)
+    }
     if (!isAuthenticated || isLoading || loginSent.current) {
       return
     }
@@ -85,8 +90,13 @@ export const AuthContextProvider: React.FC<{
       })
     },
     logout: () => {
-      setRedir(window.location.pathname)
+      // diagnostic marker — confirms the fresh bundle is loaded; remove once confirmed
+      console.error('[auth] LOGOUT MARKER: fresh bundle (v3) is running')
+      // stop token requests before the SDK discards its refresh token,
+      // then clear cached data so in-flight queries don't race the redirect
+      setLoggingOut(true)
       sessionStorage.removeItem(SESSION_LOGIN_KEY)
+      apolloClient.clearStore().catch(() => {})
       auth0Logout({
         logoutParams: {
           returnTo: window.location.origin + POST_LOGOUT_CALLBACK,
