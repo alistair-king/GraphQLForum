@@ -1,42 +1,32 @@
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql'
-import { PubSub } from 'apollo-server-express'
+import { UseGuards } from '@nestjs/common'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { LoginUserInput } from './dto/login-user.input'
+import { AuthUser } from '../auth/auth-user'
+import { CurrentUser } from '../auth/current-user.decorator'
+import { GqlAuthGuard } from '../auth/gql-auth.guard'
+
 import { UsersArgs } from './dto/users.args'
-import { User } from './model'
+import { User } from './entity'
 import { UsersService } from './service'
-
-const pubSub = new PubSub()
 
 @Resolver(of => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(GqlAuthGuard)
   @Query(returns => User)
-  async user(
-    @Args('code') code: string,
-  ): Promise<User> {
-    return await this.usersService.currentUser(code)
+  me(@CurrentUser() authUser: AuthUser): Promise<User> {
+    return this.usersService.me(authUser)
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(returns => User)
+  login(@CurrentUser() authUser: AuthUser): Promise<User> {
+    return this.usersService.login(authUser)
   }
 
   @Query(returns => [User])
   users(@Args() usersArgs: UsersArgs): Promise<User[]> {
     return this.usersService.findAll(usersArgs)
-  }
-
-  @Mutation(returns => User)
-  async loginUser(
-    @Args('loginUserData') loginUserData: LoginUserInput,
-  ): Promise<User> {
-    console.log('AJK login user', loginUserData)
-
-    const user = await this.usersService.login(loginUserData)
-    pubSub.publish('userLoggedIn', { userLoggedIn: user })
-    return user
-  }
-
-  @Subscription(returns => User)
-  userAdded() {
-    return pubSub.asyncIterator('userAdded')
   }
 }

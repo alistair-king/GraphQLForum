@@ -1,22 +1,26 @@
 import React, { ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { IReply } from '../types'
 import { TextEditor } from '../components/TextEditor'
 import { ValidationError } from '../components/ValidationError'
 
+export interface ReplyFormValues {
+  content: string
+}
+
 export const Reply: React.FC<{
   reply?: IReply,
   title: string,
   actions: ReactNode,
-  onSubmit: any
+  onSubmit: SubmitHandler<ReplyFormValues>
 }> = ({
   reply,
   title,
   actions,
   onSubmit
 }) => {
-  const { handleSubmit, errors, control } = useForm({
+  const { handleSubmit, formState: { errors }, control } = useForm<ReplyFormValues>({
     defaultValues: {
       content: reply?.content || '',
     }
@@ -28,10 +32,10 @@ export const Reply: React.FC<{
         {title}
       </div>
 
-      <div className="px-6 py-3 overflow-y-auto" style={{maxHeight: '80vh'}}>
+      <div className="px-6 py-3 overflow-y-auto" style={{ maxHeight: '80vh' }}>
         <div className="-mx-3 md:flex mb-6">
           <div className="md:w-full px-3">
-            <TextEditor name="content" control={control} />
+            <TextEditor name="content" control={control} rules={{ required: true }} />
             <ValidationError error={errors.content} />
           </div>
         </div>

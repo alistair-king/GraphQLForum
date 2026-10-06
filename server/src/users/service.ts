@@ -1,57 +1,65 @@
-import { Injectable, Inject } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { Constants } from '@server/common/constants'
+import { AuthUser } from '../auth/auth-user'
 
-import { LoginUserInput } from './dto/login-user.input'
+import { User } from './entity'
 import { UsersArgs } from './dto/users.args'
-import { User } from './model'
 
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(Constants.USER_REPO)
-    private usersRepository: Repository<User>
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
-  async currentUser(code: string): Promise<User> {
-    return this.usersRepository.findOne({
-      where: {
-        code
-      }
-    })
-  }
-
-  async findOneById(id: string): Promise<User> {
-    return this.usersRepository.findOne(id)
-  }
-
-  async findAll(usersArgs: UsersArgs): Promise<User[]> {
-    return this.usersRepository.find()
-  }
-
-  async login(data: LoginUserInput): Promise<User> {
-    let user = await this.usersRepository.findOne({
-      where: {
-        email: data.email,
-        code: data.code
-      }
-    })
+  /**
+   * Finds the local user record for an authenticated AuthUser, creating
+   * (but not counting) it on first sight. Does not update login stats.
+   */
+  async getOrCreateByAuthUser(authUser: AuthUser): Promise<User> {
+    let user = await this.usersRepository.findOneBy({ code: authUser.sub })
     if (!user) {
       user = new User()
-      user.email = data.email
-      user.code = data.code
-      user.name = data.name
+      user.code = authUser.sub
+      user.email = authUser.email ?? ''
+      user.name = authUser.name ?? authUser.sub
+      user.picture = authUser.picture ?? ''
       user.logins = 0
     }
-    user.picture = data.picture
+    return user
+  }
+
+  /** Records a login: upserts the user and bumps login stats. */
+  async login(authUser: AuthUser): Promise<User> {
+    const user = await this.getOrCreateByAuthUser(authUser)
+    if (authUser.email) {
+      user.email = authUser.email
+    }
+    if (authUser.name) {
+      user.name = authUser.name
+    }
+    if (authUser.picture) {
+      user.picture = authUser.picture
+    }
     user.logins++
     user.lastLogin = new Date()
     return this.usersRepository.save(user)
   }
 
+  async me(authUser: AuthUser): Promise<User> {
+    return this.getOrCreateByAuthUser(authUser)
+  }
 
-  // async remove(id: string): Promise<boolean> {
-  //   return this.usersRepository.delete(id)
-  // }
+  async findOneById(id: string): Promise<User> {
+    return this.usersRepository.findOneBy({ id })
+  }
+
+  async findAll(args: UsersArgs): Promise<User[]> {
+    return this.usersRepository.find({
+      skip: args.skip,
+      take: args.take,
+    })
+  }
 }

@@ -1,21 +1,19 @@
-import { Field, InputType, Int } from '@nestjs/graphql'
-import { MaxLength } from 'class-validator'
-
-import { Forum } from '@server/forums/model'
-import { User } from '@server/users/model'
+import { Field, InputType } from '@nestjs/graphql'
+import { MaxLength, MinLength, IsNotEmpty } from 'class-validator'
 
 @InputType()
 export class NewThreadInput {
   @Field()
+  @MinLength(1)
   @MaxLength(255)
   title: string
 
   @Field()
+  @MinLength(1)
+  @MaxLength(65535)
   content: string
-  
+
   @Field(type => String)
-  authorId: string
-  
-  @Field(type => String)
+  @IsNotEmpty()
   forumId: string
 }

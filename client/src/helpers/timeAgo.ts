@@ -1,9 +1,10 @@
-const timeAgo = (when) => {
+const timeAgo = (when?: number | Date) => {
   if (when === undefined) {
     return ''
   }
-  var seconds = Math.floor((new Date().getTime() - when) / 1000)
-  var interval = Math.floor(seconds / 31536000)
+  const whenMs = when instanceof Date ? when.getTime() : when
+  const seconds = Math.floor((new Date().getTime() - whenMs) / 1000)
+  let interval = Math.floor(seconds / 31536000)
   if (interval > 1) {
     return interval + " years ago"
   }

@@ -1,14 +1,14 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_REPLY, GET_FORUM, GET_THREAD } from '../gql'
 import { IReply } from '../types'
 import { useNavigationState, NavType } from '../state'
 import { ActionButton } from '../components/ActionButton'
-import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
-import { Reply } from '../forms/Reply'
+import { ModalActions } from '../components/ModalActions'
+import { Reply, ReplyFormValues } from '../forms/Reply'
 import { useModal } from '../hooks'
 
 
@@ -34,20 +34,12 @@ export const EditReply: React.FC<{
     }
   )
   
-  const Actions = () => (
-    <>
-      <Button type="submit">Update</Button>
-      <Button secondary onClick={closeModal}>Cancel</Button>
-    </>
-  )
-
-  const onSubmit = data => {
+  const onSubmit = (data: ReplyFormValues) => {
     if (data.content) {
       updateReply({
         variables: {
           updateReplyData: {
-            id: reply.id, 
-            title: data.title,
+            id: reply.id,
             content: data.content
           }
         }
@@ -60,7 +52,7 @@ export const EditReply: React.FC<{
     <Modal
       isOpen={isOpen}
       closeModal={closeModal}
-      content={<Reply reply={reply} title="Edit Reply" actions={<Actions />} onSubmit={onSubmit} />}
+      content={<Reply reply={reply} title="Edit Reply" actions={<ModalActions closeModal={closeModal} submitLabel="Update" />} onSubmit={onSubmit} />}
     >
       <ActionButton tooltip="Edit" onClick={openModal}>
         <MdEdit />

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
-export const GET_USER = gql`
-  query user($code: String!) {
-    user(code: $code) {
+export const ME = gql`
+  query me {
+    me {
       id
       name
       picture
@@ -10,11 +10,10 @@ export const GET_USER = gql`
   }
 `
 
-export const LOGIN_USER = gql`
-  mutation LoginUser($loginUserData: LoginUserInput!) {
-    loginUser(loginUserData: $loginUserData) {
-      email
-      code
+export const LOGIN = gql`
+  mutation Login {
+    login {
+      id
       name
       picture
     }
@@ -75,6 +74,7 @@ export const GET_FORUM = gql`
 export const ADD_THREAD = gql`
   mutation AddThread($newThreadData: NewThreadInput!) {
     addThread(newThreadData: $newThreadData) {
+      id
       title
       content
     }
@@ -90,6 +90,15 @@ export const UPDATE_THREAD = gql`
     }
   }
 `
+
+export const DELETE_THREAD = gql`
+  mutation DeleteThread($data: DeleteThreadInput!) {
+    deleteThread(data: $data) {
+      id
+    }
+  }
+`
+
 export const GET_THREAD = gql`
   query getForum($id: String!, $page: Int!) {
     thread(id: $id) {
@@ -116,17 +125,9 @@ export const GET_THREAD = gql`
             id
             name
             picture
-          }          
+          }
         }
       }
-    }
-  }
-`
-
-export const DELETE_THREAD = gql`
-  mutation DeleteThread($deleteThreadData: DeleteThreadInput!) {
-    deleteThread(DeleteThreadInput: $deleteThreadData) {
-      id
     }
   }
 `
@@ -134,6 +135,7 @@ export const DELETE_THREAD = gql`
 export const ADD_REPLY = gql`
   mutation AddReply($newReplyData: NewReplyInput!) {
     addReply(newReplyData: $newReplyData) {
+      id
       content
     }
   }
@@ -149,8 +151,8 @@ export const UPDATE_REPLY = gql`
 `
 
 export const DELETE_REPLY = gql`
-  mutation DeleteReply($deleteReplyData: DeleteReplyInput!) {
-    deleteReply(DeleteReplyInput: $deleteReplyData) {
+  mutation DeleteReply($data: DeleteReplyInput!) {
+    deleteReply(data: $data) {
       id
     }
   }

@@ -5,17 +5,20 @@
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2017",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "incremental": true,
-    "esModuleInterop": true,
-    "baseUrl": ".",
-    "paths": {
-      "@server/*": [
-        "src/*"
-      ]
-    }
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true
   },
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

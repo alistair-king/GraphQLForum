@@ -11,53 +11,57 @@ import { Pagination } from '../components/Pagination'
 import { timeAgo } from '../helpers/timeAgo'
 import { DeleteThread } from '../pages/forumpage/DeleteThread'
 
+const HeadingCell: React.FC<{children?: ReactNode}> = ({children}) => (
+  <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase">
+    {children}
+  </th>
+)
+
+const Headings: React.FC = () => (
+  <thead>
+    <tr>
+      <HeadingCell />
+      <HeadingCell>Title / Starter</HeadingCell>
+      <HeadingCell>Replies</HeadingCell>
+      <HeadingCell>Last reply</HeadingCell>
+      <HeadingCell />
+    </tr>
+  </thead>
+)
+
+const Footer: React.FC<{
+  page: number,
+  count: number,
+  setPage: (page: number) => void
+}> = ({
+  page,
+  count,
+  setPage
+}) => (
+  <tfoot>
+    <tr>
+      <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" colSpan={5}>
+        <Pagination activepage={page} count={count} setPage={setPage}/>
+      </th>
+    </tr>
+  </tfoot>
+)
+
 export const Forum: React.FC<{
   forum: IForum,
   page: number,
-  setPage: (page: number) => void    
+  setPage: (page: number) => void
 }> = ({
   forum,
   page,
   setPage
 }) => {
-  
-  const Headings: React.FC = () => {
-    const Cell: React.FC<{children?: ReactNode}> = ({children}) => (
-      <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase">
-        {children}
-      </th>
-    )
-    return (
-      <thead>
-        <tr>
-          <Cell />
-          <Cell>Title / Starter</Cell>
-          <Cell>Replies</Cell>
-          <Cell>Last reply</Cell>
-          <Cell />
-        </tr>
-      </thead>
-    )
-  }
-
-  const Footer: React.FC = () => {
-    return (
-      <tfoot>
-        <tr>
-          <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider" colSpan={5}>
-            <Pagination activepage={page} count={forum.threads.count} setPage={setPage}/>
-          </th>
-        </tr>
-      </tfoot>
-    )
-  }
-
   return (
     <Card>
       <table className="min-w-full">
         <Headings />
         <tbody className="bg-white">
-          { forum && forum.threads.items.map(thread => 
+          { forum && forum.threads.items.map(thread =>
             <Thread
               key={thread.id}
               forum={forum}
@@ -66,7 +70,7 @@ export const Forum: React.FC<{
             />
           )}
         </tbody>
-        <Footer />
+        <Footer page={page} count={forum.threads.count} setPage={setPage} />
       </table>
     </Card>
   )
@@ -83,7 +87,7 @@ const Thread: React.FC<{
 }) => (
   <tr>
     <td className="pl-6 pr-2 py-4 border-b border-gray-200">
-      <div className="flex-shrink-0 text-gray-500">
+      <div className="shrink-0 text-gray-500">
         <MdChatBubbleOutline />
       </div>
     </td>
@@ -97,11 +101,11 @@ const Thread: React.FC<{
       </Link>
     </td>
   
-    <td className="px-4 py-4 border-b border-gray-200 whitespace-no-wrap text-right text-gray-500">
+    <td className="px-4 py-4 border-b border-gray-200 whitespace-nowrap text-right text-gray-500">
       {thread.lastReply?.count}
     </td>
 
-    <td className="px-0 py-4  border-b border-gray-200 whitespace-no-wrap">
+    <td className="px-0 py-4  border-b border-gray-200 whitespace-nowrap">
       {thread.lastReply?.count !== 0 &&
         <div className="text-xs leading-5 text-gray-500 text-right">
           by {thread.lastReply?.reply?.author?.name}{' '}

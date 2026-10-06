@@ -1,18 +1,19 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { ADD_FORUM, GET_FORUMS } from '../../gql'
 import { IsAdmin } from '../../components/auth/IsAdmin'
-import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
-import { Forum } from '../../forms/Forum'
+import { Button } from '../../components/Button'
+import { ModalActions } from '../../components/ModalActions'
+import { Forum, ForumFormValues } from '../../forms/Forum'
 import { useModal } from '../../hooks'
 
 export const Commands: React.FC = () => {
   const { isOpen, openModal, closeModal } = useModal()
   const [addForum] = useMutation(ADD_FORUM,
     {
-      refetchQueries:[
+      refetchQueries: [
         {
           query: GET_FORUMS
         }
@@ -20,14 +21,7 @@ export const Commands: React.FC = () => {
     }
   )
 
-  const Actions: React.FC = () => (
-    <>
-      <Button type="submit">Create</Button>
-      <Button secondary onClick={closeModal}>Cancel</Button>
-    </>
-  )
-
-  const onSubmit = data => {
+  const onSubmit = (data: ForumFormValues) => {
     if (data.name) {
       addForum({
         variables: {
@@ -46,7 +40,7 @@ export const Commands: React.FC = () => {
       <Modal
         isOpen={isOpen}
         closeModal={closeModal}
-        content={<Forum title="New Forum" actions={<Actions />} onSubmit={onSubmit} />}
+        content={<Forum title="New Forum" actions={<ModalActions closeModal={closeModal} submitLabel="Create" />} onSubmit={onSubmit} />}
       >
         <Button onClick={openModal} className="mr-1">
           New Forum

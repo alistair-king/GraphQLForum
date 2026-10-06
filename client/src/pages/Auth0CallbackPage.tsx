@@ -1,13 +1,25 @@
-import React from 'react'
-import { useAuth } from 'react-use-auth'
+import React, { useEffect } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 
-import { POST_LOGIN_CALLBACK } from '../urls'
+import { Page } from '../components/Page'
+import { Spinner } from '../components/Spinner'
 
 export const Auth0CallbackPage = () => {
-  const { handleAuthentication } = useAuth()
-  React.useEffect(() => {
-    handleAuthentication({ postLoginRoute: POST_LOGIN_CALLBACK})
-  }, [handleAuthentication])
+  const { handleRedirectCallback, error, isLoading } = useAuth0()
 
-  return null 
+  useEffect(() => {
+    if (isLoading || error) {
+      return
+    }
+    handleRedirectCallback().catch(() => {
+      // already handled / not on a callback URL; onRedirectCallback
+      // takes care of navigation
+    })
+  }, [handleRedirectCallback, error, isLoading])
+
+  return (
+    <Page title="Signing in...">
+      <Spinner className="w-full flex justify-center pt-8" />
+    </Page>
+  )
 }

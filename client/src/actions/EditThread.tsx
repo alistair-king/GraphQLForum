@@ -1,14 +1,14 @@
 import React from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { MdEdit } from 'react-icons/md'
 
 import { UPDATE_THREAD, GET_FORUM } from '../gql'
 import { IThread } from '../types'
 import { useNavigationState, NavType } from '../state'
 import { ActionButton } from '../components/ActionButton'
-import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
-import { Thread } from '../forms/Thread'
+import { ModalActions } from '../components/ModalActions'
+import { Thread, ThreadFormValues } from '../forms/Thread'
 import { useModal } from '../hooks'
 
 export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
@@ -25,14 +25,7 @@ export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
     }
   )
   
-  const Actions = () => (
-    <>
-      <Button type="submit">Update</Button>
-      <Button secondary onClick={closeModal}>Cancel</Button>
-    </>
-  )
-
-  const onSubmit = data => {
+  const onSubmit = (data: ThreadFormValues) => {
     if (data.title && data.content) {
       const updateThreadData = {
         id: thread.id, 
@@ -52,7 +45,7 @@ export const EditThread: React.FC<{ thread: IThread }> = ({ thread }) => {
     <Modal
       isOpen={isOpen}
       closeModal={closeModal}
-      content={<Thread thread={thread} title="Edit Thread" actions={<Actions />} onSubmit={onSubmit} />}
+      content={<Thread thread={thread} title="Edit Thread" actions={<ModalActions closeModal={closeModal} submitLabel="Update" />} onSubmit={onSubmit} />}
     >
       <ActionButton tooltip="Edit" onClick={openModal}>
         <MdEdit />

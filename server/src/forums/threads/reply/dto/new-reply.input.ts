@@ -1,18 +1,14 @@
-import { Field, InputType, Int } from '@nestjs/graphql'
-import { IsOptional, Length, MaxLength } from 'class-validator'
-
-import { Thread } from '@server/forums/threads/model'
-import { User } from '@server/users/model'
-
+import { Field, InputType } from '@nestjs/graphql'
+import { MaxLength, MinLength, IsNotEmpty } from 'class-validator'
 
 @InputType()
 export class NewReplyInput {
   @Field(type => String)
+  @IsNotEmpty()
   threadId: string
 
   @Field(type => String)
-  authorId: string
-
-  @Field(type => String)
+  @MinLength(1)
+  @MaxLength(65535)
   content: string
 }

@@ -1,18 +1,14 @@
-import React from 'react'
-import { ApolloProvider } from '@apollo/react-hooks'
-import ApolloClient from 'apollo-boost'
+import React, { type ReactNode } from 'react'
 import {
   BrowserRouter,
   Route,
-  RouteProps,
-  Switch,
-  useHistory
+  Routes,
+  useNavigate,
 } from 'react-router-dom'
-import { AuthConfig } from 'react-use-auth'
-import { Auth0 } from 'react-use-auth/auth0'
-import ReactModal from 'react-modal'
+import { Auth0Provider, type AppState } from '@auth0/auth0-react'
 
 import * as URL from './urls'
+import { AuthedApolloProvider } from './apollo'
 import { AuthContextProvider } from './state/AuthContext'
 import { NavigationContextProvider } from './state/NavigationContext'
 import { NavBar } from './components/NavBar'
@@ -21,87 +17,65 @@ import { ForumPage } from './pages/forumpage'
 import { ThreadPage } from './pages/threadpage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { Auth0CallbackPage } from './pages/Auth0CallbackPage'
-import { LoggedInCallbackPage } from './pages/LoggedInCallbackPage'
 import { LoggedOutCallbackPage } from './pages/LoggedOutCallbackPage'
 
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
-})
-
 export const App = () => {
-  ReactModal.setAppElement('#root')
-
   return (
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <NavigationContextProvider>
-          <AuthContextProvider>
-            <AuthedSection />
-          </AuthContextProvider>
-        </NavigationContextProvider>
-      </BrowserRouter>
-    </ApolloProvider>
+    <BrowserRouter>
+      <NavigationContextProvider>
+        <Auth0ProviderWithNavigate>
+          <AuthedApolloProvider>
+            <AuthContextProvider>
+              <NavBar />
+              <Routes>
+                <Route path={URL.HOME} element={<HomePage />} />
+                <Route
+                  path={URL.POST_AUTH0_CALLBACK}
+                  element={<Auth0CallbackPage />}
+                />
+                <Route
+                  path={URL.POST_LOGOUT_CALLBACK}
+                  element={<LoggedOutCallbackPage />}
+                />
+                <Route path={URL.THREAD_PAGE1} element={<ThreadPage />} />
+                <Route path={URL.THREAD_PAGE2} element={<ThreadPage />} />
+                <Route path={URL.FORUM_PAGE1} element={<ForumPage />} />
+                <Route path={URL.FORUM_PAGE2} element={<ForumPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </AuthContextProvider>
+          </AuthedApolloProvider>
+        </Auth0ProviderWithNavigate>
+      </NavigationContextProvider>
+    </BrowserRouter>
   )
 }
 
-const AuthedSection: React.FC = () => {
-  const history = useHistory()
+const Auth0ProviderWithNavigate: React.FC<{
+  children: ReactNode
+}> = ({
+  children
+}) => {
+  const navigate = useNavigate()
+
   return (
-    <AuthConfig
-      navigate={history.push}
-      authProvider={Auth0}
-      params={{
-          domain: process.env.REACT_APP_AUTH0_DOMAIN,
-          clientID: process.env.REACT_APP_AUTH0_CLIENTID,
-          customPropertyNamespace: process.env.REACT_APP_AUTH0_CUSTOM_PROPERTY_NAME_SPACE,
+    <Auth0Provider
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENTID}
+      authorizationParams={{
+        redirect_uri:
+          window.location.origin + URL.POST_AUTH0_CALLBACK,
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
       }}
+      onRedirectCallback={(appState?: AppState) => {
+        navigate(appState?.returnTo ?? window.location.pathname)
+      }}
+      // renew via refresh token + POST instead of the hidden-iframe
+      // flow, which embedded browsers and Safari's ITP block
+      useRefreshTokens
+      cacheLocation="localstorage"
     >
-      <NavBar />
-      <Switch>
-        {Routes.map((routeprops, index) =>
-          <Route key={index} {...routeprops} />
-        )}
-      </Switch>
-    </AuthConfig>
+      {children}
+    </Auth0Provider>
   )
 }
-
-const Routes: RouteProps[] = [
-  {
-    path: [
-      URL.HOME,
-    ],
-    component: HomePage,
-    exact: true
-  },
-  {
-    path: URL.POST_AUTH0_CALLBACK,
-    component: Auth0CallbackPage
-  },
-  {
-    path: URL.POST_LOGIN_CALLBACK,
-    component: LoggedInCallbackPage
-  },
-  {
-    path: URL.POST_LOGOUT_CALLBACK,
-    component: LoggedOutCallbackPage
-  },
-  {
-    path: [
-      URL.THREAD_PAGE1,
-      URL.THREAD_PAGE2
-    ],
-    component: ThreadPage
-  },
-  {
-    path: [
-      URL.FORUM_PAGE1,
-      URL.FORUM_PAGE2
-    ],
-    component: ForumPage
-  },
-  {
-    component: NotFoundPage
-  }
-]
-

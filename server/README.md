@@ -1,75 +1,41 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# GraphQLForum API
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+NestJS 12 + Apollo Server 5 + TypeORM 1.x (MySQL) GraphQL API.
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+## Setup
 
 ```bash
-$ npm install
+pnpm install            # from the repo root (pnpm workspaces)
+cp .env.example .env    # adjust DB_*/AUTH0_* values
+docker compose up -d    # from the repo root, for MySQL
+pnpm dev                # or: pnpm --filter server dev (watch mode)
 ```
 
-## Running the app
+`schema.gql` is regenerated on every boot from the code-first decorators.
 
-```bash
-# development
-$ npm run start
+## Scripts
 
-# watch mode
-$ npm run start:dev
+Run from the repo root with `pnpm --filter server <script>`, or inside
+`server/` with `pnpm <script>`:
 
-# production mode
-$ npm run start:prod
-```
+| Script              | What                                        |
+| ------------------- | ------------------------------------------- |
+| `dev`               | Watch-mode dev server                       |
+| `build`             | Compile to `dist/`                          |
+| `start:prod`        | Run the compiled build                      |
+| `test`              | Vitest: unit + e2e (e2e skips without `DB_*`)|
+| `test:e2e`          | e2e only (needs a reachable MySQL)          |
+| `lint`              | oxlint                                      |
 
-## Test
+## Auth
 
-```bash
-# unit tests
-$ npm run test
+Every mutation requires `Authorization: Bearer <Auth0 access token>`.
+Tokens are verified against the tenant JWKS (`AUTH0_DOMAIN`,
+`AUTH0_AUDIENCE`, optional `AUTH0_ISSUER`). The user record is upserted from
+the token's claims; `login` counts the login (once per browser session by the
+client), `me` just reads. Update/delete mutations enforce author-or-
+`Administrator` (from the namespaced roles claim) server-side.
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-  Nest is [MIT licensed](LICENSE).
+`DB_SYNCHRONIZE=true` auto-syncs the schema on boot — convenient in dev, do
+not use it against production data (see the root README for the follow-up
+note on migrations).

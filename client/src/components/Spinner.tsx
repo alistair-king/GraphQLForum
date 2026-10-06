@@ -1,6 +1,6 @@
 import React from 'react'
 
-import GridLoader from "react-spinners/GridLoader"
+import { GridLoader } from "react-spinners"
 
 export const Spinner: React.FC<{
   size?: number

@@ -1,34 +1,37 @@
-import { NotFoundException } from '@nestjs/common'
+import { Inject, NotFoundException, UseGuards } from '@nestjs/common'
 import {
   Args,
   Int,
   Mutation,
-  Query,
   Parent,
-  Resolver,
+  Query,
   ResolveField,
-  Subscription
+  Resolver,
+  Subscription,
 } from '@nestjs/graphql'
-import { PubSub } from 'apollo-server-express'
+import { PubSub } from 'graphql-subscriptions'
 
-import { UsersService } from '@server/users/service'
+import { AuthUser } from '../../auth/auth-user'
+import { CurrentUser } from '../../auth/current-user.decorator'
+import { GqlAuthGuard } from '../../auth/gql-auth.guard'
+import { Constants } from '../../common/constants'
+import { UsersService } from '../../users/service'
 
 import { NewThreadInput } from './dto/new-thread.input'
 import { UpdateThreadInput } from './dto/update-thread.input'
 import { DeleteThreadInput } from './dto/delete-thread.input'
-import { ThreadsArgs } from './dto/threads.args'
-import { Thread } from './model'
+import { Thread } from './entity'
+import { LastReply, PaginatedReplies } from './model'
 import { ThreadsService } from './service'
-
 import { RepliesService } from './reply/service'
-
-const pubSub = new PubSub()
 
 @Resolver(of => Thread)
 export class ThreadsResolver {
   constructor(
     private readonly threadsService: ThreadsService,
-    private readonly repliesService: RepliesService
+    private readonly repliesService: RepliesService,
+    private readonly usersService: UsersService,
+    @Inject(Constants.PUB_SUB) private readonly pubSub: PubSub,
   ) {}
 
   @Query(returns => Thread)
@@ -40,30 +43,28 @@ export class ThreadsResolver {
     return thread
   }
 
-  @ResolveField()
+  @ResolveField(returns => PaginatedReplies)
   async replies(
     @Parent() thread: Thread,
     @Args('page', { type: () => Int }) page: number,
   ) {
-    const { id } = thread;
     const result = await this.repliesService.findAll({
-      threadId: id,
+      threadId: thread.id,
       page,
     })
     return {
       items: result[0],
-      count: result[1]
+      count: result[1],
     }
   }
 
-  @ResolveField()
+  @ResolveField(returns => LastReply)
   async lastReply(
-    @Parent() thread: Thread
+    @Parent() thread: Thread,
   ) {
-    const { id } = thread;
     const result = await this.repliesService.findLastReply({
-      threadId: id,
-      page: 0
+      threadId: thread.id,
+      page: 0,
     })
     const replies = result[0]
     const reply = replies.length > 0
@@ -71,38 +72,42 @@ export class ThreadsResolver {
       : undefined
     return {
       reply,
-      count: result[1]
+      count: result[1],
     }
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(returns => Thread)
   async addThread(
     @Args('newThreadData') newThreadData: NewThreadInput,
+    @CurrentUser() authUser: AuthUser,
   ): Promise<Thread> {
-    const thread = await this.threadsService.create(newThreadData)
-    pubSub.publish('threadAdded', { threadAdded: thread })
+    const author = await this.usersService.getOrCreateByAuthUser(authUser)
+    const thread = await this.threadsService.create(newThreadData, author)
+    this.pubSub.publish('threadAdded', { threadAdded: thread })
     return thread
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(returns => Thread)
   async updateThread(
     @Args('updateThreadData') updateThreadData: UpdateThreadInput,
+    @CurrentUser() authUser: AuthUser,
   ): Promise<Thread> {
-    const thread = await this.threadsService.update(updateThreadData)
-    pubSub.publish('threadUpdated', { threadAdded: thread })
-    return thread
+    return this.threadsService.update(updateThreadData, authUser)
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(returns => Thread)
   async deleteThread(
-    @Args('DeleteThreadInput') deletethreadinput: DeleteThreadInput) {
-    const result = await this.threadsService.delete(`${deletethreadinput.id}`)
-    console.log('AJK', result)
-    return result
+    @Args('data') data: DeleteThreadInput,
+    @CurrentUser() authUser: AuthUser,
+  ): Promise<Thread> {
+    return this.threadsService.delete(data.id, authUser)
   }
 
   @Subscription(returns => Thread)
   threadAdded() {
-    return pubSub.asyncIterator('threadAdded')
+    return this.pubSub.asyncIterableIterator('threadAdded')
   }
 }
