@@ -3,16 +3,21 @@ name: Server
 on:
   push:
     branches: [master]
-    paths: ['server/**', '.github/workflows/server.yml']
+    paths:
+      - 'server/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'turbo.json'
+      - '.github/workflows/server.yml'
   pull_request:
-    paths: ['server/**', '.github/workflows/server.yml']
+    paths:
+      - 'server/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/server.yml'
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
     env:
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
@@ -36,12 +41,10 @@ jobs:
           --health-retries=10
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: server/package-lock.json
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
-      - run: npm test
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run lint build test --filter=server

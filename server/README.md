@@ -5,24 +5,27 @@ NestJS 12 + Apollo Server 5 + TypeORM 1.x (MySQL) GraphQL API.
 ## Setup
 
 ```bash
-cp .env.example .env   # adjust DB_*/AUTH0_* values
-npm install
-docker compose up -d   # from the repo root, for MySQL
-npm run start:dev      # playground at http://localhost:4000/graphql
+pnpm install            # from the repo root (pnpm workspaces)
+cp .env.example .env    # adjust DB_*/AUTH0_* values
+docker compose up -d    # from the repo root, for MySQL
+pnpm dev                # or: pnpm --filter server dev (watch mode)
 ```
 
 `schema.gql` is regenerated on every boot from the code-first decorators.
 
 ## Scripts
 
+Run from the repo root with `pnpm --filter server <script>`, or inside
+`server/` with `pnpm <script>`:
+
 | Script              | What                                        |
 | ------------------- | ------------------------------------------- |
-| `npm run start:dev` | Watch-mode dev server                       |
-| `npm run build`     | Compile to `dist/`                          |
-| `npm run start:prod`| Run the compiled build                      |
-| `npm test`          | Vitest: unit + e2e (e2e skips without `DB_*`)|
-| `npm run test:e2e`  | e2e only (needs a reachable MySQL)          |
-| `npm run lint`      | ESLint (flat config)                        |
+| `dev`               | Watch-mode dev server                       |
+| `build`             | Compile to `dist/`                          |
+| `start:prod`        | Run the compiled build                      |
+| `test`              | Vitest: unit + e2e (e2e skips without `DB_*`)|
+| `test:e2e`          | e2e only (needs a reachable MySQL)          |
+| `lint`              | ESLint (flat config)                        |
 
 ## Auth
 

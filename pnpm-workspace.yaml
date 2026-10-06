@@ -1,0 +1,11 @@
+packages:
+  - client
+  - server
+
+# pnpm 11+ blocks lifecycle scripts by default; these packages need them
+# for their native binaries (allowBuilds replaced onlyBuiltDependencies)
+allowBuilds:
+  "@apollo/protobufjs": true
+  "@swc/core": true
+  browser-tabs-lock: true
+  esbuild: true

@@ -12,18 +12,35 @@ techniques. Mainly just an opportunity to try new things.
 | UI     | Tailwind CSS 4, TipTap editor, react-hook-form | TypeORM 1.x / MySQL 8               |
 | Auth   | @auth0/auth0-react (SPA SDK)               | passport-jwt + JWKS token verification  |
 | Tests  | Vitest + Testing Library                   | Vitest (unit + e2e, SWC for DI metadata)|
+| Tooling| pnpm workspaces + Turborepo                |                                         |
 
 ## Quick start
+
+Requires Node 20+ and pnpm (`npm i -g pnpm`, or `corepack enable`).
 
 ```bash
 # 1. MySQL (creates db `graphqlforum`, user `graphqlforum` / `graphqlforum`)
 docker compose up -d
 
-# 2. API — see server/.env.example (cp to server/.env and adjust)
-cd server && npm install && npm run start:dev     # http://localhost:4000/graphql
+# 2. Install everything (both packages)
+pnpm install
 
-# 3. Client — see client/.env.example (cp to client/.env and adjust)
-cd client && npm install && npm run dev           # http://localhost:5173
+# 3. Configure: copy the example env files and fill them in
+cp server/.env.example server/.env
+cp client/.env.example client/.env
+
+# 4. API and client together
+pnpm dev                # API http://localhost:4000, client http://localhost:5173
+
+# or run them individually
+pnpm --filter server dev
+pnpm --filter client dev
+```
+
+One-shot quality gates across both packages:
+
+```bash
+pnpm build && pnpm lint && pnpm test
 ```
 
 The Vite dev server proxies `/graphql` (including websockets) to the API, so
@@ -76,12 +93,13 @@ namespaced claims — otherwise new users get created with a blank profile
 ## Testing & CI
 
 ```bash
-cd server && npm test        # unit + e2e (e2e uses DB_* env, skips without)
-cd client && npm test        # jsdom unit tests
+pnpm test                    # both packages (server e2e uses DB_* env, skips without)
+pnpm --filter server test    # server only
+pnpm --filter client test    # client only
 ```
 
-GitHub Actions run lint/build/test per package (`.github/workflows/`), with a
-MySQL service for the server's e2e tests.
+GitHub Actions run lint/build/test per package (`.github/workflows/`) through
+Turborepo, with a MySQL service for the server's e2e tests.
 
 ## Project layout
 

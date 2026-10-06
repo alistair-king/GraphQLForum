@@ -111,3 +111,6 @@ dist
 
 ssl
 
+
+# Turborepo
+.turbo

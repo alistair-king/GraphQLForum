@@ -5,23 +5,26 @@ React 19 + Vite + Apollo Client 3 + Tailwind CSS 4 + TipTap SPA.
 ## Setup
 
 ```bash
-cp .env.example .env   # adjust VITE_AUTH0_* values (or leave the endpoint unset
-                       # to use the /graphql dev proxy)
-npm install
-npm run dev            # http://localhost:5173
+pnpm install            # from the repo root (pnpm workspaces)
+cp .env.example .env    # adjust VITE_AUTH0_* values (or leave the endpoint unset
+                        # to use the /graphql dev proxy)
+pnpm dev                # http://localhost:5173
 ```
 
 The dev server proxies `/graphql` (HTTP + websocket) to the API on port 4000.
 
 ## Scripts
 
+Run from the repo root with `pnpm --filter client <script>`, or inside
+`client/` with `pnpm <script>`:
+
 | Script             | What                                   |
 | ------------------ | -------------------------------------- |
-| `npm run dev`      | Vite dev server with HMR               |
-| `npm run build`    | Typecheck + production build to `dist/`|
-| `npm run preview`  | Serve the production build             |
-| `npm test`         | Vitest (jsdom + Testing Library)       |
-| `npm run lint`     | ESLint (flat config)                   |
+| `dev`              | Vite dev server with HMR               |
+| `build`            | Typecheck + production build to `dist/`|
+| `preview`          | Serve the production build             |
+| `test`             | Vitest (jsdom + Testing Library)       |
+| `lint`             | ESLint (flat config)                   |
 
 ## Notes
 
