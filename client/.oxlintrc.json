@@ -17,8 +17,7 @@
         "args": "none"
       }
     ],
-    "typescript/no-explicit-any": "off",
-    "react/static-components": "off"
+    "typescript/no-explicit-any": "off"
   },
   "ignorePatterns": [
     "dist",

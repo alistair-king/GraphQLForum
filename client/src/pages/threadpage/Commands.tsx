@@ -8,8 +8,9 @@ import { useNavigationState, NavType } from '../../state'
 import { IThread } from '../../types'
 import { makeThreadUrl } from '../../urls'
 import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
-import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
+import { Button } from '../../components/Button'
+import { ModalActions } from '../../components/ModalActions'
 import { Reply, ReplyFormValues } from '../../forms/Reply'
 import { useModal } from '../../hooks'
 
@@ -62,19 +63,12 @@ export const Commands: React.FC<{
     }
   }
 
-  const Actions: React.FC = () => (
-    <>
-      <Button type="submit">Post</Button>
-      <Button secondary onClick={closeModal}>Cancel</Button>
-    </>
-  )
-
   return (
     <IsAuthenticated>
       <Modal
         isOpen={isOpen}
         closeModal={closeModal}
-        content={<Reply title="Reply" actions={<Actions />} onSubmit={onSubmit} />}
+        content={<Reply title="Reply" actions={<ModalActions closeModal={closeModal} submitLabel="Post" />} onSubmit={onSubmit} />}
       >
         <Button onClick={openModal}>
           Reply

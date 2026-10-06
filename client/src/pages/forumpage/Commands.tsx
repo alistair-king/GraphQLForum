@@ -4,8 +4,9 @@ import { useMutation } from '@apollo/client'
 import { ADD_THREAD, GET_FORUM } from '../../gql'
 import { useNavigationState, NavType } from '../../state'
 import { IsAuthenticated } from '../../components/auth/IsAuthenticated'
-import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
+import { Button } from '../../components/Button'
+import { ModalActions } from '../../components/ModalActions'
 import { Thread, ThreadFormValues } from '../../forms/Thread'
 import { useModal } from '../../hooks'
 
@@ -22,13 +23,6 @@ export const Commands: React.FC = () => {
         }
       ]
     }
-  )
-
-  const Actions: React.FC = () => (
-    <>
-      <Button type="submit">Post</Button>
-      <Button secondary onClick={closeModal}>Cancel</Button>
-    </>
   )
 
   const onSubmit = (data: ThreadFormValues) => {
@@ -51,7 +45,7 @@ export const Commands: React.FC = () => {
       <Modal
         isOpen={isOpen}
         closeModal={closeModal}
-        content={<Thread title="New Thread" actions={<Actions />} onSubmit={onSubmit} />}
+        content={<Thread title="New Thread" actions={<ModalActions closeModal={closeModal} submitLabel="Post" />} onSubmit={onSubmit} />}
       >
         <Button onClick={openModal}>
           New Thread

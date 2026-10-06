@@ -6,35 +6,33 @@ import { IForum } from '../types'
 import { makeForumUrl } from '../urls'
 import { Card } from '../components/Card'
 
+const HeadingCell: React.FC<{children?: ReactNode}> = ({children}) => (
+  <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase whitespace-nowrap">
+    {children}
+  </th>
+)
+
+const HomeHeadings: React.FC = () => (
+  <thead>
+    <tr>
+      <HeadingCell />
+      <HeadingCell>Forum</HeadingCell>
+      <HeadingCell>Threads</HeadingCell>
+      <HeadingCell>Posts</HeadingCell>
+      <HeadingCell>Last Post</HeadingCell>
+    </tr>
+  </thead>
+)
+
 export const Home: React.FC<{
   forums: IForum[],
 }> = ({
   forums
 }) => {
-  
-  const Headings: React.FC = () => {
-    const Cell: React.FC<{children?: ReactNode}> = ({children}) => (
-      <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase whitespace-nowrap">
-        {children}
-      </th>
-    )
-    return (
-      <thead>
-        <tr>
-          <Cell />
-          <Cell>Forum</Cell>
-          <Cell>Threads</Cell>
-          <Cell>Posts</Cell>
-          <Cell>Last Post</Cell>
-        </tr>
-      </thead>
-    )
-  }
-
   return (
     <Card>
       <table className="min-w-full">
-        <Headings />
+        <HomeHeadings />
         <tbody className="bg-white">
           { forums.map(forum => <Forum key={forum.id} forum={forum} />)}
         </tbody>

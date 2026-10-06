@@ -9,8 +9,8 @@ import { useNavigationState, NavType } from '../../state'
 import { IReply, IThread } from '../../types'
 import { makeThreadUrl } from '../../urls'
 import { ActionButton } from '../../components/ActionButton'
-import { Button } from '../../components/Button'
 import { Modal } from '../../components/Modal'
+import { ConfirmDialog } from '../../components/ConfirmDialog'
 import { useModal } from '../../hooks'
 
 export const DeleteReply: React.FC<{
@@ -47,23 +47,6 @@ export const DeleteReply: React.FC<{
     }
   )
 
-  const Confirmation = () => (
-    <>
-      <div className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-        Delete reply
-      </div>
-      <div className="px-6 py-3">
-        <div className="-mx-3 md:flex">
-          <p>Are you sure?</p>
-        </div>
-      </div>
-      <div className="flex justify-end px-6 py-3 border-t border-gray-200 bg-gray-100 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-        <Button onClick={onDelete}>Delete</Button>
-        <Button secondary onClick={closeModal}>Cancel</Button>
-      </div>
-    </>
-  )
-
   const onDelete = () => {
     deleteReply({
       variables: {
@@ -82,7 +65,7 @@ export const DeleteReply: React.FC<{
     <Modal
       isOpen={isOpen}
       closeModal={closeModal}
-      content={<Confirmation />}
+      content={<ConfirmDialog title="Delete reply" onDelete={onDelete} closeModal={closeModal} />}
     >
       <ActionButton warning onClick={openModal}>
         <MdDelete />
