@@ -13,7 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "lint": "oxlint src test",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
@@ -55,14 +55,13 @@
     "@types/supertest": "^6.0.0",
     "@types/ws": "^8.18.2",
     "@vitest/coverage-v8": "^3.2.4",
-    "eslint": "^10.11.0",
     "prettier": "^3.9.9",
     "rimraf": "^6.0.0",
     "supertest": "^7.3.0",
     "ts-loader": "^9.5.0",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.71.0",
     "unplugin-swc": "^2.0.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "oxlint": "^1.87.0"
   }
 }

@@ -24,7 +24,7 @@ Run from the repo root with `pnpm --filter client <script>`, or inside
 | `build`            | Typecheck + production build to `dist/`|
 | `preview`          | Serve the production build             |
 | `test`             | Vitest (jsdom + Testing Library)       |
-| `lint`             | ESLint (flat config)                   |
+| `lint`             | oxlint                                 |
 
 ## Notes
 

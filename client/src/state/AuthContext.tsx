@@ -1,8 +1,7 @@
 import React, {
-  ReactNode,
+  type ReactNode,
   useEffect,
   useRef,
-  useState,
 } from 'react'
 import { useApolloClient, useMutation, useQuery } from '@apollo/client'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -47,19 +46,14 @@ export const AuthContextProvider: React.FC<{
     logout: auth0Logout,
   } = useAuth0()
   const [doLogin] = useMutation(LOGIN)
-  const [me, setMe] = useState<IUser>()
   const loginSent = useRef(false)
   const apolloClient = useApolloClient()
 
   const { data } = useQuery<{ me: IUser }>(ME, {
     skip: !isAuthenticated,
   })
-
-  useEffect(() => {
-    if (data?.me) {
-      setMe(data.me)
-    }
-  }, [data])
+  // derived straight from the query: cleared when the cache clears on logout
+  const me = data?.me
 
   useEffect(() => {
     if (isAuthenticated && !isLoading) {

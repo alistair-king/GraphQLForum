@@ -25,7 +25,7 @@ Run from the repo root with `pnpm --filter server <script>`, or inside
 | `start:prod`        | Run the compiled build                      |
 | `test`              | Vitest: unit + e2e (e2e skips without `DB_*`)|
 | `test:e2e`          | e2e only (needs a reachable MySQL)          |
-| `lint`              | ESLint (flat config)                        |
+| `lint`              | oxlint                                      |
 
 ## Auth
 
