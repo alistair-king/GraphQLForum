@@ -29,6 +29,11 @@ cd client && npm install && npm run dev           # http://localhost:5173
 The Vite dev server proxies `/graphql` (including websockets) to the API, so
 no CORS setup is needed.
 
+> **Embedded-browser gotcha:** some in-app/webview browsers cache dev bundles
+> aggressively and won't revalidate on refresh, which makes code changes look
+> like they "don't work". If behavior seems stale, clear the site's storage
+> (devtools → Application → Clear site data) or use a regular browser.
+
 ## Auth0 setup
 
 Authentication is real: the server verifies Auth0 access tokens (RS256 via

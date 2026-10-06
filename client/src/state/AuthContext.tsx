@@ -90,8 +90,6 @@ export const AuthContextProvider: React.FC<{
       })
     },
     logout: () => {
-      // diagnostic marker — confirms the fresh bundle is loaded; remove once confirmed
-      console.error('[auth] LOGOUT MARKER: fresh bundle (v3) is running')
       // stop token requests before the SDK discards its refresh token,
       // then clear cached data so in-flight queries don't race the redirect
       setLoggingOut(true)

@@ -45,7 +45,7 @@ export const ImageViewer: React.FC<{
             closeModal()
           }
         }}
-        className="fixed inset-0 m-0 p-0 h-full w-full max-w-none max-h-none border-0 bg-black backdrop:bg-gray-400/75"
+        className="fixed inset-0 m-0 p-0 h-full w-full max-w-none max-h-none border-0 bg-black text-left backdrop:bg-gray-400/75"
       >
         <Content title={title} image={image} closeModal={closeModal} />
       </dialog>

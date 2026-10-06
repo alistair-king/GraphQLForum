@@ -53,9 +53,11 @@ export const Modal: React.FC<{
             closeModal()
           }
         }}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 p-0 border border-gray-300 rounded min-w-80 w-4/5 max-w-3xl backdrop:bg-gray-400/75"
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0 p-0 border border-gray-300 rounded min-w-80 w-4/5 max-w-3xl text-left backdrop:bg-gray-400/75"
       >
-        {content}
+        {/* mount content only while open: forms and the editor start
+            fresh on every open instead of keeping the previous draft */}
+        {isOpen && content}
       </dialog>
     </>
   )
